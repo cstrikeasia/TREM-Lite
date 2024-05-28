@@ -98,7 +98,7 @@ Back.addEventListener("click", () => {
 Location.addEventListener("click", function() {
   const ArrowSpan = this.querySelector(".selected-btn");
   ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
-  LocationSelectWrapper.classList.toggle("select-show");
+  LocationSelectWrapper.classList.toggle("select-show-big");
 });
 
 // 所在地-點擊選項事件
@@ -115,7 +115,6 @@ const addLocationSelectEvent = (localItemsContainer, CityItemsContainer, selectE
     });
   });
 };
-
 // 所在地-更新目前選項的city、town
 const updateLocationSelectItems = (itemsContainer, items) => {
   itemsContainer.innerHTML = "";
@@ -146,7 +145,6 @@ CityItems.addEventListener("click", (event) => {
   if (closestDiv) {
     CitySelect.textContent = closestDiv.textContent;
     updateLocationSelectItems(TownItems, cityToTowns[closestDiv.textContent] || []);
-    TownSelect.textContent = "town";
   }
 });
 
@@ -154,20 +152,56 @@ CityItems.addEventListener("click", (event) => {
 TownItems.addEventListener("click", (event) => {
   const closestDiv = event.target.closest(".usr-location .select-items > div");
   if (closestDiv) {
+    let usrLocalStation = [];
     TownSelect.textContent = closestDiv.textContent;
     querySelector(".current-city").textContent = CitySelect.textContent;
     querySelector(".current-town").textContent = closestDiv.textContent;
-    SaveSelectedLocationToStorage(CitySelect.textContent, closestDiv.textContent, localStorage.getItem("current-station") ? localStorage.getItem("current-station") : "未知區域");
+
+    if (CitySelect.textContent !== "南楊州市" && CitySelect.textContent !== "重慶市") {
+      const usr_location_info = constant.REGION[CitySelect.textContent][closestDiv.textContent];
+      usrLocalStation = NearStation(usr_location_info.lat, usr_location_info.lon);
+      querySelector(".current-station").textContent = `${usrLocalStation.net} ${usrLocalStation.code}-${usrLocalStation.name} ${usrLocalStation.loc}`;
+    }
+    SaveSelectedLocationToStorage(CitySelect.textContent, closestDiv.textContent, JSON.stringify(usrLocalStation));
   }
 });
+
+function NearStation(la, lo) {
+  let min = Infinity;
+  let closestStation = null;
+
+  for (const id of Object.keys(StationList)) {
+    const dist_surface = Math.sqrt(Math.pow((la - StationList[id].lat) * 111, 2) + Math.pow((lo - StationList[id].lon) * 101, 2));
+    if (dist_surface < min) {
+      min = dist_surface;
+      closestStation = StationList[id];
+    }
+  }
+
+  if (closestStation) {
+    const result = {
+      net  : closestStation.net,
+      code : closestStation.code,
+      name : closestStation.name,
+      loc  : closestStation.loc,
+      lat  : closestStation.lat,
+      lon  : closestStation.lon,
+    };
+    return result;
+  }
+
+  return null;
+}
+
 
 addLocationSelectEvent(localItems, CityItems, CitySelect);
 addLocationSelectEvent(localItems, TownItems, TownSelect);
 
 // 所在地-儲存user選擇的city和town到storage
 const SaveSelectedLocationToStorage = (city, town, station) => {
-  localStorage.setItem("current-city", city);
-  localStorage.setItem("current-town", town);
+  const locationData = { city: city, town: town };
+
+  localStorage.setItem("current-location", JSON.stringify(locationData));
   localStorage.setItem("current-station", station);
 };
 
@@ -201,7 +235,6 @@ async function realtimeStation() {
     logger.error(`[Fetch] ${err}`);
   }
 }
-
 realtimeStation();
 
 // 即時測站-處理測站數據
@@ -218,11 +251,14 @@ function processStationData(data) {
     else
       loc = `${loc.city}${loc.town}`;
 
+
     const stationInfo = {
       name : station,
       net  : data[station].net,
       loc  : loc,
       code : info.code,
+      lat  : info.lat,
+      lon  : info.lon,
     };
 
     StationList.push(stationInfo);
@@ -260,13 +296,14 @@ function renderStationRegion() {
 StationLocalItems.addEventListener("click", handleCityItemClick);
 
 function handleCityItemClick(event) {
-  const target = event.target;
-  if (target.tagName === "DIV") {
+  const target = event.target.closest(".realtime-station .select-items > div");
+  if (target) {
     StationLocalItems.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
     target.classList.add("select-option-selected");
 
     const selectedCity = target.textContent;
     const filteredStations = StationList.filter(station => station.loc.includes(selectedCity));
+    console.log(filteredStations);
     renderFilteredStations(filteredStations);
   }
 }
@@ -283,6 +320,8 @@ function renderFilteredStations(stations) {
     stationDiv.setAttribute("data-code", station.code);
     stationDiv.setAttribute("data-name", station.name);
     stationDiv.setAttribute("data-loc", station.loc);
+    stationDiv.setAttribute("data-lat", station.lat);
+    stationDiv.setAttribute("data-lon", station.lon);
 
     const netSpan = createElement("span");
     netSpan.textContent = station.net;
@@ -330,6 +369,8 @@ function addStationSelectEvent(itemsContainer) {
           code : closestDiv.getAttribute("data-code"),
           name : closestDiv.getAttribute("data-name"),
           loc  : closestDiv.getAttribute("data-loc"),
+          lat  : closestDiv.getAttribute("data-lat"),
+          lon  : closestDiv.getAttribute("data-lon"),
         };
 
         localStorage.setItem("current-station", JSON.stringify(stationData));
@@ -483,32 +524,43 @@ function initializeSelect(type, location, showInt, selectWrapper, items) {
   location.addEventListener("click", function() {
     const ArrowSpan = this.querySelector(".selected-btn");
     ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
-    selectWrapper.classList.toggle("select-show");
+    selectWrapper.classList.toggle("select-show-big");
   });
 
   items.addEventListener("click", (event) => {
-    const target = event.target;
-    if (target.tagName === "DIV") {
+    const target = event.target.closest(".select-items > div");
+    if (target) {
       items.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
       target.classList.add("select-option-selected");
 
-      let warning_type;
       const selected = target.textContent;
       showInt.textContent = selected;
-      console.log(selected);
 
-      if (type.className.indexOf("warning-realtime-station") > 0)
-        warning_type = "current-warning-realtime-station";
-      else
-        warning_type = "current-warning-estimate-int";
-
-      localStorage.setItem(warning_type, selected);
+      updateLocalStorage(type.className, selected);
     }
   });
 }
 
+function updateLocalStorage(typeClassName, selectedValue) {
+  const data = JSON.parse(localStorage.getItem("current-warning")) || {};
+
+  if (typeClassName.indexOf("warning-realtime-station") > 0) {
+    if (!data["realtime-station"])
+      data["realtime-station"] = "";
+
+    data["realtime-station"] = selectedValue;
+  } else {
+    if (!data["estimate-int"])
+      data["estimate-int"] = "";
+
+    data["estimate-int"] = selectedValue;
+  }
+
+  localStorage.setItem("current-warning", JSON.stringify(data));
+}
+
 // 預警條件-即時測站
-const WRTS = querySelector(".warning-realtime-station");
+const WRTS = document.querySelector(".warning-realtime-station");
 const WRTSLocation = WRTS.querySelector(".location");
 const WRTSShowInt = WRTS.querySelector(".realtime-int");
 const WRTSSelectWrapper = WRTS.querySelector(".select-wrapper");
@@ -517,13 +569,25 @@ const WRTSItems = WRTSSelectWrapper.querySelector(".int");
 initializeSelect(WRTS, WRTSLocation, WRTSShowInt, WRTSSelectWrapper, WRTSItems);
 
 // 預警條件-預估震度
-const WEI = querySelector(".warning-estimate-int");
+const WEI = document.querySelector(".warning-estimate-int");
 const WEILocation = WEI.querySelector(".location");
 const WEIShowInt = WEI.querySelector(".estimate-int");
 const WEISelectWrapper = WEI.querySelector(".select-wrapper");
 const WEIItems = WEISelectWrapper.querySelector(".int");
 
 initializeSelect(WEI, WEILocation, WEIShowInt, WEISelectWrapper, WEIItems);
+
+// 渲染震度選項列表
+const Ints = document.querySelectorAll(".select-wrapper .int");
+const intensity_text = ["0級", "1級", "2級", "3級", "4級", "5弱", "5強", "6弱", "6強", "7級"];
+Ints.forEach(Int => {
+  intensity_text.forEach(text => {
+    const intItem = document.createElement("div");
+    intItem.textContent = text;
+    Int.appendChild(intItem);
+  });
+});
+
 
 // 其他功能-設定頁面背景透明度滑塊
 const sliderContainer = querySelector(".slider-container");
@@ -557,17 +621,23 @@ addEventListener("mousemove", (event) => {
 });
 
 // 從storage取得user之前保存的選項
-const GetSelectedFromStorage = () => ({
-  city    : localStorage.getItem("current-city") ? localStorage.getItem("current-city") : "未知區域",
-  town    : localStorage.getItem("current-town") ? localStorage.getItem("current-town") : "未知區域",
-  station : localStorage.getItem("current-station") ? localStorage.getItem("current-station") : "未知區域",
-  wrts    : localStorage.getItem("current-warning-realtime-station") ? localStorage.getItem("current-warning-realtime-station") : "0級",
-  wei     : localStorage.getItem("current-warning-estimate-int") ? localStorage.getItem("current-warning-estimate-int") : "0級",
-});
+const GetSelectedFromStorage = () => {
+  const locationData = JSON.parse(localStorage.getItem("current-location")) || {};
+  const warningData = JSON.parse(localStorage.getItem("current-warning")) || {};
+
+  return {
+    city    : locationData.city ? locationData.city : "臺南市",
+    town    : locationData.town ? locationData.town : "歸仁區",
+    station : localStorage.getItem("current-station") ? localStorage.getItem("current-station") : "未知區域",
+    wrts    : warningData["realtime-station"] ? warningData["realtime-station"] : intensity_text[0],
+    wei     : warningData["estimate-int"] ? warningData["estimate-int"] : intensity_text[0],
+    effect  : localStorage.getItem("current-map-display-effect") ? localStorage.getItem("current-map-display-effect") : "1",
+  };
+};
 
 // 渲染user之前保存的選項
 const RenderSelectedFromStorage = () => {
-  const { city, town, station, wrts, wei } = GetSelectedFromStorage();
+  const { city, town, station, wrts, wei, effect } = GetSelectedFromStorage();
   const current_station = querySelector(".current-station");
 
   querySelector(".current-city").textContent = city;
@@ -580,7 +650,61 @@ const RenderSelectedFromStorage = () => {
     current_station.textContent = `${stationData.net} ${stationData.code}-${stationData.name} ${stationData.loc}`;
   } else
     current_station.textContent = "未知區域";
+
+  const keys = Object.keys(EffectArr);
+  const effect_text = keys[effect - 1] || "unknown";
+  querySelector(".current-effect").textContent = effect_text;
 };
 
 // 渲染user之前保存的選項
 addEventListener("DOMContentLoaded", RenderSelectedFromStorage);
+
+
+const MapDisplayEffect = querySelector(".map-display-effect");
+const MapDisplayEffectSelect = MapDisplayEffect.querySelector(".current-effect");
+const MapDisplayEffectLocation = MapDisplayEffect.querySelector(".location");
+const MapDisplayEffectSelectWrapper = MapDisplayEffect.querySelector(".select-wrapper");
+const MapDisplayEffectItems = MapDisplayEffectSelectWrapper.querySelector(".effect");
+
+const EffectArr = { "實測震度 + 預估震度": 1, "即時加速度 + 預估震度": 2, "預估震度": 3, "即時加速度": 4, "實測震度": 5 };
+
+if (MapDisplayEffectItems)
+  for (const [text, value] of Object.entries(EffectArr)) {
+    const intItem = document.createElement("div");
+    intItem.setAttribute("data-value", value);
+    intItem.textContent = text;
+    MapDisplayEffectItems.appendChild(intItem);
+  }
+
+
+const addMapDisplayEffectSelectEvent = (MapDisplayEffectContainer, selectElement) => {
+  [MapDisplayEffectContainer].forEach(container => {
+    container.addEventListener("click", (event) => {
+      const closestDiv = event.target.closest(".usr-location .select-items > div");
+      if (closestDiv) {
+        selectElement.textContent = closestDiv.textContent;
+
+        container.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
+        closestDiv.classList.add("select-option-selected");
+      }
+    });
+  });
+};
+
+MapDisplayEffectLocation.addEventListener("click", function() {
+  const ArrowSpan = this.querySelector(".selected-btn");
+  ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
+  MapDisplayEffectSelectWrapper.classList.toggle("select-show-big");
+});
+
+MapDisplayEffectItems.addEventListener("click", (event) => {
+  const closestDiv = event.target.closest(".map-display-effect .select-items > div");
+  if (closestDiv) {
+    MapDisplayEffectSelect.textContent = closestDiv.textContent;
+    MapDisplayEffectSelectWrapper.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
+    closestDiv.classList.toggle("select-option-selected");
+    localStorage.setItem("current-map-display-effect", closestDiv.dataset.value);
+  }
+});
+
+addMapDisplayEffectSelectEvent(MapDisplayEffectItems, MapDisplayEffectSelect);

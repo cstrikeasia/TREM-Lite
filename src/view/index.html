@@ -487,7 +487,6 @@
                         <div class="usr-account-info-content show-account-info">
                             <div class="account">尚未登入</div>
                             <div class="vip"></div>
-                            <div class="permission"></div>
                             <div class="login-btn">登入</div>
                             <div class="logout-btn">登出</div>
                         </div>
@@ -591,16 +590,6 @@
                                 <div class="select-wrapper">
                                     <div class="select-selected current-local" style="display:none;">選擇地區</div>
                                     <div class="select-items int">
-                                        <div>0級</div>
-                                        <div>1級</div>
-                                        <div>2級</div>
-                                        <div>3級</div>
-                                        <div>4級</div>
-                                        <div>5弱</div>
-                                        <div>5強</div>
-                                        <div>6弱</div>
-                                        <div>6強</div>
-                                        <div>7級</div>
                                     </div>
                                 </div>
                             </div>
@@ -615,16 +604,6 @@
                                 <div class="select-wrapper">
                                     <div class="select-selected current-local" style="display:none;">選擇地區</div>
                                     <div class="select-items int">
-                                        <div>0級</div>
-                                        <div>1級</div>
-                                        <div>2級</div>
-                                        <div>3級</div>
-                                        <div>4級</div>
-                                        <div>5弱</div>
-                                        <div>5強</div>
-                                        <div>6弱</div>
-                                        <div>6強</div>
-                                        <div>7級</div>
                                     </div>
                                 </div>
                             </div>
@@ -775,19 +754,20 @@
                     <div class="setting-item-wrapper">
                         <div class="setting-item-content">
                             <span class="setting-item-title">地圖顯示效果</span>
-                            <span class="description">設定在地圖上的顯示效果。</span>
-                            <div class="setting-option map-show">
+                            <span class="description">
+                                設定在地圖上的顯示效果。
+                            </span>
+                            <div class="setting-option map-display-effect">
                                 <div class="location">
-                                    <span class="current-station">實測震度 + 預估震度</span>
+                                    <span class="current-effect"></span>
                                     <span class="selected-btn report-detail-field-icon material-symbols-rounded">
                                         keyboard_arrow_down
                                     </span>
                                 </div>
                                 <div class="select-wrapper">
-                                    <div class="select-selected current-local" style="display:none;">選擇地區</div>
-                                    <div class="select-items local"></div>
-                                    <div class="select-selected current-station" style="display:none;">選擇測站</div>
-                                    <div class="select-items station"></div>
+                                    <div class="select-selected current-display-effect" style="display:none;">選擇地區</div>
+                                    <div class="select-items effect">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1031,9 +1011,9 @@
     <script src="../js/key.js" defer></script>
     <script src="../js/map.js" defer></script>
     <script src="../js/data.js" defer></script>
+    <script src="../js/setting.js" defer></script>
     <script src="../js/rts.js" defer></script>
     <script src="../js/eew.js" defer></script>
-    <script src="../js/setting.js" defer></script>
 </body>
 
 </html>

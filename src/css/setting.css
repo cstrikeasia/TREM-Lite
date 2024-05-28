@@ -281,10 +281,14 @@ body {
     justify-content: unset;
     display: flex;
 
-    &:not(:last-child) {
+    &:not(.last-child) {
         border-bottom: 1px solid black;
         border-color: rgb(255 255 255 / 5%);
     }
+}
+
+.select-option-selected {
+    background-color: rgb(255 255 255 / 6%);
 }
 
 /**description**/
@@ -460,7 +464,8 @@ li {
 .city div,
 .town div,
 .station div,
-.int div {
+.int div,
+.effect div {
     color: white;
     cursor: pointer;
     user-select: none;
@@ -475,6 +480,7 @@ li {
 .town div:hover,
 .station div:hover,
 .int div:hover,
+.effect div:hover,
 .select-option-selected {
     background-color: rgb(255 255 255 / 6%);
 }
@@ -503,11 +509,6 @@ li {
     overflow: hidden;
     transition: max-height .5s ease;
     display: flex;
-}
-
-.select-wrapper.select-show {
-    height: 1000px;
-    max-height: 8rem;
 }
 
 .select-wrapper.select-show-big {
@@ -737,7 +738,8 @@ li {
 }
 
 .warning-realtime-station .select-items,
-.warning-estimate-int .select-items {
+.warning-estimate-int .select-items,
+.map-display-effect .select-items {
     width: 100%;
     justify-content: center;
     display: block;
