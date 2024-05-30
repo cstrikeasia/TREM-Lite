@@ -1189,6 +1189,14 @@ body:has(#report-panel.show) .pga_dot {
   width: 100%;
 }
 
+.tsunami-area-item.lift {
+  flex-direction: row-reverse;
+}
+
+.lift .tsunami-arrival-height {
+  width: 100px;
+}
+
 .tsunami-report-container .tsunami-area-item {
   display: flex;
   background-color: rgb(40, 40, 40);
