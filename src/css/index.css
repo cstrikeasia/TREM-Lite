@@ -1336,9 +1336,45 @@ body:has(#report-panel.show) .pga_dot {
   position: relative;
 }
 
-.height-teen {
-  border: 1px solid #c800c8;
-  background: #c800c8;
+.height-one {
+  border: 1px solid #FFC800;
+  background: #FFC800;
+  width: 55px;
+  text-align: center;
+  left: 12px;
+  position: relative;
+}
+
+.height-three {
+  border: 1px solid #FF0000;
+  background: #FF0000;
+  width: 55px;
+  text-align: center;
+  left: 12px;
+  position: relative;
+}
+
+.height-six {
+  border: 1px solid #9600FF;
+  background: #9600FF;
+  width: 55px;
+  text-align: center;
+  left: 12px;
+  position: relative;
+}
+
+.height-six-plus {
+  border: 1px solid #C800C8;
+  background: #C800C8;
+  width: 55px;
+  text-align: center;
+  left: 12px;
+  position: relative;
+}
+
+.height-lift {
+  border: 1px solid #00C8C8;
+  background: #00C8C8;
   width: 55px;
   text-align: center;
   left: 12px;
