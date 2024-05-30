@@ -1087,7 +1087,7 @@ body:has(#report-panel.show) .pga_dot {
   gap: 8px;
   bottom: 0;
   right: 0;
-  height: calc(100vh - 170px);
+  height: calc(100vh - 245px);
   width: calc(18vw + 16px);
   min-width: 290px;
   margin: 8px;
@@ -1350,15 +1350,89 @@ body:has(#report-panel.show) .pga_dot {
   text-align: center;
 }
 
-#tsunami-info-box.cancel {
-  background-color: #464646;
-}
-
 .cancel .info-body-box {
   background-color: unset;
 }
 
-.tsunami-info-box {
+.tsunami-info-value {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.tsunami-info-title {
+  opacity: .75;
+  line-height: 16px;
+}
+
+.tsunami-info-container {
+  display: flex;
+  gap: 8px;
+  font-family: "Open Sans", sans-serif;
+  flex-direction: column;
+  margin-left: 0.8em;
+}
+
+.tsunami-info-body {
+  display: grid;
+  align-items: center;
+  padding: 0 4px;
+  line-height: 12px;
+  font-size: 12px;
+  gap: 10px;
+}
+
+.tsunami-info-body-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  border-radius: 5px;
+  background-color: #383838;
+  padding: 8px;
+  margin-top: 0.5em;
+}
+
+.tsunami-info-body-box .cancel-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: rgb(0 0 0 / 40%);
+  color: white;
+  backdrop-filter: blur(1px);
+  z-index: 1001;
+  opacity: 0;
+}
+
+.tsunami-info-body-box .cancel-title {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+  line-height: 36px;
+  font-weight: 900;
+  font-size: 36px;
+}
+
+.tsunami-info-title-box {
+  display: flex;
+  padding: 0 8px;
+  line-height: 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+#info-title-box-type {
+  flex: 1;
+}
+
+#tsunami-info-box {
   position: absolute;
   top: 0;
   right: 0;
@@ -1369,235 +1443,80 @@ body:has(#report-panel.show) .pga_dot {
   min-width: 277px;
   margin: 8px;
   padding: 8px;
-  border-radius: 7px;
-  background-color: #ff0000c7;
+  border-radius: 10px;
+  background-color: #464646;
   color: white;
   white-space: nowrap;
   z-index: 1001;
+}
 
-  >.info-title-box
+#tsunami-info-box.warning-1 {
+  background-color: #ff0000;
+}
 
-  /* 標題 */
-    {
-    display: flex;
-    padding: 0 8px;
-    line-height: 14px;
-    font-size: 18px;
-    font-weight: 700;
+#tsunami-info-box.warning-2 {
+  background-color: #ff9900;
+}
 
-    /* 標題左邊 */
-    >.info-title-box-type {
-      flex: 1;
-    }
-  }
+#tsunami-info-box.warning-3 {
+  background-color: #ffc800;
+}
 
-  >.info-body-box
+#tsunami-info-box.warning-4 {
+  background-color: #1e9632;
+}
 
-  /* 中間 */
-    {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    position: relative;
-    border-radius: 5px;
-    background-color: #383838;
-    padding: 8px;
+.warning-2 .tsunami-info-title-box {
+  color: #313131;
+}
 
-    >.info-body-title-box {
-      display: flex;
-      height: 72px;
-      gap: 8px;
+.warning-3 .tsunami-info-title-box {
+  color: #313131;
+}
 
-      >.info-body-title-title-box,
-      >.info-body-title-body-box {
-        padding: 8px;
-        border-radius: 12px;
-      }
+#tsunami-info-title-box-type {
+  flex: 1;
+}
 
-      >.info-body-title-body-box {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        background-color: #222;
+.tsunami-info-item {
+  display: flex;
+  align-items: center;
+}
 
-        >.info-body-eq-box {
-          display: flex;
-          padding: 4px;
+.tsunami-info-coordinate {
+  line-height: 16px;
+}
 
-          >.info-body-magnitude,
-          >.info-body-depth {
-            position: relative;
-            display: flex;
-            gap: 4px;
-            height: 28px;
-            isolation: isolate;
-          }
+.tsunami_coordinate {
+  margin-right: 10px;
+  opacity: .75;
+}
 
-          >.info-body-magnitude::after,
-          >.info-body-depth::before
+.tsunami_mag {
+  font-size: 20px;
+  color: #fff;
+}
 
-          /*! 背景文字 */
-            {
-            position: absolute;
-            content: attr(data-background-text);
-            padding: 0 6px;
-            line-height: 28px;
-            font-size: 28px;
-            font-weight: 700;
-            opacity: .15;
-            z-index: -1;
-          }
+.tsunami_m {
+  margin-right: 2px;
+  opacity: .75;
+}
 
-          >.info-body-magnitude::before,
-          >.info-body-depth::after
+.tsunami-info-item-branch {
+  display: flex;
+}
 
-          /*! 色條樣式 */
-            {
-            content: "";
-            display: block;
-            width: 4px;
-            border-radius: 30px;
-          }
+.tsunami-info-item-branch .tsunami-info-item {
+  margin-right: 50px;
+}
 
-          >.info-body-magnitude>.info-body-magnitude-value,
-          >.info-body-depth>.info-body-depth-value {
-            font-weight: 700;
-            line-height: 28px;
-          }
+.tsunami_depth {
+  font-size: 20px;
+  color: #fff;
+  margin-right: 2px;
+}
 
-          >.info-body-magnitude>.info-body-magnitude-value::before,
-          >.info-body-depth>.info-body-depth-value::after {
-            display: inline-block;
-            opacity: .75;
-            line-height: 28px;
-            font-weight: 400;
-          }
-
-          >.info-body-magnitude {
-            flex: 1;
-            font-size: 28px;
-
-            &::before
-
-            /*! 規模色條顏色 */
-              {
-              background-color: #C800C0;
-            }
-
-            >.info-body-magnitude-value {
-              &::before {
-                margin-right: 4px;
-                content: "𝖬";
-                font-size: 16px;
-              }
-            }
-          }
-
-          >.info-body-depth {
-            &::before
-
-            /*! 背景文字位置 */
-              {
-              right: 0;
-            }
-
-            &::after
-
-            /*! 深度色條顏色 */
-              {
-              background-color: #FF1F00;
-            }
-
-            >.info-body-depth-value {
-              font-size: 20px;
-              line-height: 36px;
-
-              &::after {
-                margin-left: 4px;
-                content: "㎞";
-                font-size: 12px;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    >.info-body-footer {
-      display: flex;
-      align-items: center;
-      padding: 0 4px;
-      line-height: 12px;
-      font-size: 12px;
-
-      >.info-body-footer-title {
-        opacity: .75;
-        font-size: 11px;
-        flex: 1;
-      }
-
-      >.info-body-footer-value-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-family: "Open Sans", sans-serif;
-
-        >.info-body-footer-value-time {
-          line-height: 16px;
-          font-size: 14px;
-          font-weight: 500;
-        }
-
-        >.info-body-footer-value-name {
-          opacity: .75;
-          line-height: 16px;
-        }
-      }
-    }
-  }
-
-  >.info-body-box>.cancel-box
-
-  /*! 取消覆蓋 */
-    {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    gap: 8px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    background-color: rgb(0 0 0 / 40%);
-    color: white;
-    backdrop-filter: blur(1px);
-    z-index: 1001;
-    opacity: 0;
-
-    >.cancel-title {
-      display: flex;
-      justify-content: space-between;
-      width: 30%;
-      line-height: 36px;
-      font-weight: 900;
-      font-size: 36px;
-    }
-
-    >.cancel-body {
-      line-height: 14px;
-      font-weight: 500;
-      font-size: 14px;
-    }
-  }
-
-  &.cancelled>.info-body-box>.cancel-box
-
-  /*! 顯示取消覆蓋 */
-    {
-    display: flex;
-  }
+.tsunami_km {
+  margin-right: 2px;
+  opacity: .75;
 }

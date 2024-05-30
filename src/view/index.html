@@ -47,28 +47,47 @@
 
 
     <div id="tsunami-info-box" class="tsunami-info-box">
-        <div class="info-title-box">
-            <div class="info-title-box-type" id="info-title-box-type">海嘯警報</div>
-            <div class="info-title-box-value" id="info-no">第1報</div>
+        <div class="tsunami-info-title-box">
+            <div class="tsunami-info-title-box-type" id="tsunami-info-title-box-type">海嘯警報</div>
+            <div class="tsunami-info-title-box-value" id="tsunami-info-no">第1報</div>
         </div>
-        <div class="info-body-box">
-            <div class="info-body-title-box">
-                <div class="info-body-title-body-box">
-                    <div class="info-body-eq-box">
-                        <div class="info-body-magnitude magnitude-6" data-background-text="規模">
-                            <div class="info-body-magnitude-value" id="info-mag"></div>
-                        </div>
-                        <div class="info-body-depth depth-deep" data-background-text="深度">
-                            <div class="info-body-depth-value" id="info-depth"></div>
-                        </div>
+        <div class="tsunami-info-body-box">
+            <div class="tsunami-info-body">
+                <div class="tsunami-info-item">
+                    <div class="report-detail-field-icon material-symbols-rounded">schedule</div>
+                    <div class="tsunami-info-container">
+                        <span class="tsunami-info-title">發震時間</span>
+                        <span class="tsunami-info-value tsunami_eq_time">2024/09/21 09:21</span>
                     </div>
                 </div>
-            </div>
-            <div class="info-body-footer">
-                <div class="info-body-footer-title">預估最大震度</div>
-                <div class="info-body-footer-value-container">
-                    <span class="info-body-footer-value-time" id="info-time"></span>
-                    <span class="info-body-footer-value-name">發震</span>
+                <div class="tsunami-info-item">
+                    <div class="report-detail-field-icon material-symbols-rounded">location_on</div>
+                    <div class="tsunami-info-container">
+                        <span class="tsunami-info-title">震央位置</span>
+                        <span class="tsunami-info-value tsunami_epic_center">臺灣東部海域</span>
+                        <div class="tsunami-info-coordinate"><span class="tsunami_coordinate">23.76°N</span><span
+                                class="tsunami_coordinate">121.86°E</span></div>
+                    </div>
+                </div>
+                <div class="tsunami-info-item-branch">
+                    <div class="tsunami-info-item">
+                        <div class="report-detail-field-icon material-symbols-rounded">speed</div>
+                        <div class="tsunami-info-container">
+                            <span class="tsunami-info-title">地震規模</span>
+
+                            <div class="tsunami-info-coordinate"><span class="tsunami_m">M</span><span
+                                    class="tsunami_mag">8.0</span></div>
+                        </div>
+                    </div>
+                    <div class="tsunami-info-item">
+                        <div class="report-detail-field-icon material-symbols-rounded">stat_minus_3</div>
+                        <div class="tsunami-info-container">
+                            <span class="tsunami-info-title">震源深度</span>
+
+                            <div class="tsunami-info-coordinate"><span class="tsunami_depth">8.0</span><span
+                                    class="tsunami_km">km</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="cancel-box">
@@ -76,6 +95,7 @@
             </div>
         </div>
     </div>
+
     <div id="info-box" class="info-box">
         <div class="info-title-box">
             <div class="info-title-box-type" id="info-title-box-type"></div>
