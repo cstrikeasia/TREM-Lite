@@ -6,7 +6,6 @@ body {
 body {
     user-select: none;
     margin: 0;
-    font-family: "Lato", "Noto Sans TC", "Open Sans", sans-serif;
     text-rendering: optimizeLegibility;
     overflow: hidden;
     --surface-hsl: 0deg 0% 25%;
