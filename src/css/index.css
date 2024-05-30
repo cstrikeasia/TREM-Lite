@@ -1087,7 +1087,7 @@ body:has(#report-panel.show) .pga_dot {
   gap: 8px;
   bottom: 0;
   right: 0;
-  height: calc(100vh - 245px);
+  height: calc(100vh - 265px);
   width: calc(18vw + 16px);
   min-width: 290px;
   margin: 8px;
@@ -1439,7 +1439,7 @@ body:has(#report-panel.show) .pga_dot {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 20vw;
+  width: 18vw;
   min-width: 277px;
   margin: 8px;
   padding: 8px;
@@ -1519,4 +1519,16 @@ body:has(#report-panel.show) .pga_dot {
 .tsunami_km {
   margin-right: 2px;
   opacity: .75;
+}
+
+.tsunami-info-unit {
+  font-weight: bold;
+  font-size: 11px;
+  position: relative;
+  right: 1vh;
+}
+
+.tsunami-info-item.unit {
+  justify-content: end;
+  margin-top: -8px;
 }
