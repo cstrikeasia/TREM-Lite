@@ -45,6 +45,37 @@
 
     <div id="map" class="map"></div>
 
+
+    <div id="tsunami-info-box" class="tsunami-info-box">
+        <div class="info-title-box">
+            <div class="info-title-box-type" id="info-title-box-type">海嘯警報</div>
+            <div class="info-title-box-value" id="info-no">第1報</div>
+        </div>
+        <div class="info-body-box">
+            <div class="info-body-title-box">
+                <div class="info-body-title-body-box">
+                    <div class="info-body-eq-box">
+                        <div class="info-body-magnitude magnitude-6" data-background-text="規模">
+                            <div class="info-body-magnitude-value" id="info-mag"></div>
+                        </div>
+                        <div class="info-body-depth depth-deep" data-background-text="深度">
+                            <div class="info-body-depth-value" id="info-depth"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-body-footer">
+                <div class="info-body-footer-title">預估最大震度</div>
+                <div class="info-body-footer-value-container">
+                    <span class="info-body-footer-value-time" id="info-time"></span>
+                    <span class="info-body-footer-value-name">發震</span>
+                </div>
+            </div>
+            <div class="cancel-box">
+                <div class="cancel-title"><span>取</span><span>消</span></div>
+            </div>
+        </div>
+    </div>
     <div id="info-box" class="info-box">
         <div class="info-title-box">
             <div class="info-title-box-type" id="info-title-box-type"></div>
@@ -94,6 +125,7 @@
         </div>
     </div>
 
+    <!--
     <div class="warning-alert">
         <div class="earthquake-warning">
             <div class="earthquake-content">
@@ -114,6 +146,7 @@
             </div>
         </div>
     </div>
+    -->
 
     <div class="warning-message">
         <div class="tsunami-warning">
@@ -133,44 +166,60 @@
                     <span class="nav-item-icon material-symbols-rounded">warning</span>
                     <span class="nav-item-icon material-symbols-rounded">waves</span>
                     <div class="tsunami-title">海嘯警報！</div>
-
                 </div>
                 <div class="tsunami-description">海嘯警報發布中，請遠離海岸及水域，盡速前往高處避難！</div>
             </div>
         </div>
-        <div class="tsunami-warning">
-            <div class="tsunami-content">
-                <div style="display: flex;align-items: center;">
-                    <span class="nav-item-icon material-symbols-rounded">warning</span>
-                    <span class="nav-item-icon material-symbols-rounded">waves</span>
-                    <div class="tsunami-title">海嘯警報！</div>
-
+        <div class="tsunami-nhk-warning">
+            <div class="tsunami-nhk-content">
+                <div style="display: flex;align-items: center;border: 1.5px solid #fff;height: auto;">
+                    <div class="tsunami-nhk-title">津波到達予想</div>
+                    <div class="tsunami-nhk-mag">東日本大震災級</div>
                 </div>
-                <div class="tsunami-description">海嘯警報發布中，請遠離海岸及水域，盡速前往高處避難！</div>
+                <div class="tsunami-nhk-type tsunami-1m">大津波警報</div>
+                <div class="tsunami-nhk-item-wrapper">
+                    <div class="tsunami-nhk-item">
+                        <div class="tsunami-nhk-area">
+                            <div class="area">東沙群島附近海域</div>
+                            <div class="arrival">到達</div>
+                            <div class="height height-teen">10m超</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tsunami-nhk-type">津波警報</div>
+                <div class="tsunami-nhk-item-wrapper">
+                    <div class="tsunami-nhk-item">
+                        <div class="tsunami-nhk-area">
+                            <div class="area">東沙群島附近海域</div>
+                            <div class="arrival">到達</div>
+                            <div class="height height-teen">10m超</div>
+                        </div>
+                    </div>
+                    <div class="tsunami-nhk-item">
+                        <div class="tsunami-nhk-area">
+                            <div class="area">東沙群島附近海域</div>
+                            <div class="arrival">到達</div>
+                            <div class="height height-teen">10m超</div>
+                        </div>
+                    </div>
+                    <div class="tsunami-nhk-item">
+                        <div class="tsunami-nhk-area">
+                            <div class="area">東沙群島附近海域</div>
+                            <div class="arrival">到達</div>
+                            <div class="height height-teen">10m超</div>
+                        </div>
+                    </div>
+                    <div class="tsunami-nhk-item">
+                        <div class="tsunami-nhk-area">
+                            <div class="area">東沙群島附近海域</div>
+                            <div class="arrival">到達</div>
+                            <div class="height height-teen">10m超</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="tsunami-warning">
-            <div class="tsunami-content">
-                <div style="display: flex;align-items: center;">
-                    <span class="nav-item-icon material-symbols-rounded">warning</span>
-                    <span class="nav-item-icon material-symbols-rounded">waves</span>
-                    <div class="tsunami-title">海嘯警報！</div>
-
-                </div>
-                <div class="tsunami-description">海嘯警報發布中，請遠離海岸及水域，盡速前往高處避難！</div>
-            </div>
-        </div>
-        <div class="tsunami-warning">
-            <div class="tsunami-content">
-                <div style="display: flex;align-items: center;">
-                    <span class="nav-item-icon material-symbols-rounded">warning</span>
-                    <span class="nav-item-icon material-symbols-rounded">waves</span>
-                    <div class="tsunami-title">海嘯警報！</div>
-
-                </div>
-                <div class="tsunami-description">海嘯警報發布中，請遠離海岸及水域，盡速前往高處避難！</div>
-            </div>
-        </div>
+    </div>
     </div>
 
     <div class="tsunami-report-container">

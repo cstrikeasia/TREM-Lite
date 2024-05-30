@@ -212,6 +212,8 @@ function show_eew(data) {
   variable.eew_list[data.id].eew_intensity_list = eew_area_pga(data.eq.lat, data.eq.lon, data.eq.depth, data.eq.mag);
   // console.log(intensity_list);
   last_map_update = 0;
+  document.querySelector("#settings").style.display = "none";
+  document.querySelector("#settings").style.opacity = 0;
 }
 
 function ps_wave_dist(depth, time, now) {

@@ -37,12 +37,12 @@ const localArr = {
   "南部" : ["高雄市", "臺南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣"],
   "東部" : ["花蓮縣", "臺東縣"],
   "外島" : ["金門縣", "連江縣"],
-  "南韓" : ["南楊州市"],
+  "南韓" : ["南陽州市"],
   "中國" : ["重慶市"],
 };
 
 const cityToTowns = {
-  "南楊州市" : ["和道邑"],
+  "南陽州市" : ["和道邑"],
   "重慶市"  : ["北碚區"],
 };
 
@@ -157,14 +157,26 @@ TownItems.addEventListener("click", (event) => {
     querySelector(".current-city").textContent = CitySelect.textContent;
     querySelector(".current-town").textContent = closestDiv.textContent;
 
-    if (CitySelect.textContent !== "南楊州市" && CitySelect.textContent !== "重慶市") {
+    if (CitySelect.textContent !== "南陽州市" && CitySelect.textContent !== "重慶市") {
       const usr_location_info = constant.REGION[CitySelect.textContent][closestDiv.textContent];
       usrLocalStation = NearStation(usr_location_info.lat, usr_location_info.lon);
-      querySelector(".current-station").textContent = `${usrLocalStation.net} ${usrLocalStation.code}-${usrLocalStation.name} ${usrLocalStation.loc}`;
-    }
+    } else
+      usrLocalStation = findStationByLocation(CitySelect.textContent, closestDiv.textContent);
+
+    querySelector(".current-station").textContent = `${usrLocalStation.net} ${usrLocalStation.code}-${usrLocalStation.name} ${usrLocalStation.loc}`;
     SaveSelectedLocationToStorage(CitySelect.textContent, closestDiv.textContent, JSON.stringify(usrLocalStation));
   }
 });
+
+function findStationByLocation(city, town) {
+  const location = `${city}${town}`;
+  for (const station of StationList)
+    if (station.loc === location)
+      return station;
+
+
+  return null;
+}
 
 function NearStation(la, lo) {
   let min = Infinity;
@@ -303,7 +315,6 @@ function handleCityItemClick(event) {
 
     const selectedCity = target.textContent;
     const filteredStations = StationList.filter(station => station.loc.includes(selectedCity));
-    console.log(filteredStations);
     renderFilteredStations(filteredStations);
   }
 }
