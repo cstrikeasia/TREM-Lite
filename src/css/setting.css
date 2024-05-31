@@ -80,7 +80,6 @@ body {
         height: 20px;
         width: 20px;
         left: .2rem;
-        bottom: 0.20rem;
         background-color: white;
         transition: .4s;
         border-radius: 15px;
@@ -191,7 +190,7 @@ body {
     cursor: pointer;
     width: 70px;
     height: 39px;
-    font-family: "Lato", "Noto Sans TC", "Open Sans", sans-serif;
+    font-family: "Lato", "Noto Sans TC";
     text-rendering: optimizeLegibility;
 }
 
@@ -276,9 +275,9 @@ body {
 
 .setting-item-content div div:not(.select-items, .select-wrapper, .condition-items) {
     padding: 13px;
-    align-content: center;
     justify-content: unset;
     display: flex;
+    align-items: center;
 
     &:not(.last-child) {
         border-bottom: 1px solid black;
@@ -746,4 +745,51 @@ li {
 
 .int div {
     justify-content: center !important;
+    font-weight: 100;
+    font-family: auto;
+}
+
+/**Hello**/
+.hello__div {
+    display: block;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    opacity: 1;
+    transition: opacity 3s;
+}
+
+.hello__svg {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-miterlimit: 10;
+    stroke-width: 48px;
+    stroke-dasharray: 5800px;
+    stroke-dashoffset: 5800px;
+    animation: anim__hello linear 5s forwards;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+    text-align: center;
+}
+
+@keyframes anim__hello {
+    0% {
+        stroke-dashoffset: 5800;
+    }
+
+    25% {
+        stroke-dashoffset: 5800;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+    }
 }

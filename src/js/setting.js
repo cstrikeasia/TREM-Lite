@@ -719,3 +719,31 @@ MapDisplayEffectItems.addEventListener("click", (event) => {
 });
 
 addMapDisplayEffectSelectEvent(MapDisplayEffectItems, MapDisplayEffectSelect);
+
+
+const Tos = querySelector(".tos");
+const Tos_Sure = querySelector(".tos_sure");
+
+if (!localStorage.getItem("tos")) {
+  querySelector(".tos").style.display = "flex";
+  const hello = querySelector(".hello__div");
+  setTimeout(() => {
+    hello.style.opacity = "0";
+
+    setTimeout(() => {
+      const tosWrapper = querySelector(".tos_wrapper");
+      tosWrapper.style.height = "19em";
+      tosWrapper.style.opacity = "1";
+      hello.style.display = "none";
+    }, 2500);
+  }, 6000);
+}
+
+Tos_Sure.addEventListener("click", () => {
+  Tos.style.opacity = "0";
+
+  setTimeout(() => {
+    Tos.style.display = "none";
+    localStorage.setItem("tos", true);
+  }, 500);
+});
