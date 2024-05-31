@@ -745,5 +745,16 @@ Tos_Sure.addEventListener("click", () => {
   setTimeout(() => {
     Tos.style.display = "none";
     localStorage.setItem("tos", true);
-  }, 500);
+  }, 2000);
+});
+
+
+/** Report **/
+querySelectorAll(".report-list-item-wrapper").forEach(wrapper => {
+  const ReportListItem = wrapper.querySelector(".report-list-item");
+  ReportListItem.addEventListener("click", () => {
+    const ArrowSpan = ReportListItem.querySelector(".report-arrow-down");
+    ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
+    wrapper.classList.toggle("active");
+  });
 });

@@ -110,7 +110,7 @@ body {
   width: 33em;
   height: 0;
   opacity: 0;
-  transition: opacity 2s;
+  transition: opacity 3s;
 }
 
 .tos_body li {
@@ -1629,40 +1629,10 @@ body:has(#report-panel.show) .pga_dot {
 .int {
   width: 44px;
   height: auto;
-  border-radius: 0px 15px 0px 15px;
+  border-radius: 0px 15px 0px 10px;
   font-family: "Open Sans", sans-serif;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.report-int-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: auto;
-  border-radius: 11px;
-  background-color: hsl(var(--background-variant-hsl));
-  color: #fff;
-  font-size: 16px;
-  margin: 1px;
-  outline: transparent;
-  box-shadow: transparent;
-  opacity: .85;
-  cursor: pointer;
-  transition: background-color .1s ease-in-out, opacity .1s ease-in-out, outline .1s ease-in-out, box-shadow .1s ease-in-out;
-  width: 16.5em;
-}
-
-.report-int-items {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-top: .1em;
-}
-
-.report-int-item .town {
-  font-size: 14px;
-  font-weight: 600;
 }
