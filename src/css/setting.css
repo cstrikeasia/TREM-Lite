@@ -274,6 +274,10 @@ body {
     margin-top: 3vh;
 }
 
+.info .setting-option div {
+    align-items: flex-start !important;
+}
+
 
 .setting-item-content div div:not(.select-items, .select-wrapper, .condition-items) {
     padding: 13px;
@@ -281,7 +285,7 @@ body {
     display: flex;
     align-items: center;
 
-    &:not(.last-child) {
+    &:not(:last-child) {
         border-bottom: 1px solid black;
         border-color: rgb(255 255 255 / 2%);
     }

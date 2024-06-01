@@ -8,7 +8,6 @@ const domMethods = {
 const { querySelector, querySelectorAll, createElement } = domMethods;
 
 const version = querySelector("#version");
-const uuid = querySelector("#uuid");
 const SettingWrapper = querySelector(".setting-wrapper");
 const SettingBtn = querySelector("#nav-settings-panel");
 const Back = querySelector(".back_to_home");
@@ -29,7 +28,6 @@ const TownItems = LocationSelectWrapper.querySelector(".town");
 
 // 版本號、UUID
 version.textContent = "2.0.0";
-uuid.textContent = "undefined";
 
 const localArr = {
   "北部" : ["臺北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣"],
