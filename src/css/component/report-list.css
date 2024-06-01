@@ -383,11 +383,15 @@
     display: flex;
     align-items: baseline;
   }
+
+  .report-list-item-mag span {
+    font-size: 30px;
+  }
 }
 
 .report-list-item-mag-depth {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   width: 100%;
   justify-content: space-around;
 }
