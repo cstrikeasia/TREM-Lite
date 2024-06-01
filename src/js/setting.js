@@ -401,7 +401,7 @@ const FormLogin = querySelector("#form-login");
 const FormEmail = querySelector("#email");
 const FormPassword = querySelector("#password");
 const LoginMsg = querySelector(".login_msg");
-const url = "https://api.exptech.com.tw/api/v3/et/";
+const url = "https://api.exptech.dev/api/v3/et/";
 
 // 登入-切換登入表單和帳號資訊
 function toggleForms(isLoginFormVisible) {

@@ -247,3 +247,18 @@
   font-weight: 600;
   margin-left: .3em;
 }
+
+#report-back-btn {
+  border-radius: 30px;
+  height: 25px;
+  width: 80px;
+  background: #fff;
+}
+
+#report-back-btn span {
+  color: #000;
+}
+
+#report-back-btn .button-label {
+  font-weight: bold;
+}

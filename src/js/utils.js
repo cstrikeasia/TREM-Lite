@@ -142,9 +142,9 @@ async function fetchData(url, timeout = 1000) {
 }
 
 function API_url() {
-  return `https://api-${Math.ceil(Math.random() * 2)}.exptech.com.tw/api/`;
+  return `https://api-${Math.ceil(Math.random() * 2)}.exptech.dev/api/`;
 }
 
 function LB_url() {
-  return `https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/`;
+  return `https://lb-${Math.ceil(Math.random() * 4)}.exptech.dev/api/`;
 }
