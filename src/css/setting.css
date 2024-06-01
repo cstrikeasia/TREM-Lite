@@ -528,7 +528,7 @@ li {
 .slider-container {
     position: relative;
     width: 10vw;
-    height: .4em;
+    height: .3em;
     background-color: #d3d3d3;
     border-radius: 5px;
     margin: 20px 0;
@@ -542,7 +542,7 @@ li {
     padding: 0 !important;
     border-color: unset !important;
     border-bottom: unset !important;
-    height: 0.5rem;
+    height: 0.3rem;
     position: relative;
     top: 0em;
     right: 0.1em;
@@ -558,6 +558,8 @@ li {
     cursor: pointer;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     padding: 10px !important;
+    height: 2px;
+    width: 2px;
 }
 
 .slider-wrapper {

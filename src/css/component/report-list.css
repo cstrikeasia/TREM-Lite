@@ -33,7 +33,6 @@
   min-height: 0;
   padding: 8px;
   border-radius: 16px;
-  background-color: hsl(var(--surface-hsl));
   pointer-events: all;
 
   /* animation */
@@ -261,4 +260,134 @@
 
 #report-back-btn .button-label {
   font-weight: bold;
+}
+
+
+.report-list-item-int {
+  border: 1px solid #9600FF;
+  width: 65px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background-color: #9600FF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
+}
+
+.report-list-item-info {
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.report-list-item-location {
+  font-size: 21px;
+}
+
+.report-list-item-time {
+  font-size: 13px;
+}
+
+.report-list-item-index {
+  margin-bottom: .5em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 11px;
+  background-color: #464646;
+  color: #fff;
+  font-size: 16px;
+  outline: transparent;
+  box-shadow: transparent;
+  cursor: pointer;
+  transition: background-color .1s ease-in-out, opacity .1s ease-in-out, outline .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.report-list-item-mag {
+  font-size: 23px;
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.report-list-item-info-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.report-list-item-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.report-list-item-int-title {
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: .3em;
+}
+
+.report-list-item-int-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.report-list-item-index.first {
+  padding: 10px;
+  align-items: flex-start;
+
+  .report-list-item-location {
+    font-size: 28px;
+  }
+
+  .report-list-item-info-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .report-list-item-int {
+    height: 80px;
+    width: 80px;
+    font-size: 3em;
+  }
+
+  .report-list-item-info {
+    height: auto;
+  }
+
+  .report-list-item-mag {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .m {
+    font-size: 14px;
+    margin-right: 2;
+  }
+
+  .km {
+    font-size: 14px;
+    margin-left: 2;
+  }
+
+  .report-list-item-km {
+    color: #fff;
+    font-size: 23px;
+    font-weight: bold;
+    display: flex;
+    align-items: baseline;
+  }
+}
+
+.report-list-item-mag-depth {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
 }
