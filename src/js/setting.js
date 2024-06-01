@@ -401,7 +401,7 @@ const FormLogin = querySelector("#form-login");
 const FormEmail = querySelector("#email");
 const FormPassword = querySelector("#password");
 const LoginMsg = querySelector(".login_msg");
-const url = "https://api.exptech.dev/api/v3/et/";
+const url = "https://api.exptech.com.tw/api/v3/et/";
 
 // 登入-切換登入表單和帳號資訊
 function toggleForms(isLoginFormVisible) {
@@ -628,6 +628,8 @@ addEventListener("mousemove", (event) => {
     sliderThumb.style.left = `${percentage}%`;
     sliderTrack.style.width = `${percentage}%`;
     SettingWrapper.style.backdropFilter = `blur(${blurValue}px)`;
+    localStorage.setItem("bg-percentage", percentage);
+    localStorage.setItem("bg-filter", blurValue);
   }
 });
 
@@ -636,19 +638,24 @@ const GetSelectedFromStorage = () => {
   const locationData = JSON.parse(localStorage.getItem("current-location")) || {};
   const warningData = JSON.parse(localStorage.getItem("current-warning")) || {};
 
+  sliderThumb.style.left = `${localStorage.getItem("bg-percentage") ? localStorage.getItem("bg-percentage") : 100 }%`;
+  sliderTrack.style.width = `${localStorage.getItem("bg-percentage") ? localStorage.getItem("bg-percentage") : 100 }%`;
+  SettingWrapper.style.backdropFilter = `blur(${localStorage.getItem("bg-filter") ? localStorage.getItem("bg-filter") : 20 }px)`;
+
   return {
-    city    : locationData.city ? locationData.city : "臺南市",
-    town    : locationData.town ? locationData.town : "歸仁區",
-    station : localStorage.getItem("current-station") ? localStorage.getItem("current-station") : "未知區域",
-    wrts    : warningData["realtime-station"] ? warningData["realtime-station"] : intensity_text[0],
-    wei     : warningData["estimate-int"] ? warningData["estimate-int"] : intensity_text[0],
-    effect  : localStorage.getItem("current-map-display-effect") ? localStorage.getItem("current-map-display-effect") : "1",
+    city             : locationData.city ? locationData.city : "臺南市",
+    town             : locationData.town ? locationData.town : "歸仁區",
+    station          : localStorage.getItem("current-station") ? localStorage.getItem("current-station") : "未知區域",
+    wrts             : warningData["realtime-station"] ? warningData["realtime-station"] : intensity_text[0],
+    wei              : warningData["estimate-int"] ? warningData["estimate-int"] : intensity_text[0],
+    effect           : localStorage.getItem("current-map-display-effect") ? localStorage.getItem("current-map-display-effect") : "1",
+    selectedcheckbox : localStorage.getItem("user-checkbox"),
   };
 };
 
 // 渲染user之前保存的選項
 const RenderSelectedFromStorage = () => {
-  const { city, town, station, wrts, wei, effect } = GetSelectedFromStorage();
+  const { city, town, station, wrts, wei, effect, selectedcheckbox } = GetSelectedFromStorage();
   const current_station = querySelector(".current-station");
 
   querySelector(".current-city").textContent = city;
@@ -665,6 +672,18 @@ const RenderSelectedFromStorage = () => {
   const keys = Object.keys(EffectArr);
   const effect_text = keys[effect - 1] || "unknown";
   querySelector(".current-effect").textContent = effect_text;
+
+  /** 選中check box**/
+  const checkboxes = querySelectorAll(".switch input[type='checkbox']");
+  const SelectedCheckBoxes = JSON.parse(selectedcheckbox) || {};
+  checkboxes.forEach((checkbox) => {
+    const id = checkbox.id;
+    if (SelectedCheckBoxes[id])
+      checkbox.checked = true;
+    else
+      checkbox.checked = false;
+
+  });
 };
 
 // 渲染user之前保存的選項
@@ -756,5 +775,24 @@ querySelectorAll(".report-list-item-wrapper").forEach(wrapper => {
     const ArrowSpan = ReportListItem.querySelector(".report-arrow-down");
     ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
     wrapper.classList.toggle("active");
+  });
+});
+
+
+/** 滑條選中**/
+const checkboxes = document.querySelectorAll(".switch input[type='checkbox']");
+
+checkboxes.forEach((checkbox) => {
+  checkbox.addEventListener("change", () => {
+    const selectedcheckbox = {};
+
+    checkboxes.forEach((cb) => {
+      if (cb.checked)
+        selectedcheckbox[cb.id] = true;
+
+    });
+
+    const selectedcheckboxJSON = JSON.stringify(selectedcheckbox);
+    localStorage.setItem("user-checkbox", selectedcheckboxJSON);
   });
 });

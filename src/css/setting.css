@@ -234,7 +234,9 @@ body {
 .setting-item-wrapper {
     position: absolute;
     top: 4rem;
+    width: 100%;
     display: flex;
+    align-items: center;
     flex-direction: column;
     gap: 4px;
     overflow-y: hidden;
@@ -522,7 +524,7 @@ li {
 .slider-container {
     position: relative;
     width: 10vw;
-    height: 5px;
+    height: .4em;
     background-color: #d3d3d3;
     border-radius: 5px;
     margin: 20px 0;
@@ -534,6 +536,12 @@ li {
     background-color: #0073fc;
     border-radius: 5px;
     padding: 0 !important;
+    border-color: unset !important;
+    border-bottom: unset !important;
+    height: 0.5rem;
+    position: relative;
+    top: 0em;
+    right: 0.1em;
 }
 
 .slider-thumb {
