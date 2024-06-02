@@ -120,7 +120,7 @@ async function report() {
 
   const Time = document.createElement("div");
   Time.classList.add("report-list-item-time");
-  Time.textContent = formatTime(FirstItem.time);
+  Time.textContent = ReportTime(FirstItem.time);
 
   Info.appendChild(Title);
   Info.appendChild(Location);
@@ -171,7 +171,7 @@ async function report() {
 
     const TimeItem = document.createElement("div");
     TimeItem.classList.add("report-list-item-time");
-    TimeItem.textContent = formatTime(item.time);
+    TimeItem.textContent = ReportTime(item.time);
 
     const MagItem = document.createElement("div");
     MagItem.classList.add("report-list-item-mag");
@@ -210,7 +210,7 @@ function LocalReplace(loc) {
   return "";
 }
 
-function formatTime(timestamp) {
+function ReportTime(timestamp) {
   const date = new Date(timestamp);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
