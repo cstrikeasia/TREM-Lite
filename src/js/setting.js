@@ -1,11 +1,4 @@
 /* eslint-disable no-undef */
-const domMethods = {
-  querySelector    : document.querySelector.bind(document),
-  querySelectorAll : document.querySelectorAll.bind(document),
-  createElement    : document.createElement.bind(document),
-};
-
-const { querySelector, querySelectorAll, createElement } = domMethods;
 
 const version = querySelector("#version");
 const SettingWrapper = querySelector(".setting-wrapper");
@@ -578,7 +571,7 @@ function updateLocalStorage(typeClassName, selectedValue) {
 }
 
 // 預警條件-即時測站
-const WRTS = document.querySelector(".warning-realtime-station");
+const WRTS = querySelector(".warning-realtime-station");
 const WRTSLocation = WRTS.querySelector(".location");
 const WRTSShowInt = WRTS.querySelector(".realtime-int");
 const WRTSSelectWrapper = WRTS.querySelector(".select-wrapper");
@@ -587,7 +580,7 @@ const WRTSItems = WRTSSelectWrapper.querySelector(".int");
 initializeSelect(WRTS, WRTSLocation, WRTSShowInt, WRTSSelectWrapper, WRTSItems);
 
 // 預警條件-預估震度
-const WEI = document.querySelector(".warning-estimate-int");
+const WEI = querySelector(".warning-estimate-int");
 const WEILocation = WEI.querySelector(".location");
 const WEIShowInt = WEI.querySelector(".estimate-int");
 const WEISelectWrapper = WEI.querySelector(".select-wrapper");
@@ -596,7 +589,7 @@ const WEIItems = WEISelectWrapper.querySelector(".int");
 initializeSelect(WEI, WEILocation, WEIShowInt, WEISelectWrapper, WEIItems);
 
 // 渲染震度選項列表
-const Ints = document.querySelectorAll(".select-wrapper .int");
+const Ints = querySelectorAll(".select-wrapper .int");
 const intensity_text = ["0級", "1級", "2級", "3級", "4級", "5弱", "5強", "6弱", "6強", "7級"];
 Ints.forEach(Int => {
   intensity_text.forEach(text => {
@@ -782,7 +775,7 @@ querySelectorAll(".report-list-item-wrapper").forEach(wrapper => {
 
 
 /** 滑條選中**/
-const checkboxes = document.querySelectorAll(".switch input[type='checkbox']");
+const checkboxes = querySelectorAll(".switch input[type='checkbox']");
 
 checkboxes.forEach((checkbox) => {
   checkbox.addEventListener("change", () => {

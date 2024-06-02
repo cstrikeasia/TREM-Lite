@@ -14,7 +14,6 @@ setInterval(() => {
       document.getElementById("connect").style.color = "red";
     } else {
       doc_time.style.color = "white";
-      console.log(formatTime(_now));
       doc_time.textContent = formatTime(_now);
     }
 }, 1000);

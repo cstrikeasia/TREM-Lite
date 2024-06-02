@@ -79,7 +79,7 @@ async function ntp() {
 }
 
 async function report() {
-  const ReportList = document.querySelector(".report-list-items");
+  const ReportList = querySelector(".report-list-items");
   const res = await fetchData(`${API_url()}v2/eq/report?limit=20`);
   const data = await res.json();
   ReportList.innerHTML = "";
@@ -87,6 +87,7 @@ async function report() {
   const FirstItem = data[0];
   const First = document.createElement("div");
   First.classList.add("report-list-item-index", "first");
+  First.setAttribute("data-report-id", FirstItem.id);
 
   const IntWrapper = document.createElement("div");
   IntWrapper.classList.add("report-list-item-int-wrapper");
@@ -120,7 +121,7 @@ async function report() {
 
   const Time = document.createElement("div");
   Time.classList.add("report-list-item-time");
-  Time.textContent = ReportTime(FirstItem.time);
+  Time.textContent = ReportTimeFormat(FirstItem.time);
 
   Info.appendChild(Title);
   Info.appendChild(Location);
@@ -154,6 +155,7 @@ async function report() {
     const item = data[i];
     const Element = document.createElement("div");
     Element.classList.add("report-list-item-index");
+    Element.setAttribute("data-report-id", item.id);
 
     const IntItem = document.createElement("div");
     IntItem.classList.add("report-list-item-int", `intensity-${item.int}`);
@@ -171,7 +173,7 @@ async function report() {
 
     const TimeItem = document.createElement("div");
     TimeItem.classList.add("report-list-item-time");
-    TimeItem.textContent = ReportTime(item.time);
+    TimeItem.textContent = ReportTimeFormat(item.time);
 
     const MagItem = document.createElement("div");
     MagItem.classList.add("report-list-item-mag");
@@ -200,6 +202,65 @@ async function report() {
 }
 report();
 
+const ReportItem = querySelector(".report-list-items");
+const ReportBoxWrapper = querySelector(".report-box-wrapper");
+const ReportTitle = querySelector("#report-title");
+const ReportLocation = querySelector("#report-location");
+const ReportLongitude = querySelector("#report-longitude");
+const ReportLatitude = querySelector("#report-latitude");
+const ReportMagitude = querySelector("#report-magnitude");
+const ReportDepth = querySelector("#report-depth");
+const ReportTime = querySelector("#report-time");
+ReportItem.addEventListener("click", (event) => {
+  const closestDiv = event.target.closest(".report-list-item-index");
+  const ReporID = closestDiv.getAttribute("data-report-id");
+  ReportInfo(ReporID);
+});
+
+async function ReportInfo(id) {
+  const res = await fetchData(`${API_url()}v2/eq/report/${id}`);
+  const data = await res.json();
+  console.log(data);
+  ReportBoxWrapper.style.display = "flex";
+  ReportLocation.textContent = data.loc;
+  ReportLongitude.textContent = data.lon;
+  ReportLatitude.textContent = data.lat;
+  ReportMagitude.textContent = data.mag;
+  ReportDepth.textContent = data.depth;
+  ReportTime.textContent = formatTime(data.time).replace(/\//g, "-");
+}
+
+// function reportFormat(data) {
+//   Report_Info_Msg = "";
+//   const loc = data.loc;
+//   const dep = data.depth;
+//   const lat = data.lat;
+//   const lon = data.lon;
+//   const mag = data.mag;
+//   const time = formatTimestamp(data.time);
+//   const list = data.list;
+
+
+//   for (const city in list)
+//     if (list.hasOwnProperty(city)) {
+//       Report_Info_Msg += `${city}：`;
+//       const townObject = list[city].town;
+//       for (const town in townObject)
+//         if (townObject.hasOwnProperty(town)) {
+//           const townDetails = townObject[town];
+//           Report_Info_Msg += `${town}${townDetails.int}級、`;
+//         }
+
+//       Report_Info_Msg = Report_Info_Msg.slice(0, -1);
+//       Report_Info_Msg += "。";
+//     }
+
+
+//   const msg = `臺灣時間${time}左右發生規模${mag}地震，震央位於${loc}，深度${dep}公里，各地震度『${Report_Info_Msg}』，更多詳細的地震資訊請參閱中央氣象署網站。`;
+//   return msg;
+// }
+
+
 function LocalReplace(loc) {
   const matches = loc.match(/\(([^)]+)\)/);
   if (matches) {
@@ -210,7 +271,7 @@ function LocalReplace(loc) {
   return "";
 }
 
-function ReportTime(timestamp) {
+function ReportTimeFormat(timestamp) {
   const date = new Date(timestamp);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
