@@ -240,7 +240,7 @@ body {
     flex-direction: column;
     gap: 4px;
     overflow-y: hidden;
-    height: 84vh;
+    height: calc(100% - 85px);
     padding-bottom: 1.5rem;
 
     &:hover {
