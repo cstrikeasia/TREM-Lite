@@ -264,14 +264,12 @@
 
 
 .report-list-item-int {
-  border: 1px solid #9600FF;
   width: 65px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 11px;
-  background-color: #9600FF;
   font-size: 30px;
   font-weight: bold;
   font-family: "Open Sans", sans-serif;
@@ -322,7 +320,7 @@
 }
 
 .report-list-item-title {
-  font-size: 14px;
+  font-size: 17px;
   font-weight: bold;
 }
 
@@ -362,36 +360,101 @@
   }
 
   .report-list-item-mag {
+    position: relative;
     display: flex;
-    align-items: baseline;
+    gap: 4px;
+    height: 28px;
+    isolation: isolate;
+    font-size: 28px;
+    flex: 1 1 0%;
+
+    &::before {
+      background-color: rgb(255, 31, 0);
+      content: "";
+      display: block;
+      width: 5px;
+      border-radius: 30px;
+      height: 31px;
+    }
+
+    &:after {
+      position: absolute;
+      content: attr(data-background-text);
+      line-height: 28px;
+      font-size: 30px;
+      font-weight: 700;
+      opacity: 0.15;
+      z-index: -1;
+      padding: 0px 6px;
+      color: #fff;
+    }
   }
 
-  .m {
-    font-size: 14px;
-    margin-right: 2;
+  .report-list-item-magnitude {
+    &::before {
+      margin-right: 4px;
+      content: "𝖬";
+      font-size: 23px;
+    }
   }
 
   .km {
-    font-size: 14px;
-    margin-left: 2;
+    font-size: 24px;
+    line-height: 36px;
+
+    &::after {
+      margin-left: 4px;
+      content: "km";
+      font-size: 14px;
+      font-weight: bold;
+      display: inline-block;
+      line-height: 28px;
+      font-weight: 400;
+    }
   }
 
   .report-list-item-km {
     color: #fff;
+    position: relative;
+    gap: 4px;
+    height: 28px;
+    isolation: isolate;
     font-size: 23px;
     font-weight: bold;
     display: flex;
     align-items: baseline;
+
+    &:before {
+      position: absolute;
+      content: attr(data-background-text);
+      line-height: 28px;
+      font-size: 30px;
+      font-weight: 700;
+      opacity: 0.15;
+      z-index: -1;
+      color: #fff;
+      margin-right: 4px;
+    }
+
+    &::after {
+      background-color: rgb(255, 31, 0);
+      content: "";
+      display: block;
+      width: 4px;
+      height: 28px;
+      border-radius: 30px;
+    }
   }
 
   .report-list-item-mag span {
     font-size: 30px;
   }
-}
 
-.report-list-item-mag-depth {
-  display: flex;
-  align-items: baseline;
-  width: 100%;
-  justify-content: space-around;
+  .report-list-item-mag-depth {
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+    margin-top: .3em;
+    justify-content: space-around;
+  }
 }
