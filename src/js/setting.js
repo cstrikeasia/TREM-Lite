@@ -464,6 +464,8 @@ async function handleUserAction(endpoint, options) {
     const response = await fetch(`${url}${endpoint}`, options);
     const responseData = await response.text();
 
+    LoginMsg.classList.remove("success", "error", "shake");
+
     switch (true) {
       case response.ok: {
         LoginMsg.classList.add("success");
@@ -475,12 +477,19 @@ async function handleUserAction(endpoint, options) {
       case response.status === 400 || response.status === 401:
         LoginMsg.classList.add("error");
         LoginMsg.textContent = "帳號或密碼錯誤！";
+        LoginMsg.classList.add("shake");
         break;
       default:
         LoginMsg.classList.add("error");
         LoginMsg.textContent = `伺服器異常(error ${response.status})`;
+        LoginMsg.classList.add("shake");
         break;
     }
+
+    LoginMsg.addEventListener("animationend", () => {
+      LoginMsg.classList.remove("shake");
+    }, { once: true });
+
   } catch (error) {
     console.error("Error:", error);
   }
@@ -743,17 +752,12 @@ const Tos_Sure = querySelector(".tos_sure");
 
 if (!localStorage.getItem("tos")) {
   querySelector(".tos").style.display = "flex";
-  const hello = querySelector(".hello__div");
-  setTimeout(() => {
-    hello.style.opacity = "0";
 
-    setTimeout(() => {
-      const tosWrapper = querySelector(".tos_wrapper");
-      tosWrapper.style.height = "19em";
-      tosWrapper.style.opacity = "1";
-      hello.style.display = "none";
-    }, 2500);
-  }, 6000);
+  setTimeout(() => {
+    const tosWrapper = querySelector(".tos_wrapper");
+    tosWrapper.style.height = "19em";
+    tosWrapper.style.opacity = "1";
+  }, 2500);
 }
 
 Tos_Sure.addEventListener("click", () => {
