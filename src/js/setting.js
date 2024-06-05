@@ -764,13 +764,15 @@ Tos_Sure.addEventListener("click", () => {
 
 
 /** Report **/
-querySelectorAll(".report-list-item-wrapper").forEach(wrapper => {
-  const ReportListItem = wrapper.querySelector(".report-list-item");
-  ReportListItem.addEventListener("click", () => {
+document.addEventListener("click", (event) => {
+  const ReportListItem = event.target.closest(".report-list-item");
+
+  if (ReportListItem) {
+    const wrapper = ReportListItem.closest(".report-list-item-wrapper");
     const ArrowSpan = ReportListItem.querySelector(".report-arrow-down");
     ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
     wrapper.classList.toggle("active");
-  });
+  }
 });
 
 
