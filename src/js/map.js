@@ -84,3 +84,35 @@ function updateIconSize() {
 }
 
 variable.map.on("zoomend", updateIconSize);
+
+variable.focus.bounds = {
+  report    : L.latLngBounds(),
+  intensity : L.latLngBounds(),
+  tsunami   : L.latLngBounds(),
+  eew       : L.latLngBounds(),
+  rts       : L.latLngBounds(),
+};
+
+setInterval(() => {
+  if (variable.focus.status.rts) {
+    variable.focus.status.rts = 0;
+    const zoom_now = variable.map.getZoom();
+    const center_now = variable.map.getCenter();
+    const center = variable.focus.bounds.rts.getCenter();
+    let zoom = variable.map.getBoundsZoom(variable.focus.bounds.rts) - 0.7;
+    if (Math.abs(zoom - zoom_now) < 0.2) zoom = zoom_now;
+    const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
+    variable.map.setView((set_center > 10) ? center : center_now, zoom);
+  }
+  if (variable.focus.status.eew) {
+    variable.focus.status.eew = 0;
+    const zoom_now = variable.map.getZoom();
+    const center_now = variable.map.getCenter();
+    const center = variable.focus.bounds.eew.getCenter();
+    let zoom = variable.map.getBoundsZoom(variable.focus.bounds.eew) - 0.7;
+    if (Math.abs(zoom - zoom_now) < 0.2) zoom = zoom_now;
+    if (zoom < 6.5) zoom = 6.5;
+    const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
+    variable.map.setView((set_center > 10) ? center : center_now, zoom);
+  }
+}, 0);

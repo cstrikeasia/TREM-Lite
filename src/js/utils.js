@@ -70,7 +70,7 @@ function eew_area_pga(lat, lon, depth, mag) {
       let i = pga_to_float(pga);
       if (i >= 4.5) i = eew_area_pgv([lat, lon], [info.lat, info.lon], depth, mag);
       if (i > eew_max_i) eew_max_i = i;
-      json[`${city} ${town}`] = { dist, i };
+      json[`${city} ${town}`] = { dist, i, lat: info.lat, lon: info.lon };
     }
   json.max_i = eew_max_i;
   return json;

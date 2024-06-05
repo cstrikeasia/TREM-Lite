@@ -15,6 +15,7 @@ const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
 async function report() {
   const ReportList = querySelector(".report-list-items");
   const res = await fetchData(`${API_url()}v2/eq/report?limit=20`);
+  if (!res) return;
   const data = await res.json();
   ReportList.innerHTML = "";
 

@@ -29,6 +29,7 @@ function get_station_info() {
 function show_rts_box(_colors) {
   const _colors_ = {};
   const _eew_list = Object.keys(variable.eew_list);
+  variable.focus.bounds.rts = L.latLngBounds();
   Object.keys(_colors).forEach(key => {
     let passed = false;
     if (_eew_list.length) {
@@ -44,6 +45,9 @@ function show_rts_box(_colors) {
           passed = true;
           break;
         }
+        if (!variable.focus.bounds.eew) variable.focus.status.rts = 1;
+        for (let _i = 0; _i < 4; _i++)
+          variable.focus.bounds.rts.extend([box[_i][1], box[_i][0]]);
       }
     }
     if (!passed)
@@ -85,8 +89,6 @@ function show_rts_dot(data, alert) {
     };
   else {
     realtime_list.innerHTML = "";
-
-    console.log(data.int);
 
     for (const area of data.int) {
       const box = document.createElement("div");

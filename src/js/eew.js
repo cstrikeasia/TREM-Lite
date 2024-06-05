@@ -8,6 +8,8 @@ setInterval(() => {
   if (!_eew_list.length) return;
   if (draw_lock) return;
   draw_lock = true;
+  variable.focus.bounds.eew = L.latLngBounds();
+  variable.focus.status.eew = 1;
   for (const id of _eew_list) {
     const data = variable.eew_list[id].data;
     const now_time = data.time + (now() - data.timestamp);
@@ -28,7 +30,18 @@ setInterval(() => {
     variable.eew_list[data.id].layer.p.setRadius(p_dist);
     variable.eew_list[data.id].layer.s.setRadius(s_dist);
     variable.eew_list[data.id].layer.s_fill.setRadius(s_dist);
-
+    if (_eew_list[last_map_count] == id) {
+      variable.focus.bounds.eew.extend([data.eq.lat, data.eq.lon]);
+      if (!data.eq.max) variable.focus.bounds.eew.extend(variable.eew_list[data.id].layer.s.getBounds());
+      else {
+        const intensity_list = variable.eew_list[_eew_list[last_map_count]].eew_intensity_list;
+        for (const name of Object.keys(intensity_list)) {
+          const intensity = intensity_float_to_int(intensity_list[name].i);
+          if (intensity > 1 && s_dist / 1000 > intensity_list[name].dist)
+            variable.focus.bounds.eew.extend([intensity_list[name].lat, intensity_list[name].lon]);
+        }
+      }
+    }
     if (s_t) {
       const progress = Math.floor(((now_time - data.eq.time) / 1000 / s_t) * 100);
       const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;

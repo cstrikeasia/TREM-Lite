@@ -117,6 +117,22 @@ const variable = {
       shindo_2 : 0,
     },
   },
+  focus: {
+    bounds: {
+      report    : null,
+      intensity : null,
+      tsunami   : null,
+      eew       : null,
+      rts       : null,
+    },
+    status: {
+      report    : 0,
+      intensity : 0,
+      tsunami   : 0,
+      eew       : 0,
+      rts       : 0,
+    },
+  },
 };
 
 const domMethods = {

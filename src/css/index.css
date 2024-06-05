@@ -6,6 +6,8 @@
 @import url(./component/report-list.css);
 @import url(./component/report-marker.css);
 
+.warning-message,.warning-alert{display:none!important;}
+
 body {
   user-select: none;
   margin: 0;
