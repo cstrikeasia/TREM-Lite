@@ -34,6 +34,9 @@ function show_rts_box(_colors) {
     let passed = false;
     if (_eew_list.length) {
       const box = constant.BOX_GEOJSON.features.find(item => item.id == key).geometry.coordinates[0];
+      if (!variable.focus.bounds.eew) variable.focus.status.rts = 1;
+      for (let _i = 0; _i < 4; _i++)
+        variable.focus.bounds.rts.extend([box[_i][1], box[_i][0]]);
       for (const id of _eew_list) {
         const data = variable.eew_list[id].data;
         let SKIP = 0;
@@ -45,9 +48,6 @@ function show_rts_box(_colors) {
           passed = true;
           break;
         }
-        if (!variable.focus.bounds.eew) variable.focus.status.rts = 1;
-        for (let _i = 0; _i < 4; _i++)
-          variable.focus.bounds.rts.extend([box[_i][1], box[_i][0]]);
       }
     }
     if (!passed)
@@ -136,11 +136,11 @@ function show_rts_dot(data, alert) {
 
     const pga = data.station[id].pga;
 
+    const info = variable.station_info[id].info.at(-1);
     if (data.station[id].alert) {
       trigger++;
       level += pga;
     }
-    const info = variable.station_info[id].info.at(-1);
 
     let loc = region_code_to_string(constant.REGION, info.code);
 

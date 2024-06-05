@@ -40,6 +40,7 @@ setInterval(() => {
           if (intensity > 1 && s_dist / 1000 > intensity_list[name].dist)
             variable.focus.bounds.eew.extend([intensity_list[name].lat, intensity_list[name].lon]);
         }
+        variable.focus.bounds.eew.extend(variable.focus.bounds.rts);
       }
     }
     if (s_t) {
@@ -183,14 +184,14 @@ function show_eew(data) {
           weight    : 2,
         }).addTo(variable.map),
         s: L.circle([data.eq.lat, data.eq.lon], {
-          color     : "red",
+          color     : (data.status) ? "red" : "#FF9224",
           fillColor : "transparent",
           radius    : s_dist,
           weight    : 2,
         }).addTo(variable.map),
         s_fill: L.gradientCircle([data.eq.lat, data.eq.lon], {
           radius         : s_dist,
-          gradientColors : ["rgba(255, 0, 0, 0)", "rgba(255, 0, 0, 0.6)"],
+          gradientColors : (data.status) ? ["rgba(255, 0, 0, 0)", "rgba(255, 0, 0, 0.6)"] : ["rgba(255, 146, 36, 0)", "rgba(255, 146, 36, 0.6)"],
           pane           : "circlePane",
         }).addTo(variable.map),
       },
@@ -210,10 +211,26 @@ function show_eew(data) {
   } else
     if (data.serial != variable.eew_list[data.id].data.serial) {
       constant.AUDIO.UPDATE.play();
+      if (!variable.eew_list[data.id].data.status && data.status) {
+        variable.eew_list[data.id].layer.s.remove();
+        variable.eew_list[data.id].layer.s_fill.remove();
+        variable.eew_list[data.id].layer.s = L.circle([data.eq.lat, data.eq.lon], {
+          color     : (data.status) ? "red" : "#FF9224",
+          fillColor : "transparent",
+          radius    : s_dist,
+          weight    : 2,
+        }).addTo(variable.map);
+        variable.eew_list[data.id].layer.s_fill = L.gradientCircle([data.eq.lat, data.eq.lon], {
+          radius         : s_dist,
+          gradientColors : (data.status) ? ["rgba(255, 0, 0, 0)", "rgba(255, 0, 0, 0.6)"] : ["rgba(255, 146, 36, 0)", "rgba(255, 146, 36, 0.6)"],
+          pane           : "circlePane",
+        }).addTo(variable.map);
+      } else {
+        variable.eew_list[data.id].layer.s.setLatLng([data.eq.lat, data.eq.lon]);
+        variable.eew_list[data.id].layer.s_fill.setLatLng([data.eq.lat, data.eq.lon]);
+      }
       variable.eew_list[data.id].data = data;
       variable.eew_list[data.id].layer.epicenterIcon.setLatLng([data.eq.lat, data.eq.lon]);
-      variable.eew_list[data.id].layer.s.setLatLng([data.eq.lat, data.eq.lon]);
-      variable.eew_list[data.id].layer.s_fill.setLatLng([data.eq.lat, data.eq.lon]);
       variable.eew_list[data.id].layer.p.setLatLng([data.eq.lat, data.eq.lon]);
     } else return;
 

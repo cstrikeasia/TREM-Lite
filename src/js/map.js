@@ -115,4 +115,4 @@ setInterval(() => {
     const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
     variable.map.setView((set_center > 10) ? center : center_now, zoom);
   }
-}, 0);
+}, 100);

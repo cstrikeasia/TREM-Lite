@@ -46,7 +46,7 @@ function read_replay_file() {
 
     variable.replay = data.rts.time;
 
-    // console.log(name);
+    // console.log(data);
   }
 }
 
