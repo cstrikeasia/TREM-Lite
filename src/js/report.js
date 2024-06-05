@@ -1,3 +1,17 @@
+const ReportItem = querySelector(".report-list-items");
+const ReportBoxWrapper = querySelector(".report-box-wrapper");
+const ReportTitle = querySelector("#report-title");
+const ReportSubTitle = querySelector("#report-subtitle");
+const ReportMaxIntensity = querySelector("#report-max-intensity");
+const ReportActionOpen = querySelector("#report-action-open");
+const ReportLocation = querySelector("#report-location");
+const ReportLongitude = querySelector("#report-longitude");
+const ReportLatitude = querySelector("#report-latitude");
+const ReportMagitude = querySelector("#report-magnitude");
+const ReportDepth = querySelector("#report-depth");
+const ReportTime = querySelector("#report-time");
+const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
+
 async function report() {
   const ReportList = querySelector(".report-list-items");
   const res = await fetchData(`${API_url()}v2/eq/report?limit=20`);
@@ -119,26 +133,17 @@ async function report() {
 
     ReportList.appendChild(Element);
   }
+
+  ReportItem.addEventListener("click", (event) => {
+    const closestDiv = event.target.closest(".report-list-item-index");
+    const ReportID = closestDiv.getAttribute("data-report-id");
+    const ThisReport = data.find(ReportInt => ReportInt.id === ReportID);
+    ReportInfo(ReportID, ThisReport.int);
+  });
 }
 report();
 
-const ReportItem = querySelector(".report-list-items");
-const ReportBoxWrapper = querySelector(".report-box-wrapper");
-const ReportTitle = querySelector("#report-title");
-const ReportLocation = querySelector("#report-location");
-const ReportLongitude = querySelector("#report-longitude");
-const ReportLatitude = querySelector("#report-latitude");
-const ReportMagitude = querySelector("#report-magnitude");
-const ReportDepth = querySelector("#report-depth");
-const ReportTime = querySelector("#report-time");
-const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
-ReportItem.addEventListener("click", (event) => {
-  const closestDiv = event.target.closest(".report-list-item-index");
-  const ReporID = closestDiv.getAttribute("data-report-id");
-  ReportInfo(ReporID);
-});
-
-async function ReportInfo(id) {
+async function ReportInfo(id, int) {
   const res = await fetchData(`${API_url()}v2/eq/report/${id}`);
   const data = await res.json();
   ReportBoxWrapper.style.display = "flex";
@@ -148,7 +153,25 @@ async function ReportInfo(id) {
   ReportMagitude.textContent = data.mag;
   ReportDepth.textContent = data.depth;
   ReportTime.textContent = formatTime(data.time).replace(/\//g, "-");
+  ReportTitle.textContent = LocalReplace(data.loc);
+  ReportSubTitle.textContent = `編號 ${data.id}`;
 
+  ReportMaxIntensity.classList.forEach(className => {
+    if (className.startsWith("intensity-"))
+      ReportMaxIntensity.classList.remove(className);
+
+    ReportMaxIntensity.classList.add(`intensity-${int}`);
+  });
+
+  ReportActionOpen.addEventListener("click", () => {
+    window.open(`https://www.cwa.gov.tw/V8/C/E/EQ/EQ${data.id.replace("2024-", "")}.html`, "_blank");
+  });
+  // https://www.cwa.gov.tw/V8/C/E/EQ/EQ113000-0605-212043.html
+  report_grouped(data);
+  report_all(data);
+}
+
+function report_grouped(data) {
   const reportListWrapper = document.querySelector("#report-intensity-grouped");
   reportListWrapper.innerHTML = "";
 
@@ -234,7 +257,6 @@ async function ReportInfo(id) {
 
     reportListWrapper.appendChild(ReportListWrapper);
   });
-  report_all(data);
 }
 
 function report_all(data) {
