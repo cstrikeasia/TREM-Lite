@@ -118,3 +118,11 @@ const variable = {
     },
   },
 };
+
+const domMethods = {
+  querySelector    : document.querySelector.bind(document),
+  querySelectorAll : document.querySelectorAll.bind(document),
+  createElement    : document.createElement.bind(document),
+};
+
+const { querySelector, querySelectorAll, createElement } = domMethods;

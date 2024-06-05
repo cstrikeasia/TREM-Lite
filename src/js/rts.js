@@ -138,7 +138,7 @@ function show_rts_dot(data, alert) {
       trigger++;
       level += pga;
     }
-    const info = variable.station_info[id].info[variable.station_info[id].info.length - 1];
+    const info = variable.station_info[id].info.at(-1);
 
     let loc = region_code_to_string(constant.REGION, info.code);
 

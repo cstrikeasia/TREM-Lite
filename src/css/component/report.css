@@ -6,11 +6,17 @@
   display: flex;
   flex-direction: column;
   width: 20vw;
-  min-width: 320px;
+  min-width: 450px;
   overflow: hidden;
   pointer-events: none;
   display: none;
   z-index: 1001;
+
+  .report-list-int {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
 
   .report-box {
     display: contents;
@@ -43,8 +49,8 @@
       flex-direction: column;
       gap: 8px;
       padding: 12px;
-      border-radius: 12px;
-      background-color: rgb(0 0 0 / 80%);
+      border-radius: 12px 12px 0px 0px;
+      background-color: #00000085;
       position: relative;
       z-index: 1;
 
@@ -112,10 +118,10 @@
       min-height: 0;
       padding: 5px;
       background-color: #1818189c;
-      bottom: 0.5rem;
       position: relative;
       padding-top: 2rem;
       border-radius: 0px 0px 15px 15px;
+      height: 100%;
 
       >.report-detail {
         display: flex;
@@ -272,7 +278,7 @@
             min-height: 0;
             overflow-x: hidden;
             overflow-y: hidden;
-            height: 450px;
+            height: 500em;
 
             &::-webkit-scrollbar-track {
               background-color: hsl(var(--background-variant-hsl));

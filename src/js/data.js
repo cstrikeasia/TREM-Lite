@@ -12,8 +12,13 @@ setInterval(() => {
 }, 1000);
 
 setInterval(() => {
+  report();
+}, 10000);
+
+setInterval(() => {
   ntp();
 }, 60000);
+
 
 function read_replay_file() {
   if (!variable.replay_list.length) {

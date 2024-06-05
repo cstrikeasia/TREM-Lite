@@ -19,6 +19,32 @@ body {
   --background-variant-hsl: 0deg 0% 16%;
 }
 
+@font-face {
+  font-family: "Material Symbols Rounded";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../font/material-symbols-rounded.woff2") format("woff2");
+}
+
+.material-symbols-rounded {
+  font-family: "Material Symbols Rounded";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "liga";
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -29,17 +55,66 @@ body {
 }
 
 .tos {
-  visibility: hidden;
+  visibility: visible;
   position: absolute;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(2px);
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 1500;
-  display: flex;
+  backdrop-filter: blur(18px);
+  background-color: rgb(0 0 0 / 100%);
+  z-index: 99999;
+  display: none;
   align-items: center;
   justify-content: center;
   color: white;
+  flex-direction: column;
+  opacity: 1;
+  transition: opacity 3s;
+}
+
+.tos_exptech {
+  text-align: center;
+  height: 25px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: .5em;
+  color: #ffffff36;
+}
+
+.tos_sure {
+  border: 1px solid #ffffff14;
+  border-radius: 5px;
+  width: 225px;
+  height: 35px;
+  text-align: center;
+  margin-top: 1em;
+  align-items: center;
+  justify-content: space-around;
+  cursor: pointer;
+  background: #00000085;
+  display: flex;
+}
+
+.tos_title {
+  font-size: 38px;
+  font-weight: 700;
+  margin-top: .2em;
+}
+
+.tos_wrapper {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ffffff14;
+  width: 33em;
+  height: 0;
+  opacity: 0;
+  transition: opacity 3s;
+}
+
+.tos_body li {
+  list-style-type: decimal;
 }
 
 .map {
@@ -56,7 +131,7 @@ body {
   flex-direction: column;
   gap: 8px;
   width: 20vw;
-  min-width: 277px;
+  min-width: 300px;
   margin: 8px;
   padding: 8px;
   border-radius: 20px;
@@ -195,7 +270,7 @@ body {
             >.info-body-magnitude-value {
               &::before {
                 margin-right: 4px;
-                content: "M";
+                content: "𝖬";
                 font-size: 16px;
               }
             }
@@ -271,7 +346,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    display: none;
+    display: flex;
     gap: 8px;
     flex-direction: column;
     align-items: center;
@@ -284,6 +359,7 @@ body {
     text-shadow: 2px 2px black, -2px -2px black, -2px 2px black, 2px -2px black;
     backdrop-filter: blur(1px);
     z-index: 1001;
+    opacity: 0;
 
     >.cancel-title {
       display: flex;
@@ -383,8 +459,9 @@ body {
   right: 0;
   height: calc(100vh - 170px);
   width: calc(20vw + 16px);
-  min-width: 290px;
+  min-width: 320px;
   margin: 8px;
+  display: none;
 
   >.realtime-box {
     flex: 1;
@@ -430,7 +507,7 @@ body {
             height: 23px;
             border-radius: 17px;
             font-family: "Open Sans", sans-serif;
-            font-weight: 700;
+            font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -666,7 +743,7 @@ body {
   border-radius: 5px;
   color: red;
   font-size: 15px;
-  z-index: 1000;
+  z-index: 1001;
 }
 
 .icon {
@@ -816,84 +893,6 @@ body:has(#report-panel.show) .pga_dot {
 .rts-info-body {
   display: flex;
   justify-content: space-between;
-}
-
-@font-face {
-  font-family: "Material Symbols Outlined";
-  font-style: normal;
-  font-weight: 400;
-  font-display: block;
-  src: url("./material-symbols-outlined.woff2") format("woff2");
-}
-
-.material-symbols-outlined {
-  font-family: "Material Symbols Outlined";
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "liga";
-}
-
-@font-face {
-  font-family: "Material Symbols Rounded";
-  font-style: normal;
-  font-weight: 400;
-  font-display: block;
-  src: url("./material-symbols-rounded.woff2") format("woff2");
-}
-
-.material-symbols-rounded {
-  font-family: "Material Symbols Rounded";
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "liga";
-}
-
-@font-face {
-  font-family: "Material Symbols Sharp";
-  font-style: normal;
-  font-weight: 400;
-  font-display: block;
-  src: url("./material-symbols-sharp.woff2") format("woff2");
-}
-
-.material-symbols-sharp {
-  font-family: "Material Symbols Sharp";
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "liga";
 }
 
 /**地震速報、海嘯警報下方警語**/
@@ -1058,6 +1057,13 @@ body:has(#report-panel.show) .pga_dot {
   top: calc(5rem);
   transform: translate(-230%, 0);
   pointer-events: none;
+  height: 100%;
+}
+
+.tsunami-title-container {
+  display: flex;
+  align-items: center;
+  height: 42px;
 }
 
 .warning-message .tsunami-warning {
@@ -1108,118 +1114,528 @@ body:has(#report-panel.show) .pga_dot {
   font-weight: bold;
   text-align: center;
   display: flex;
+  font-size: 16px;
 }
 
 .warning-message .tsunami-title,
-.tsunami-description {
+.tsunami-description,
+.tsunami-nhk-title {
   width: 100%;
 }
 
-.warning-message .tsunami-content {
+.warning-message .tsunami-container .tsunami-content {
   display: grid;
   justify-content: center;
 }
 
-/**地震波同心圓**/
-.earthquake-waves {
-  position: relative;
-  width: 800px;
-  height: 800px;
-  left: 35vw;
-  top: -51VW;
+/**海嘯報告**/
+.tsunami-report-container {
+  visibility: unset;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  bottom: 0;
+  right: 0;
+  height: calc(100vh - 265px);
+  width: calc(18vw + 16px);
+  min-width: 290px;
+  margin: 8px;
+  display: none;
 }
 
-.wave {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.tsunami-report-container .tsunami-report-box {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  color: white;
+  z-index: 1001;
+  border-radius: 15px;
+}
+
+.tsunami-report-container .tsunami-report-box .tsunami-container {
+  display: inline-table;
+  min-height: 0;
+  padding: 12px 12px 12px 12px;
+  border-radius: 10px 10px 10px 10px;
+  background-color: #383838ba;
+}
+
+.tsunami-report-container .tsunami-header {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.tsunami-report-container .tsunami-container .tsunami-content {
+  font-size: 18px;
+  font-weight: 700;
+  background: #212121;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 150px;
+  border-radius: 10px;
+  overflow-y: hidden;
+
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+.tsunami-report-container .tsunami-text {
+  font-size: 15px;
+  text-align: start;
+}
+
+.tsunami-report-container .tsunami-warning-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  padding: 12px 12px 12px 12px;
+  border-radius: 10px 10px 10px 10px;
+  background-color: #383838ba;
+  margin-top: 1vw;
+}
+
+.tsunami-report-container .tsunami-area-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  border-radius: 10px;
+  overflow-y: hidden;
+
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+.tsunami-report-container .tsunami-arrival-height {
+  width: 60px;
+  height: 49.27px;
+  border-radius: 18px 18px 18px 18px;
+  font-family: "Open Sans", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 30px;
+
+  &:after {
+    content: "m";
+    font-size: 13px;
+    margin-top: .7rem;
+    margin-left: 0.1vw;
+  }
+}
+
+.tsunami-arrival-info {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 100%;
-  border-radius: 50%;
 }
 
-.wave-1 {
+.tsunami-area-item.lift {
+  flex-direction: row-reverse;
+}
+
+.lift .tsunami-arrival-height {
   width: 100px;
-  height: 100px;
-  border: 2px solid #fff;
 }
 
-.wave-2 {
-  width: 200px;
-  height: 200px;
-  border: 2px solid #fff;
+.tsunami-report-container .tsunami-area-item {
+  display: flex;
+  background-color: rgb(40, 40, 40);
+  border-radius: 17px;
+  align-content: center;
+  align-items: center;
 }
 
-.wave-3 {
-  width: 300px;
-  height: 300px;
-  border: 2px solid #fff;
+.tsunami-report-container .tsunami-arrival-time {
+  font-weight: bold;
+  margin-left: auto;
+  left: -1vw;
+  position: relative;
 }
 
-.wave-4 {
-  width: 400px;
-  height: 400px;
-  border: 2px solid #fff;
+.tsunami-report-container .tsunami-arrival-height .nav-item-icon {
+  margin-left: -1rem;
+  left: 0.7rem;
+  position: relative;
+  bottom: 0.8rem;
+  width: 16px;
 }
 
-.wave-5 {
-  width: 500px;
-  height: 500px;
-  border: 2px solid #fff;
-}
-
-.wave-6 {
-  width: 600px;
-  height: 600px;
-  border: 2px solid #fff;
-}
-
-.epicenter {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
+.tsunami-report-container .tsunami-arrival-area {
+  padding-left: 1rem;
+  font-size: 19px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
   height: 20px;
-  border-radius: 50%;
-  background: url(epic-center.png) center center;
-  background-size: contain;
 }
 
-.wave-label {
-  position: absolute;
+.tsunami-report-container .tsunami-height-six-above {
+  border: 1px solid #c800c8;
+  color: white;
+  background-color: #c800c8;
+  box-sizing: border-box;
+
+  &:after {
+    margin-left: 0.1rem;
+  }
+}
+
+.tsunami-report-container .tsunami-height-six {
+  border: 1px solid #9600FF;
+  color: white;
+  background-color: #9600FF;
+  box-sizing: border-box;
+}
+
+.tsunami-report-container .tsunami-height-three {
+  border: 1px solid #FF0000;
+  color: white;
+  background-color: #FF0000;
+  box-sizing: border-box;
+}
+
+.tsunami-report-container .tsunami-height-one {
+  border: 1px solid #FFC800;
+  color: #313131;
+  background-color: #FFC800;
+  box-sizing: border-box;
+}
+
+.tsunami-nhk-warning {
+  border-radius: 15px;
+  width: 300px;
+  margin-top: 5px;
+  height: 6rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999999;
+  position: fixed;
+  bottom: 15.5rem;
+  left: .5rem;
+}
+
+.tsunami-nhk-title {
   color: #fff;
-  font-size: 12px;
+  font-size: 16px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background: #000;
+  font-weight: 100;
+}
+
+.tsunami-nhk-mag {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 100;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background: #f00;
+  width: 100%;
+}
+
+.tsunami-nhk-type {
+  background: #fb0202;
+  width: 90px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+.tsunami-1m {
+  background: #ffc800;
+}
+
+.tsunami-3m {
+  background: #ff0000;
+}
+
+.tsunami-6m {
+  background: #9600ff;
+}
+
+.tsunami-6m-height {
+  background: #C800C8;
+}
+
+.tsunami-lift {
+  background: #00c8c8;
+}
+
+.tsunami-nhk-area {
+  background-color: rgb(0 0 0 / 58%);
+  display: flex;
+  justify-content: space-around;
+}
+
+.tsunami-nhk-item {
+  color: #fff;
+  border: 1px solid rgb(0 0 0 / 58%);
+  margin-bottom: 1.5px;
+}
+
+.arrival {
+  border-radius: 5px;
+  border: 1px solid #fff;
+  width: 45px;
+  text-align: center;
+  left: 20px;
+  position: relative;
+}
+
+.height-one {
+  border: 1px solid #FFC800;
+  background: #FFC800;
+  width: 55px;
+  text-align: center;
+  left: 12px;
+  position: relative;
+}
+
+.height-three {
+  border: 1px solid #FF0000;
+  background: #FF0000;
+  width: 55px;
+  text-align: center;
+  left: 12px;
+  position: relative;
+}
+
+.height-six {
+  border: 1px solid #9600FF;
+  background: #9600FF;
+  width: 55px;
+  text-align: center;
+  left: 12px;
+  position: relative;
+}
+
+.height-six-plus {
+  border: 1px solid #C800C8;
+  background: #C800C8;
+  width: 55px;
+  text-align: center;
+  left: 12px;
+  position: relative;
+}
+
+.height-lift {
+  border: 1px solid #00C8C8;
+  background: #00C8C8;
+  width: 55px;
+  text-align: center;
+  left: 12px;
+  position: relative;
+}
+
+.tsunami-nhk-area>.area {
+  max-width: 150px;
+  text-align: center;
+}
+
+.cancel .info-body-box {
+  background-color: unset;
+}
+
+.tsunami-info-value {
+  font-size: 17px;
   font-weight: bold;
 }
 
-.wave-1 .wave-label {
-  top: -20%;
-  left: 50%;
+.tsunami-info-title {
+  opacity: .75;
+  line-height: 16px;
 }
 
-.wave-2 .wave-label {
-  top: -10%;
-  left: 50%;
+.tsunami-info-container {
+  display: flex;
+  gap: 8px;
+  font-family: "Open Sans", sans-serif;
+  flex-direction: column;
+  margin-left: 0.8em;
 }
 
-.wave-3 .wave-label {
-  top: -7%;
-  left: 50%;
+.tsunami-info-body {
+  display: grid;
+  align-items: center;
+  padding: 0 4px;
+  line-height: 12px;
+  font-size: 12px;
+  gap: 10px;
 }
 
-.wave-4 .wave-label {
-  top: -6%;
-  left: 50%;
+.tsunami-info-body-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  border-radius: 5px;
+  background-color: #383838;
+  padding: 8px;
+  margin-top: 0.5em;
 }
 
-.wave-5 .wave-label {
-  top: -5%;
-  left: 50%;
+.tsunami-info-body-box .cancel-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: rgb(0 0 0 / 40%);
+  color: white;
+  backdrop-filter: blur(1px);
+  z-index: 1001;
+  opacity: 0;
 }
 
-.wave-6 .wave-label {
-  top: -4%;
-  left: 50%;
+.tsunami-info-body-box .cancel-title {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+  line-height: 36px;
+  font-weight: 900;
+  font-size: 36px;
+}
+
+.tsunami-info-title-box {
+  display: flex;
+  padding: 0 8px;
+  line-height: 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+#info-title-box-type {
+  flex: 1;
+}
+
+#tsunami-info-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 18vw;
+  min-width: 277px;
+  margin: 8px;
+  padding: 8px;
+  border-radius: 10px;
+  background-color: #464646;
+  color: white;
+  white-space: nowrap;
+  z-index: 1001;
+  display: none;
+}
+
+#tsunami-info-box.warning-1 {
+  background-color: #ff0000;
+}
+
+#tsunami-info-box.warning-2 {
+  background-color: #ff9900;
+}
+
+#tsunami-info-box.warning-3 {
+  background-color: #ffc800;
+}
+
+#tsunami-info-box.warning-4 {
+  background-color: #1e9632;
+}
+
+.warning-2 .tsunami-info-title-box {
+  color: #313131;
+}
+
+.warning-3 .tsunami-info-title-box {
+  color: #313131;
+}
+
+#tsunami-info-title-box-type {
+  flex: 1;
+}
+
+.tsunami-info-item {
+  display: flex;
+  align-items: center;
+}
+
+.tsunami-info-coordinate {
+  line-height: 16px;
+}
+
+.tsunami_coordinate {
+  margin-right: 10px;
+  opacity: .75;
+}
+
+.tsunami_mag {
+  font-size: 20px;
+  color: #fff;
+}
+
+.tsunami_m {
+  margin-right: 2px;
+  opacity: .75;
+}
+
+.tsunami-info-item-branch {
+  display: flex;
+}
+
+.tsunami-info-item-branch .tsunami-info-item {
+  margin-right: 50px;
+}
+
+.tsunami_depth {
+  font-size: 20px;
+  color: #fff;
+  margin-right: 2px;
+}
+
+.tsunami_km {
+  margin-right: 2px;
+  opacity: .75;
+}
+
+.tsunami-info-unit {
+  font-weight: bold;
+  font-size: 11px;
+  position: relative;
+  right: 1vh;
+}
+
+.tsunami-info-item.unit {
+  justify-content: end;
+  margin-top: -8px;
+}
+
+.int {
+  width: 44px;
+  height: auto;
+  border-radius: 0px 15px 0px 10px;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -2,16 +2,14 @@
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 8px;
-  bottom: 8px;
+  top: 9.5em;
+  bottom: 0px;
   right: 8px;
   min-width: 320px;
   width: 20vw;
   z-index: 1000;
   overflow: hidden;
   pointer-events: none;
-
-  /* dim when report is open */
   filter: none;
   transition-property: filter;
   transition-duration: .2s;
@@ -33,12 +31,9 @@
   min-height: 0;
   padding: 8px;
   border-radius: 16px;
-  background-color: hsl(var(--surface-hsl));
   pointer-events: all;
 
   /* animation */
-  opacity: 0;
-  translate: 100%;
   transition-property: opacity, translate;
   transition-duration: .2s;
   transition-timing-function: cubic-bezier(0.3, 0, 0.8, 0.15);
@@ -150,6 +145,11 @@
   }
 }
 
+.report-list-item>.report-arrow-down {
+  position: relative;
+  right: 5px;
+}
+
 .report-intensity {
   width: 44px;
   height: auto;
@@ -164,4 +164,293 @@
 .report-location {
   font-size: 14px;
   font-weight: 600;
+  margin-left: .5em;
+}
+
+.report-int-item-info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.my_location {
+  border: 1px solid #a1d8f5;
+  border-radius: 15px;
+  width: 68px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: .5em;
+  background: #a1d8f51c;
+  box-shadow: 1px 1px 1px #a1d8f51c, 0 3px 6px #a1d8f51c;
+}
+
+.my_location>.usr_location {
+  font-size: 16px;
+  color: #a1d8f5;
+}
+
+
+.my_location>.location {
+  font-size: 13px;
+  margin-left: 0.1em;
+  cursor: auto;
+  color: #a1d8f5;
+}
+
+
+
+#report-intensity-grouped {
+  gap: 2px !important;
+}
+
+.report-int-items {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  margin-top: 0.3em;
+}
+
+.report-list-item-wrapper.active .report-int-items {
+  max-height: 1000px;
+}
+
+.report-int-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: auto;
+  border-radius: 11px;
+  background-color: hsl(var(--background-variant-hsl));
+  color: #fff;
+  font-size: 16px;
+  margin: 1px;
+  outline: transparent;
+  box-shadow: transparent;
+  opacity: .85;
+  transition: background-color .1s ease-in-out, opacity .1s ease-in-out, outline .1s ease-in-out, box-shadow .1s ease-in-out;
+  width: 90%;
+  margin-bottom: 0.2em;
+}
+
+.report-int-item .town {
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: .3em;
+}
+
+#report-back-btn {
+  border-radius: 30px;
+  height: 25px;
+  width: 80px;
+  background: #fff;
+}
+
+#report-back-btn span {
+  color: #000;
+}
+
+#report-back-btn .button-label {
+  font-weight: bold;
+}
+
+
+.report-list-item-int {
+  width: 65px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
+}
+
+.report-list-item-info {
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.report-list-item-location {
+  font-size: 21px;
+}
+
+.report-list-item-time {
+  font-size: 13px;
+}
+
+.report-list-item-index {
+  margin-bottom: .5em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 11px;
+  background-color: #464646;
+  color: #fff;
+  font-size: 16px;
+  outline: transparent;
+  box-shadow: transparent;
+  cursor: pointer;
+  transition: background-color .1s ease-in-out, opacity .1s ease-in-out, outline .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.report-list-item-mag {
+  font-size: 23px;
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.report-list-item-info-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.report-list-item-title {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.report-list-item-int-title {
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: .3em;
+}
+
+.report-list-item-int-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.report-list-item-index.first {
+  padding: 10px;
+  align-items: flex-start;
+
+  .report-list-item-location {
+    font-size: 28px;
+  }
+
+  .report-list-item-info-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .report-list-item-int {
+    height: 80px;
+    width: 80px;
+    font-size: 3em;
+  }
+
+  .report-list-item-info {
+    height: auto;
+  }
+
+  .report-list-item-mag {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    height: 28px;
+    isolation: isolate;
+    font-size: 28px;
+    flex: 1 1 0%;
+
+    &::before {
+      background-color: rgb(255, 31, 0);
+      content: "";
+      display: block;
+      width: 5px;
+      border-radius: 30px;
+      height: 31px;
+    }
+
+    &:after {
+      position: absolute;
+      content: attr(data-background-text);
+      line-height: 28px;
+      font-size: 30px;
+      font-weight: 700;
+      opacity: 0.15;
+      z-index: -1;
+      padding: 0px 6px;
+      color: #fff;
+    }
+  }
+
+  .report-list-item-magnitude {
+    &::before {
+      margin-right: 4px;
+      content: "𝖬";
+      font-size: 23px;
+    }
+  }
+
+  .km {
+    font-size: 24px;
+    line-height: 36px;
+
+    &::after {
+      margin-left: 4px;
+      content: "km";
+      font-size: 14px;
+      font-weight: bold;
+      display: inline-block;
+      line-height: 28px;
+      font-weight: 400;
+    }
+  }
+
+  .report-list-item-km {
+    color: #fff;
+    position: relative;
+    gap: 4px;
+    height: 28px;
+    isolation: isolate;
+    font-size: 23px;
+    font-weight: bold;
+    display: flex;
+    align-items: baseline;
+
+    &:before {
+      position: absolute;
+      content: attr(data-background-text);
+      line-height: 28px;
+      font-size: 30px;
+      font-weight: 700;
+      opacity: 0.15;
+      z-index: -1;
+      color: #fff;
+      margin-right: 4px;
+    }
+
+    &::after {
+      background-color: rgb(255, 31, 0);
+      content: "";
+      display: block;
+      width: 4px;
+      height: 28px;
+      border-radius: 30px;
+    }
+  }
+
+  .report-list-item-mag span {
+    font-size: 30px;
+  }
+
+  .report-list-item-mag-depth {
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+    margin-top: .3em;
+    justify-content: space-around;
+  }
 }

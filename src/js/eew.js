@@ -73,11 +73,13 @@ setInterval(() => {
       const intensity = intensity_float_to_int(variable.eew_list[_eew_list[last_map_count]].eew_intensity_list[name].i);
       let color = (!intensity) ? "#3F4045" : int_to_color(intensity);
       let nsspe = 0;
-      for (const i of Object.keys(data.eq.area))
-        if (data.eq.area[i].includes(region_string_to_code(constant.REGION, args.COUNTYNAME, args.TOWNNAME).toString())) {
-          nsspe = i;
-          break;
-        }
+      if (data.eq.area)
+        for (const i of Object.keys(data.eq.area))
+          if (data.eq.area[i].includes(region_string_to_code(constant.REGION, args.COUNTYNAME, args.TOWNNAME).toString())) {
+            nsspe = i;
+            break;
+          }
+
       if (nsspe) color = int_to_color(nsspe);
       return {
         color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
@@ -210,6 +212,8 @@ function show_eew(data) {
   variable.eew_list[data.id].eew_intensity_list = eew_area_pga(data.eq.lat, data.eq.lon, data.eq.depth, data.eq.mag);
   // console.log(intensity_list);
   last_map_update = 0;
+  querySelector("#settings").style.display = "none";
+  querySelector("#settings").style.opacity = 0;
 }
 
 function ps_wave_dist(depth, time, now) {

@@ -11,6 +11,7 @@
     "constant": "writable",
     "api": "readonly",
     "ipcRenderer": "readonly",
+    "ipcMain": "readonly",
     "reportMarkers": "readonly"
   },
 	"rules": {

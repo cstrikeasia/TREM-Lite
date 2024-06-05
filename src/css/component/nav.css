@@ -6,8 +6,8 @@
   position: absolute;
   top: 4.5rem;
   left: 8px;
-  z-index: 9999999;
-  height: 100%;
+  z-index: 9999;
+  width: 0;
 
   >.nav-item {
     display: flex;
@@ -45,9 +45,10 @@
   }
 
   >.nav-item-label {
-    font-weight: 600;
     opacity: 0;
     transition: opacity .1s cubic-bezier(0.2, 0, 0, 1);
+    font-size: 18px;
+    font-weight: 700;
   }
 
   &:hover {
