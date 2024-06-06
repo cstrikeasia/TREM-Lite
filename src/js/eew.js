@@ -175,6 +175,7 @@ function show_eew(data) {
     if (variable.eew_list[data.id] && variable.eew_list[data.id].cancel_timer) {
       clearTimeout(variable.eew_list[data.id].cancel_timer);
       variable.eew_list[data.id].layer.epicenterIcon.remove();
+      show_rts_list(false);
     } else constant.AUDIO.EEW.play();
     variable.eew_list[data.id] = {
       data  : data,

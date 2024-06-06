@@ -1,17 +1,16 @@
 .report-list-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: absolute;
   top: 9.5em;
   bottom: 0px;
   right: 8px;
-  min-width: 320px;
+  min-width: 345px;
   width: 20vw;
   z-index: 1000;
   overflow: hidden;
-  pointer-events: none;
   filter: none;
-  transition-property: filter;
+  transition-property: opacity, translate;
   transition-duration: .2s;
   transition-timing-function: cubic-bezier(0.3, 0, 0.8, 0.15);
 
@@ -25,6 +24,10 @@
   }
 }
 
+.report-list-wrapper.hidden {
+  translate: 95%;
+}
+
 .report-list-scrollview {
   display: flex;
   flex-direction: column;
@@ -32,6 +35,7 @@
   padding: 8px;
   border-radius: 16px;
   pointer-events: all;
+  width: 100%;
 
   /* animation */
   transition-property: opacity, translate;
@@ -424,7 +428,7 @@
       position: absolute;
       content: attr(data-background-text);
       line-height: 28px;
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 700;
       opacity: 0.15;
       z-index: -1;
@@ -453,4 +457,25 @@
     margin-top: .3em;
     justify-content: space-around;
   }
+}
+
+.report-list-btn {
+  border: 1px solid #00000000;
+  height: 35px;
+  width: 20px;
+  background: #464646;
+  border-radius: 5px;
+  position: relative;
+  top: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.report-list-btn span {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  justify-content: center;
 }

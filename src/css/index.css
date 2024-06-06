@@ -6,7 +6,10 @@
 @import url(./component/report-list.css);
 @import url(./component/report-marker.css);
 
-.warning-message,.warning-alert{display:none!important;}
+.warning-message,
+.warning-alert {
+  display: none !important;
+}
 
 body {
   user-select: none;
@@ -451,6 +454,10 @@ body {
   font-family: "OpenSans-Bold";
 }
 
+.intensity-container.hidden {
+  display: none;
+}
+
 .intensity-container {
   visibility: unset;
   position: absolute;
@@ -463,7 +470,6 @@ body {
   width: calc(20vw + 16px);
   min-width: 320px;
   margin: 8px;
-  display: none;
 
   >.realtime-box {
     flex: 1;

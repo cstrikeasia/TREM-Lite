@@ -1,3 +1,6 @@
+const EEWInfoTitle = querySelector("#info-title-box-type");
+const ReportListWrapper = querySelector(".report-list-wrapper");
+const ReportListBtn = querySelector(".report-list-btn");
 const ReportItem = querySelector(".report-list-items");
 const ReportBoxWrapper = querySelector(".report-box-wrapper");
 const ReportTitle = querySelector("#report-title");
@@ -68,7 +71,7 @@ async function report() {
   const Mag = document.createElement("div");
   Mag.classList.add("report-list-item-mag");
   Mag.dataset.backgroundText = "規模";
-  Mag.innerHTML = `<div class="report-list-item-magnitude">${FirstItem.mag}</div>`;
+  Mag.innerHTML = `<div class="report-list-item-magnitude">${FirstItem.mag < 10 ? FirstItem.mag.toFixed(1) : FirstItem.mag}</div>`;
 
   const KM = document.createElement("div");
   KM.classList.add("report-list-item-km");
@@ -143,6 +146,12 @@ async function report() {
   });
 }
 report();
+
+ReportListBtn.addEventListener("click", function() {
+  const ArrowSpan = this.querySelector(".nav-item-icon");
+  ArrowSpan.textContent = ArrowSpan.textContent.trim() === "chevron_right" ? "chevron_left" : "chevron_right";
+  ReportListWrapper.classList.toggle("hidden");
+});
 
 async function ReportInfo(id, int) {
   const res = await fetchData(`${API_url()}v2/eq/report/${id}`);
@@ -285,6 +294,22 @@ function report_all(data) {
     reportContainer.appendChild(reportItem);
   });
 }
+
+function show_rts_list(status) {
+  const RTS_List = querySelector(".intensity-container");
+
+  if (status === true) {
+    RTS_List.classList.remove("hidden");
+    ReportListBtn.style.opacity = 0;
+    ReportListWrapper.classList.add("hidden");
+  } else {
+    RTS_List.classList.add("hidden");
+    ReportListBtn.style.opacity = 1;
+    ReportListWrapper.classList.remove("hidden");
+    EEWInfoTitle.textContent = "暫無生效中的地震預警";
+  }
+}
+show_rts_list(false);
 
 function LocalReplace(loc) {
   const matches = loc.match(/\(([^)]+)\)/);
