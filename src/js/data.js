@@ -71,6 +71,8 @@ async function realtime_eew() {
     eew.timestamp = now();
     show_eew(eew);
   }
+
+  show_rts_list(true);
 }
 
 async function ntp() {
