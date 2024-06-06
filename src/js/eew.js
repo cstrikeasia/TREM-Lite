@@ -77,7 +77,7 @@ setInterval(() => {
 
   const data = variable.eew_list[_eew_list[last_map_count]].data;
   if (variable.intensity_geojson) variable.intensity_geojson.remove();
-  variable.intensity_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "town.json")), {
+  if (data.status != 3) variable.intensity_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "town.json")), {
     minZoom : 4,
     maxZoom : 12,
     buffer  : 256,
@@ -145,7 +145,12 @@ function show_eew(data) {
   const p_dist = dist.p_dist;
   const s_dist = dist.s_dist || 0;
 
+  if (data.serial == 10 || data.serial == 11 || data.serial == 12 || data.serial == 13)
+    data.status = 3;
+
   if (data.status == 3) {
+    variable.eew_list[data.id].data = data;
+    last_map_update = 0;
     if (!variable.eew_list[data.id].cancel) {
       variable.eew_list[data.id].cancel = true;
       constant.AUDIO.UPDATE.play();
@@ -158,7 +163,7 @@ function show_eew(data) {
         iconElement.className = "cancel";
         iconElement.style.visibility = "visible";
       }
-      setTimeout(() => {
+      variable.eew_list[data.id].cancel_timer = setTimeout(() => {
         variable.eew_list[data.id].layer.epicenterIcon.remove();
         delete variable.eew_list[data.id];
       }, 30000);
@@ -166,8 +171,11 @@ function show_eew(data) {
     return;
   }
 
-  if (!variable.eew_list[data.id]) {
-    constant.AUDIO.EEW.play();
+  if (!variable.eew_list[data.id] || variable.eew_list[data.id].cancel_timer) {
+    if (variable.eew_list[data.id] && variable.eew_list[data.id].cancel_timer) {
+      clearTimeout(variable.eew_list[data.id].cancel_timer);
+      variable.eew_list[data.id].layer.epicenterIcon.remove();
+    } else constant.AUDIO.EEW.play();
     variable.eew_list[data.id] = {
       data  : data,
       layer : {
