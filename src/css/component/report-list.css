@@ -6,7 +6,6 @@
   bottom: 0px;
   right: 8px;
   min-width: 345px;
-  width: 20vw;
   z-index: 1000;
   overflow: hidden;
   filter: none;
@@ -25,7 +24,7 @@
 }
 
 .report-list-wrapper.hidden {
-  translate: 95%;
+  translate: 76%;
 }
 
 .report-list-scrollview {
@@ -478,4 +477,25 @@
   align-items: stretch;
   width: 100%;
   justify-content: center;
+}
+
+.hidden .report-list-btn span {
+  justify-content: unset;
+  align-items: unset;
+  width: 1em;
+}
+
+.hidden .report-list-btn {
+  width: 100px;
+}
+
+
+.report-list-btn span:first-child {
+  display: none;
+}
+
+.hidden .report-list-btn span:first-child {
+  width: 4em;
+  margin-left: .3em;
+  display: flex;
 }
