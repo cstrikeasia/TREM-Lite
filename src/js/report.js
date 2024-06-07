@@ -312,10 +312,8 @@ function show_rts_list(status) {
     RTS_List.classList.add("hidden");
     ReportListBtn.style.opacity = 1;
     EEWInfoTitle.textContent = "暫無生效中的地震預警";
-    setTimeout(() => {
-      InfoBodyTitleBox.style.opacity = 0;
-      InfoBodyFooter.style.opacity = 0;
-    }, 1000);
+    InfoBodyTitleBox.style.opacity = 0;
+    InfoBodyFooter.style.opacity = 0;
   }
 
 }
