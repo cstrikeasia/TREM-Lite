@@ -44,8 +44,6 @@ function read_replay_file() {
       show_eew(eew);
     }
 
-    show_rts_list(true);
-
     variable.replay = data.rts.time;
     // console.log(data);
   }
@@ -71,8 +69,6 @@ async function realtime_eew() {
     eew.timestamp = now();
     show_eew(eew);
   }
-
-  show_rts_list(true);
 }
 
 async function ntp() {

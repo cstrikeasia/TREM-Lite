@@ -5,7 +5,14 @@ let last_map_update = 0;
 let last_map_count = 0;
 setInterval(() => {
   const _eew_list = Object.keys(variable.eew_list);
-  if (!_eew_list.length) return;
+
+  if (!_eew_list.length)
+    return;
+
+
+  if (_eew_list.length)
+    show_rts_list(true);
+
   if (draw_lock) return;
   draw_lock = true;
   variable.focus.bounds.eew = L.latLngBounds();
@@ -68,7 +75,12 @@ setInterval(() => {
 
 setInterval(() => {
   const _eew_list = Object.keys(variable.eew_list);
-  if (!_eew_list.length) return;
+
+  if (!_eew_list.length) {
+    show_rts_list(false);
+    return;
+  }
+
   const now_local_time = Date.now();
   if (now_local_time - last_map_update < 10000) return;
   last_map_update = now_local_time;

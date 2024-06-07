@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-undef */
 const EEWInfoTitle = querySelector("#info-title-box-type");
 const ReportListWrapper = querySelector(".report-list-wrapper");
 const ReportListBtn = querySelector(".report-list-btn");
@@ -13,6 +15,8 @@ const ReportLatitude = querySelector("#report-latitude");
 const ReportMagitude = querySelector("#report-magnitude");
 const ReportDepth = querySelector("#report-depth");
 const ReportTime = querySelector("#report-time");
+const InfoBodyTitleBox = querySelector(".info-body-title-box");
+const InfoBodyFooter = querySelector(".info-body-footer");
 const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
 
 async function report() {
@@ -182,8 +186,8 @@ async function ReportInfo(id, int) {
 }
 
 function report_grouped(data) {
-  const reportListWrapper = document.querySelector("#report-intensity-grouped");
-  reportListWrapper.innerHTML = "";
+  const RepoListWrapper = document.querySelector("#report-intensity-grouped");
+  RepoListWrapper.innerHTML = "";
 
   const cities = Object.keys(data.list);
 
@@ -265,7 +269,7 @@ function report_grouped(data) {
 
     ReportListWrapper.appendChild(ReportInts);
 
-    reportListWrapper.appendChild(ReportListWrapper);
+    RepoListWrapper.appendChild(ReportListWrapper);
   });
 }
 
@@ -302,12 +306,18 @@ function show_rts_list(status) {
     RTS_List.classList.remove("hidden");
     ReportListBtn.style.opacity = 0;
     ReportListWrapper.classList.add("hidden");
+    InfoBodyTitleBox.style.opacity = 1;
+    InfoBodyFooter.style.opacity = 1;
   } else {
     RTS_List.classList.add("hidden");
     ReportListBtn.style.opacity = 1;
-    ReportListWrapper.classList.remove("hidden");
     EEWInfoTitle.textContent = "暫無生效中的地震預警";
+    setTimeout(() => {
+      InfoBodyTitleBox.style.opacity = 0;
+      InfoBodyFooter.style.opacity = 0;
+    }, 1000);
   }
+
 }
 show_rts_list(false);
 
