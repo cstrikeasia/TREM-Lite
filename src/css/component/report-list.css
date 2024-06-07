@@ -422,12 +422,13 @@
     font-weight: bold;
     display: flex;
     align-items: baseline;
+    justify-content: flex-end;
 
     &:before {
       position: absolute;
       content: attr(data-background-text);
       line-height: 28px;
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 700;
       opacity: 0.15;
       z-index: -1;
