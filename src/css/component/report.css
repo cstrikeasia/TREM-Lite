@@ -3,13 +3,12 @@
   top: 8px;
   right: 8px;
   bottom: 8px;
-  display: flex;
+  display: none;
   flex-direction: column;
   width: 20vw;
-  min-width: 450px;
+  min-width: 375px;
   overflow: hidden;
   pointer-events: none;
-  display: none;
   z-index: 1001;
 
   .report-list-int {

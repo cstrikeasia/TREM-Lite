@@ -5,7 +5,9 @@
   top: 9.5em;
   bottom: 0px;
   right: 8px;
-  min-width: 345px;
+  margin-top: .5em;
+  width: 375px;
+  max-width: 355px;
   z-index: 1000;
   overflow: hidden;
   filter: none;
@@ -24,14 +26,13 @@
 }
 
 .report-list-wrapper.hidden {
-  translate: 76%;
+  translate: 73%;
 }
 
 .report-list-scrollview {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  padding: 8px;
   border-radius: 16px;
   pointer-events: all;
   width: 100%;
@@ -48,12 +49,12 @@
   }
 
   &:hover {
-    padding-right: 4px;
+    padding-right: 0px;
   }
 
   &:hover>.report-list-scroller {
     overflow-y: auto;
-    padding-right: 4px;
+    padding-right: 0px;
   }
 
   >.report-list-scroller {
@@ -291,11 +292,11 @@
 }
 
 .report-list-item-index {
-  margin-bottom: .5em;
+  margin-bottom: .3em;
   display: flex;
   align-items: center;
   gap: 8px;
-  border-radius: 11px;
+  border-radius: 10px;
   background-color: #464646;
   color: #fff;
   font-size: 16px;
@@ -315,7 +316,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .report-list-item-title {
@@ -346,6 +347,7 @@
   .report-list-item-info-wrapper {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
   }
 
   .report-list-item-int {
@@ -459,6 +461,13 @@
   }
 }
 
+.report-list-btn-wrapper {
+  height: auto;
+  width: 40px;
+  display: flex;
+  justify-content: space-around;
+}
+
 .report-list-btn {
   border: 1px solid #00000000;
   height: 35px;
@@ -499,4 +508,19 @@
   width: 4em;
   margin-left: .3em;
   display: flex;
+}
+
+.hidden .report-list-btn-wrapper {
+  width: 100px !important;
+  padding-right: .5em;
+}
+
+.report-list-item-mag-depth {
+  margin-right: 0.5em;
+}
+
+
+
+.report-list-item-magnitude.normal {
+  color: #fff;
 }

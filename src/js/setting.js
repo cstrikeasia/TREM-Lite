@@ -71,17 +71,17 @@ ResetCancel.addEventListener("click", () => {
 
 // 設定按鈕點擊事件
 SettingBtn.addEventListener("click", () => {
-  SettingWrapper.style.display = "block";
+  show_element([SettingWrapper], "block");
   requestAnimationFrame(() => {
-    SettingWrapper.style.opacity = "1";
+    opacity([SettingWrapper], 1);
   });
 });
 
 // 返回按鈕點擊事件
 Back.addEventListener("click", () => {
-  SettingWrapper.style.display = "none";
+  hidden_element([SettingWrapper]);
   requestAnimationFrame(() => {
-    SettingWrapper.style.opacity = "0";
+    opacity([SettingWrapper], 0);
   });
 });
 
@@ -433,8 +433,8 @@ LogoutBtn.addEventListener("click", async () => {
 
 // 登入-登入成功畫面
 function LoginSuccess(msg) {
-  LoginBtn.style.display = "none";
-  LogoutBtn.style.display = "flex";
+  hidden_element([LoginBtn]);
+  show_element([LogoutBtn], "flex");
   act.textContent = "Welcome";
   vip.textContent = `VIP-${msg.vip}`;
   localStorage.setItem("user-token", msg.device[0].key);
@@ -443,8 +443,8 @@ function LoginSuccess(msg) {
 
 // 登入-登出成功畫面
 function LogoutSuccess() {
-  LoginBtn.style.display = "flex";
-  LogoutBtn.style.display = "none";
+  hidden_element([LogoutBtn]);
+  show_element([LoginBtn], "flex");
   act.textContent = "尚未登入";
   vip.textContent = "";
   localStorage.removeItem("user-token", "");
@@ -744,20 +744,20 @@ const Tos = querySelector(".tos");
 const Tos_Sure = querySelector(".tos_sure");
 
 if (!localStorage.getItem("tos")) {
-  querySelector(".tos").style.display = "flex";
+  show_element([Tos], "flex");
 
   setTimeout(() => {
     const tosWrapper = querySelector(".tos_wrapper");
     tosWrapper.style.height = "19em";
-    tosWrapper.style.opacity = "1";
+    opacity([tosWrapper], 1);
   }, 2500);
 }
 
 Tos_Sure.addEventListener("click", () => {
-  Tos.style.opacity = "0";
+  opacity([Tos], 0);
 
   setTimeout(() => {
-    Tos.style.display = "none";
+    hidden_element([Tos]);
     localStorage.setItem("tos", true);
   }, 2000);
 });

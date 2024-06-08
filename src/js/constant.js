@@ -142,3 +142,21 @@ const domMethods = {
 };
 
 const { querySelector, querySelectorAll, createElement } = domMethods;
+
+function show_element(elements, type) {
+  elements.forEach(element => {
+    element.style.display = type;
+  });
+}
+
+function hidden_element(elements) {
+  elements.forEach(element => {
+    element.style.display = "none";
+  });
+}
+
+function opacity(elements, type) {
+  elements.forEach(element => {
+    element.style.opacity = type;
+  });
+}

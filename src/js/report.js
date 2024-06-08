@@ -15,175 +15,227 @@ const ReportLatitude = querySelector("#report-latitude");
 const ReportMagitude = querySelector("#report-magnitude");
 const ReportDepth = querySelector("#report-depth");
 const ReportTime = querySelector("#report-time");
+const ReportBackBtn = querySelector("#report-back-btn");
+const InfoBox = querySelector(".info-box");
 const InfoBodyTitleBox = querySelector(".info-body-title-box");
 const InfoBodyFooter = querySelector(".info-body-footer");
 const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
 
-async function report() {
-  const ReportList = querySelector(".report-list-items");
-  const res = await fetchData(`${API_url()}v2/eq/report?limit=20`);
-  if (!res) return;
-  const data = await res.json();
-  ReportList.innerHTML = "";
+let Report_DATA = {};
+const List_maxRetries = 3;
 
-  const FirstItem = data[0];
-  const First = document.createElement("div");
-  First.classList.add("report-list-item-index", "first");
-  First.setAttribute("data-report-id", FirstItem.id);
+async function report(retryCount = 0) {
+  try {
+    const ReportList = document.querySelector(".report-list-items");
+    const res = await fetchData(`${API_url()}v2/eq/report?limit=20`);
+    if (!res.ok) throw new Error("Network response was not ok");
 
-  const IntWrapper = document.createElement("div");
-  IntWrapper.classList.add("report-list-item-int-wrapper");
+    const data = await res.json();
+    Report_DATA = data;
+    ReportList.innerHTML = "";
+    let WithoutNo = "";
 
-  const Int = document.createElement("div");
-  Int.classList.add("report-list-item-int", `intensity-${FirstItem.int}`);
-  Int.textContent = FirstItem.int;
+    const FirstItem = data[0];
+    const First = document.createElement("div");
+    First.classList.add("report-list-item-index", "first");
+    First.setAttribute("data-report-id", FirstItem.id);
 
-  const IntTitle = document.createElement("div");
-  IntTitle.classList.add("report-list-item-int-title");
-  IntTitle.textContent = "觀測最大震度";
+    const No = FirstItem.id.split("-");
+    const check_No = No[0].split(3)[1];
 
-  IntWrapper.appendChild(Int);
-  IntWrapper.appendChild(IntTitle);
-  First.appendChild(IntWrapper);
+    if (check_No === "000")
+      WithoutNo = "Normal";
 
-  let InfoWrapper = document.createElement("div");
-  InfoWrapper.classList.add("report-list-item-info-wrapper");
 
-  const Info = document.createElement("div");
-  Info.classList.add("report-list-item-info");
+    const IntWrapper = document.createElement("div");
+    IntWrapper.classList.add("report-list-item-int-wrapper");
 
-  const Title = document.createElement("div");
-  const TitleText = FirstItem.mag > 4.0 ? "顯著有感地震" : "小區域有感地震";
-  Title.classList.add("report-list-item-title");
-  Title.textContent = TitleText;
+    const Int = document.createElement("div");
+    Int.classList.add("report-list-item-int", `intensity-${FirstItem.int}`);
+    Int.textContent = FirstItem.int;
 
-  const Location = document.createElement("div");
-  Location.classList.add("report-list-item-location");
-  Location.textContent = LocalReplace(FirstItem.loc);
+    const IntTitle = document.createElement("div");
+    IntTitle.classList.add("report-list-item-int-title");
+    IntTitle.textContent = "觀測最大震度";
 
-  const Time = document.createElement("div");
-  Time.classList.add("report-list-item-time");
-  Time.textContent = ReportTimeFormat(FirstItem.time);
+    IntWrapper.appendChild(Int);
+    IntWrapper.appendChild(IntTitle);
+    First.appendChild(IntWrapper);
 
-  Info.appendChild(Title);
-  Info.appendChild(Location);
-  Info.appendChild(Time);
-
-  let MagDepthWrapper = document.createElement("div");
-  MagDepthWrapper.classList.add("report-list-item-mag-depth");
-
-  const Mag = document.createElement("div");
-  Mag.classList.add("report-list-item-mag");
-  Mag.dataset.backgroundText = "規模";
-  Mag.innerHTML = `<div class="report-list-item-magnitude">${FirstItem.mag < 10 ? FirstItem.mag.toFixed(1) : FirstItem.mag}</div>`;
-
-  const KM = document.createElement("div");
-  KM.classList.add("report-list-item-km");
-  KM.dataset.backgroundText = "深度";
-  KM.innerHTML = `<div class="km">${FirstItem.depth}</div>`;
-
-  MagDepthWrapper.appendChild(Mag);
-  MagDepthWrapper.appendChild(KM);
-
-  InfoWrapper.appendChild(Info);
-  InfoWrapper.appendChild(MagDepthWrapper);
-
-  First.appendChild(InfoWrapper);
-
-  ReportList.appendChild(First);
-
-  // 非First
-  for (let i = 1; i < data.length; i++) {
-    const item = data[i];
-    const Element = document.createElement("div");
-    Element.classList.add("report-list-item-index");
-    Element.setAttribute("data-report-id", item.id);
-
-    const IntItem = document.createElement("div");
-    IntItem.classList.add("report-list-item-int", `intensity-${item.int}`);
-    IntItem.textContent = item.int;
-
-    InfoWrapper = document.createElement("div");
+    let InfoWrapper = document.createElement("div");
     InfoWrapper.classList.add("report-list-item-info-wrapper");
 
-    const InfoItem = document.createElement("div");
-    InfoItem.classList.add("report-list-item-info");
+    const Info = document.createElement("div");
+    Info.classList.add("report-list-item-info");
 
-    const LocationItem = document.createElement("div");
-    LocationItem.classList.add("report-list-item-location");
-    LocationItem.textContent = LocalReplace(item.loc);
+    const Location = document.createElement("div");
+    Location.classList.add("report-list-item-location");
+    Location.textContent = LocalReplace(FirstItem.loc);
 
-    const TimeItem = document.createElement("div");
-    TimeItem.classList.add("report-list-item-time");
-    TimeItem.textContent = ReportTimeFormat(item.time);
+    const Time = document.createElement("div");
+    Time.classList.add("report-list-item-time");
+    Time.textContent = ReportTimeFormat(FirstItem.time);
 
-    const MagItem = document.createElement("div");
-    MagItem.classList.add("report-list-item-mag");
-    MagItem.textContent = `M ${item.mag < 10 ? item.mag.toFixed(1) : item.mag}`;
+    Info.appendChild(Location);
+    Info.appendChild(Time);
 
-    InfoItem.appendChild(LocationItem);
-    InfoItem.appendChild(TimeItem);
-
-    MagDepthWrapper = document.createElement("div");
+    let MagDepthWrapper = document.createElement("div");
     MagDepthWrapper.classList.add("report-list-item-mag-depth");
 
-    const MagDepth = document.createElement("div");
-    MagDepth.classList.add("report-list-item-mag", "report-list-item-mag-depth");
-    MagDepth.dataset.backgroundText = "規模";
-    MagDepth.innerHTML = `<div class="report-list-item-magnitude">M ${item.mag < 10 ? item.mag.toFixed(1) : item.mag}</div>`;
+    const Mag = document.createElement("div");
+    Mag.classList.add("report-list-item-mag");
+    Mag.dataset.backgroundText = "規模";
+    Mag.innerHTML = `<div class="report-list-item-magnitude ${WithoutNo}">${FirstItem.mag < 10 ? FirstItem.mag.toFixed(1) : FirstItem.mag}</div>`;
 
-    MagDepthWrapper.appendChild(MagDepth);
-    InfoWrapper.appendChild(InfoItem);
+    const KM = document.createElement("div");
+    KM.classList.add("report-list-item-km");
+    KM.dataset.backgroundText = "深度";
+    KM.innerHTML = `<div class="km">${FirstItem.depth}</div>`;
+
+    MagDepthWrapper.appendChild(Mag);
+    MagDepthWrapper.appendChild(KM);
+
+    InfoWrapper.appendChild(Info);
     InfoWrapper.appendChild(MagDepthWrapper);
 
-    Element.appendChild(IntItem);
-    Element.appendChild(InfoWrapper);
+    First.appendChild(InfoWrapper);
 
-    ReportList.appendChild(Element);
+    ReportList.appendChild(First);
+
+    // 非First
+    for (let i = 1; i < data.length; i++) {
+      WithoutNo = "";
+      const item = data[i];
+
+      const No = item.id.split("-");
+      const check_No = No[0].split(3)[1];
+
+      if (check_No === "000")
+        WithoutNo = "Normal";
+
+      const Element = document.createElement("div");
+      Element.classList.add("report-list-item-index");
+      Element.setAttribute("data-report-id", item.id);
+
+      const IntItem = document.createElement("div");
+      IntItem.classList.add("report-list-item-int", `intensity-${item.int}`);
+      IntItem.textContent = item.int;
+
+      InfoWrapper = document.createElement("div");
+      InfoWrapper.classList.add("report-list-item-info-wrapper");
+
+      const InfoItem = document.createElement("div");
+      InfoItem.classList.add("report-list-item-info");
+
+      const LocationItem = document.createElement("div");
+      LocationItem.classList.add("report-list-item-location");
+      LocationItem.textContent = LocalReplace(item.loc);
+
+      const TimeItem = document.createElement("div");
+      TimeItem.classList.add("report-list-item-time");
+      TimeItem.textContent = ReportTimeFormat(item.time);
+
+      const MagItem = document.createElement("div");
+      MagItem.classList.add("report-list-item-mag");
+      MagItem.textContent = `M ${item.mag < 10 ? item.mag.toFixed(1) : item.mag}`;
+
+      InfoItem.appendChild(LocationItem);
+      InfoItem.appendChild(TimeItem);
+
+      MagDepthWrapper = document.createElement("div");
+      MagDepthWrapper.classList.add("report-list-item-mag-depth");
+
+      const MagDepth = document.createElement("div");
+      MagDepth.classList.add("report-list-item-mag", "report-list-item-mag-depth");
+      MagDepth.dataset.backgroundText = "規模";
+      MagDepth.innerHTML = `<div class="report-list-item-magnitude ${WithoutNo}">M ${item.mag < 10 ? item.mag.toFixed(1) : item.mag}</div>`;
+
+      MagDepthWrapper.appendChild(MagDepth);
+      InfoWrapper.appendChild(InfoItem);
+      InfoWrapper.appendChild(MagDepthWrapper);
+
+      Element.appendChild(IntItem);
+      Element.appendChild(InfoWrapper);
+
+      ReportList.appendChild(Element);
+    }
+  } catch (error) {
+    if (retryCount < List_maxRetries) {
+      console.log(`Retry ${retryCount + 1}/${List_maxRetries}...`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await report(retryCount + 1);
+    } else
+      console.error("Failed to fetch data after several attempts:", error);
+
   }
-
-  ReportItem.addEventListener("click", (event) => {
-    const closestDiv = event.target.closest(".report-list-item-index");
-    const ReportID = closestDiv.getAttribute("data-report-id");
-    const ThisReport = data.find(ReportInt => ReportInt.id === ReportID);
-    ReportInfo(ReportID, ThisReport.int);
-  });
 }
 report();
 
-ReportListBtn.addEventListener("click", function() {
+// eslint-disable-next-line space-before-function-paren
+ReportListBtn.addEventListener("click", function () {
   const ArrowSpan = this.querySelector(".nav-item-icon");
   ArrowSpan.textContent = ArrowSpan.textContent.trim() === "chevron_right" ? "chevron_left" : "chevron_right";
   ReportListWrapper.classList.toggle("hidden");
 });
 
-async function ReportInfo(id, int) {
-  const res = await fetchData(`${API_url()}v2/eq/report/${id}`);
-  const data = await res.json();
-  ReportBoxWrapper.style.display = "flex";
-  ReportLocation.textContent = data.loc;
-  ReportLongitude.textContent = data.lon;
-  ReportLatitude.textContent = data.lat;
-  ReportMagitude.textContent = data.mag;
-  ReportDepth.textContent = data.depth;
-  ReportTime.textContent = formatTime(data.time).replace(/\//g, "-");
-  ReportTitle.textContent = LocalReplace(data.loc);
-  ReportSubTitle.textContent = `編號 ${data.id}`;
+let open_DATA = {};
+const Info_maxRetries = 3;
 
-  ReportMaxIntensity.classList.forEach(className => {
-    if (className.startsWith("intensity-"))
-      ReportMaxIntensity.classList.remove(className);
+async function ReportInfo(id, int, retryCount = 0) {
+  try {
+    const res = await fetchData(`${API_url()}v2/eq/report/${id}`);
+    if (!res.ok) throw new Error("Network response was not ok");
 
+    const data = await res.json();
+    const No = data.id.split("-")[0];
+    const check_No = No.split(3)[1];
+    open_DATA = data;
+
+    show_element([ReportBoxWrapper], "flex");
+    // eslint-disable-next-line no-useless-escape
+    ReportLocation.textContent = data.loc.match(/^[^\(]+/)[0].trim();
+    ReportLongitude.textContent = data.lon;
+    ReportLatitude.textContent = data.lat;
+    ReportMagitude.textContent = data.mag < 10 ? data.mag.toFixed(1) : data.mag;
+    ReportDepth.textContent = data.depth;
+    ReportTime.textContent = formatTime(data.time).replace(/\//g, "-");
+    ReportTitle.textContent = LocalReplace(data.loc);
+    ReportSubTitle.textContent = `${check_No !== "000" ? `編號 ${No}` : "小區域有感地震"}`;
+
+    ReportMaxIntensity.classList.forEach(className => {
+      if (className.startsWith("intensity-"))
+        ReportMaxIntensity.classList.remove(className);
+
+    });
     ReportMaxIntensity.classList.add(`intensity-${int}`);
-  });
+    report_grouped(data);
+    report_all(data);
+  } catch (error) {
+    if (retryCount < Info_maxRetries) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await ReportInfo(id, int, retryCount + 1);
+    } else
+      console.error("Failed to fetch data after several attempts:", error);
 
-  ReportActionOpen.addEventListener("click", () => {
-    window.open(`https://www.cwa.gov.tw/V8/C/E/EQ/EQ${data.id.replace("2024-", "")}.html`, "_blank");
-  });
-  // https://www.cwa.gov.tw/V8/C/E/EQ/EQ113000-0605-212043.html
-  report_grouped(data);
-  report_all(data);
+  }
 }
+
+ReportActionOpen.addEventListener("click", () => {
+  window.open(`https://www.cwa.gov.tw/V8/C/E/EQ/EQ${open_DATA.id.replace("2024-", "")}.html`, "_blank");
+});
+
+ReportItem.addEventListener("click", (event) => {
+  const closestDiv = event.target.closest(".report-list-item-index");
+  const ReportID = closestDiv.getAttribute("data-report-id");
+  const ThisReport = Report_DATA.find(ReportInt => ReportInt.id === ReportID);
+  opacity([ReportListWrapper, InfoBox], 0);
+  ReportInfo(ReportID, ThisReport.int);
+});
+
+ReportBackBtn.addEventListener("click", () => {
+  hidden_element([ReportBoxWrapper], "");
+  opacity([ReportListWrapper, InfoBox], 1);
+});
 
 function report_grouped(data) {
   const RepoListWrapper = document.querySelector("#report-intensity-grouped");
@@ -304,16 +356,21 @@ function show_rts_list(status) {
 
   if (status === true) {
     RTS_List.classList.remove("hidden");
-    ReportListBtn.style.opacity = 0;
     ReportListWrapper.classList.add("hidden");
-    InfoBodyTitleBox.style.opacity = 1;
-    InfoBodyFooter.style.opacity = 1;
+    hidden_element([ReportBoxWrapper]);
+    opacity([ReportListBtn], 0);
+    opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], 1);
   } else {
     RTS_List.classList.add("hidden");
-    ReportListBtn.style.opacity = 1;
+    if (window.getComputedStyle(ReportBoxWrapper).display !== "flex")
+      opacity([InfoBox], 1);
+    else
+      opacity([InfoBox], 0);
+
+    opacity([InfoBodyTitleBox], 0);
+    opacity([ReportListBtn], 1);
+    InfoBox.style.backgroundColor = "#505050c7";
     EEWInfoTitle.textContent = "暫無生效中的地震預警";
-    InfoBodyTitleBox.style.opacity = 0;
-    InfoBodyFooter.style.opacity = 0;
   }
 
 }
