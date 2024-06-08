@@ -35,6 +35,8 @@
   min-height: 0;
   border-radius: 16px;
   pointer-events: all;
+  width: 570px;
+  max-width: 317px;
   width: 100%;
 
   /* animation */
@@ -465,7 +467,6 @@
   height: auto;
   width: 40px;
   display: flex;
-  justify-content: space-around;
 }
 
 .report-list-btn {
@@ -480,6 +481,7 @@
   display: flex;
   align-items: center;
   color: #fff;
+  justify-content: center;
 }
 
 .report-list-btn span {
