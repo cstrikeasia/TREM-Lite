@@ -32,8 +32,16 @@
 // });
 
 function show_intensity(data) {
-  if (!variable.intensity_list[data.id] || variable.intensity_list[data.id].serial < data.serial) {
-    variable.intensity_list[data.id] = data;
+  if (!variable.intensity_list[data.id] || variable.intensity_list[data.id].data.serial < data.serial) {
+    if (!variable.intensity_list[data.id])
+      variable.intensity_list[data.id] = {
+        data,
+        speech: {
+          max : -1,
+          loc : "",
+        },
+      };
+    else variable.intensity_list[data.id].data = data;
     variable.focus.bounds.intensity = L.latLngBounds();
     const area_intensity_list = {};
     const max_city_list = [];
@@ -50,8 +58,13 @@ function show_intensity(data) {
     variable.intensity_time = Date.now();
 
     if (variable.speech_status) {
-      if (speech.speaking()) speech.cancel();
-      speech.speak({ text: `震度速報，最大震度${intensity_list[data.max].replace("⁺", "強").replace("⁻", "弱")}，${max_city_list.join("、")}` });
+      const loc_str = max_city_list.join("、");
+      if (variable.intensity_list[data.id].speech.max < data.max || variable.intensity_list[data.id].speech.loc != loc_str) {
+        variable.intensity_list[data.id].speech.max = data.max;
+        variable.intensity_list[data.id].speech.loc = loc_str;
+        if (speech.speaking()) speech.cancel();
+        speech.speak({ text: `震度速報，最大震度${intensity_list[data.max].replace("⁺", "強").replace("⁻", "弱")}，${loc_str}` });
+      }
     }
 
     if (variable.intensity_geojson) variable.intensity_geojson.remove();
