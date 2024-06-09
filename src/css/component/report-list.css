@@ -303,7 +303,6 @@
   color: #fff;
   font-size: 16px;
   outline: transparent;
-  box-shadow: transparent;
   cursor: pointer;
   transition: background-color .1s ease-in-out, opacity .1s ease-in-out, outline .1s ease-in-out, box-shadow .1s ease-in-out;
 }
@@ -421,6 +420,7 @@
     position: relative;
     gap: 4px;
     height: 28px;
+    width: 100%;
     isolation: isolate;
     font-size: 23px;
     font-weight: bold;

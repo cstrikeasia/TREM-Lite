@@ -20,21 +20,18 @@ Home_btn.addEventListener("click", (event) => {
   opacity([ReportListWrapper], 1);
 });
 
-// Report_btn.addEventListener("click", (event) => {
-//   const _eew_list = Object.keys(variable.eew_list);
+Report_btn.addEventListener("click", (event) => {
+  const _eew_list = Object.keys(variable.eew_list);
+  if (_eew_list.length) return;
 
-//   if (_eew_list.length) return;
-
-//   removeOnClass();
-//   const closestDiv = event.target.closest(".nav-btn");
-//   closestDiv.classList.add("on");
-//   hidden_element([ReportBoxWrapper, ReportListWrapper, InfoBox]);
-//   show_element([ReportListWrapper], "flex");
-// });
+  removeOnClass();
+  const closestDiv = event.target.closest(".nav-btn");
+  closestDiv.classList.add("on");
+  console.log("report");
+});
 
 Tsunami_btn.addEventListener("click", (event) => {
   const _eew_list = Object.keys(variable.eew_list);
-
   if (_eew_list.length) return;
 
   removeOnClass();

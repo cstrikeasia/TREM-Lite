@@ -22,6 +22,69 @@ const TownItems = LocationSelectWrapper.querySelector(".town");
 // 版本號、UUID
 version.textContent = "2.0.0";
 
+async function localStorage_initialization() {
+  await realtimeStation();
+
+  const DefSetting = {
+    "current-location"           : { city: "臺南市", town: "歸仁區" },
+    "current-warning"            : { "realtime-station": "0級", "estimate-int": "0級" },
+    "bg-filter"                  : 20,
+    "bg-percentage"              : 100,
+    "current-map-display-effect" : 1,
+  };
+
+  for (const [key, value] of Object.entries(DefSetting))
+    if (!localStorage.getItem(key))
+      localStorage.setItem(key, JSON.stringify(value));
+
+
+  const def_loc = DefSetting["current-location"];
+  const def_loc_info = constant.REGION[def_loc.city][def_loc.town];
+
+  if (!localStorage.getItem("current-station"))
+    localStorage.setItem("current-station", JSON.stringify(NearStation(def_loc_info.lat, def_loc_info.lon)));
+
+
+  const UserCheckBoxDef = {
+    "early-warning-CWA"        : false,
+    "early-warning-JMA"        : false,
+    "early-warning-KMA"        : false,
+    "early-warning-NIED"       : false,
+    "early-warning-SCDZJ"      : false,
+    "graphics-block-auto-zoom" : false,
+    "graphics-show-plates"     : false,
+    "other-auto-start"         : false,
+    "other-voice"              : false,
+    "show-window-detect"       : false,
+    "show-window-eew"          : false,
+    "show-window-realtime-int" : false,
+    "show-window-report"       : false,
+    "sound-effects-EEW"        : false,
+    "sound-effects-EEW2"       : false,
+    "sound-effects-PAlert"     : false,
+    "sound-effects-PGA1"       : false,
+    "sound-effects-PGA2"       : false,
+    "sound-effects-Report"     : false,
+    "sound-effects-Shindo0"    : false,
+    "sound-effects-Shindo1"    : false,
+    "sound-effects-Shindo2"    : false,
+    "sound-effects-Update"     : false,
+    "sound-effects-dong"       : false,
+  };
+
+  const UserCheckBox = JSON.parse(localStorage.getItem("user-checkbox") || "{}");
+
+  Object.entries(UserCheckBoxDef).forEach(([key, defaultValue]) => {
+    if (!(key in UserCheckBox))
+      UserCheckBox[key] = defaultValue;
+
+  });
+
+  localStorage.setItem("user-checkbox", JSON.stringify(UserCheckBox));
+}
+
+localStorage_initialization();
+
 const localArr = {
   "北部" : ["臺北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣"],
   "中部" : ["臺中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣"],
@@ -71,6 +134,9 @@ ResetCancel.addEventListener("click", () => {
 
 // 設定按鈕點擊事件
 SettingBtn.addEventListener("click", () => {
+  const _eew_list = Object.keys(variable.eew_list);
+  if (_eew_list.length) return;
+
   show_element([SettingWrapper], "block");
   requestAnimationFrame(() => {
     opacity([SettingWrapper], 1);
@@ -238,7 +304,6 @@ async function realtimeStation() {
     logger.error(`[Fetch] ${err}`);
   }
 }
-realtimeStation();
 
 // 即時測站-處理測站數據
 function processStationData(data) {
