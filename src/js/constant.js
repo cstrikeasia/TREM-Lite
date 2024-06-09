@@ -103,6 +103,7 @@ const variable = {
   icon_size          : 0,
   intensity_list     : {},
   intensity_geojson  : null,
+  intensity_time     : 0,
   audio              : {
     shindo : -1,
     pga    : -1,

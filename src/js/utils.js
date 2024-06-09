@@ -29,7 +29,7 @@ function region_code_to_string(region, code) {
   for (const city of Object.keys(region))
     for (const town of Object.keys(region[city]))
       if (region[city][town].code == code)
-        return { city, town };
+        return { city, town, lat: region[city][town].lat, lon: region[city][town].lon };
   return null;
 }
 
