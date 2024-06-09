@@ -108,7 +108,7 @@ setInterval(() => {
       return;
     }
     if (variable.focus.status.intensity) {
-      if (Date.now() - variable.focus.status.intensity > 10000) {
+      if (Date.now() - variable.focus.status.intensity > 5000) {
         variable.focus.status.intensity = 0;
         intensity_focus = 0;
       } else if (!intensity_focus) {
@@ -116,7 +116,7 @@ setInterval(() => {
         const zoom_now = variable.map.getZoom();
         const center_now = variable.map.getCenter();
         const center = variable.focus.bounds.intensity.getCenter();
-        let zoom = variable.map.getBoundsZoom(variable.focus.bounds.intensity) - 0.7;
+        let zoom = variable.map.getBoundsZoom(variable.focus.bounds.intensity) - 0.4;
         if (Math.abs(zoom - zoom_now) < 0.2) zoom = zoom_now;
         const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
         variable.map.setView((set_center > 10) ? center : center_now, zoom);

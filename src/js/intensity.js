@@ -65,12 +65,13 @@ function show_intensity(data) {
         const intensity = area_intensity_list[name];
         const color = (!intensity) ? "#3F4045" : int_to_color(intensity);
         return {
-          color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
-          weight      : 0.4,
+          color       : "transparent",
+          weight      : 0,
           fillColor   : color,
           fillOpacity : 1,
         };
       },
     }).addTo(variable.map);
+    variable.last_map_hash = "";
   }
 }

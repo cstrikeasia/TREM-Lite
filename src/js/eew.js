@@ -89,33 +89,38 @@ setInterval(() => {
 
   const data = variable.eew_list[_eew_list[last_map_count]].data;
   if (!variable.focus.status.intensity) {
-    if (variable.intensity_geojson) variable.intensity_geojson.remove();
-    if (data.status != 3) variable.intensity_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "town.json")), {
-      minZoom : 4,
-      maxZoom : 12,
-      buffer  : 256,
-      zIndex  : 5,
-      style   : (args) => {
-        const name = args.COUNTYNAME + " " + args.TOWNNAME;
-        const intensity = intensity_float_to_int(variable.eew_list[_eew_list[last_map_count]].eew_intensity_list[name].i);
-        let color = (!intensity) ? "#3F4045" : int_to_color(intensity);
-        let nsspe = 0;
-        if (data.eq.area)
-          for (const i of Object.keys(data.eq.area))
-            if (data.eq.area[i].includes(region_string_to_code(constant.REGION, args.COUNTYNAME, args.TOWNNAME).toString())) {
-              nsspe = i;
-              break;
-            }
+    const hash = crypto.createHash("sha256").update(JSON.stringify(variable.eew_list[_eew_list[last_map_count]].eew_intensity_list));
+    const digest = hash.digest("hex");
+    if (variable.last_map_hash != digest) {
+      variable.last_map_hash = digest;
+      if (variable.intensity_geojson) variable.intensity_geojson.remove();
+      if (data.status != 3) variable.intensity_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "town.json")), {
+        minZoom : 4,
+        maxZoom : 12,
+        buffer  : 256,
+        zIndex  : 5,
+        style   : (args) => {
+          const name = args.COUNTYNAME + " " + args.TOWNNAME;
+          const intensity = intensity_float_to_int(variable.eew_list[_eew_list[last_map_count]].eew_intensity_list[name].i);
+          let color = (!intensity) ? "#3F4045" : int_to_color(intensity);
+          let nsspe = 0;
+          if (data.eq.area)
+            for (const i of Object.keys(data.eq.area))
+              if (data.eq.area[i].includes(region_string_to_code(constant.REGION, args.COUNTYNAME, args.TOWNNAME).toString())) {
+                nsspe = i;
+                break;
+              }
 
-        if (nsspe) color = int_to_color(nsspe);
-        return {
-          color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
-          weight      : (nsspe) ? 1.5 : 0.4,
-          fillColor   : color,
-          fillOpacity : 1,
-        };
-      },
-    }).addTo(variable.map);
+          if (nsspe) color = int_to_color(nsspe);
+          return {
+            color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
+            weight      : (nsspe) ? 1.5 : 0.4,
+            fillColor   : color,
+            fillOpacity : 1,
+          };
+        },
+      }).addTo(variable.map);
+    }
   }
   document.getElementById("info-depth").textContent = data.eq.depth;
   document.getElementById("info-no").textContent = `第${data.serial}報${(data.final) ? "(最終)" : ""}`;
@@ -163,31 +168,32 @@ function show_eew(data) {
     data.status = 3;
 
   if (data.status == 3) {
-    variable.eew_list[data.id].data = data;
-    last_map_update = 0;
-    if (!variable.eew_list[data.id].cancel) {
-      variable.eew_list[data.id].cancel = true;
-      if (UserCheckBox()["sound-effects-Update"] === true) constant.AUDIO.UPDATE.play();
-      variable.eew_list[data.id].layer.s.remove();
-      variable.eew_list[data.id].layer.s_fill.remove();
-      variable.eew_list[data.id].layer.p.remove();
-      const iconElement = variable.eew_list[data.id].layer.epicenterIcon.getElement();
-      if (iconElement) {
-        iconElement.style.opacity = "0.5";
-        iconElement.className = "cancel";
-        iconElement.style.visibility = "visible";
+    if (data.final) variable.eew_list[data.id].cancel_timer = setTimeout(() => {
+      variable.eew_list[data.id].layer.epicenterIcon.remove();
+      delete variable.eew_list[data.id];
+    }, 30000);
+    else {
+      variable.eew_list[data.id].data = data;
+      last_map_update = 0;
+      if (!variable.eew_list[data.id].cancel) {
+        variable.eew_list[data.id].cancel = true;
+        if (UserCheckBox()["sound-effects-Update"] === true) constant.AUDIO.UPDATE.play();
+        variable.eew_list[data.id].layer.s.remove();
+        variable.eew_list[data.id].layer.s_fill.remove();
+        variable.eew_list[data.id].layer.p.remove();
+        const iconElement = variable.eew_list[data.id].layer.epicenterIcon.getElement();
+        if (iconElement) {
+          iconElement.style.opacity = "0.5";
+          iconElement.className = "cancel";
+          iconElement.style.visibility = "visible";
+        }
       }
-      variable.eew_list[data.id].cancel_timer = setTimeout(() => {
-        variable.eew_list[data.id].layer.epicenterIcon.remove();
-        delete variable.eew_list[data.id];
-      }, 30000);
     }
     return;
   }
 
-  if (!variable.eew_list[data.id] || variable.eew_list[data.id].cancel_timer) {
-    if (variable.eew_list[data.id] && variable.eew_list[data.id].cancel_timer) {
-      clearTimeout(variable.eew_list[data.id].cancel_timer);
+  if (!variable.eew_list[data.id] || variable.eew_list[data.id].cancel) {
+    if (variable.eew_list[data.id] && variable.eew_list[data.id].cancel) {
       variable.eew_list[data.id].layer.epicenterIcon.remove();
       show_rts_list(false);
     } else

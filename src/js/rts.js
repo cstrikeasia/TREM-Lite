@@ -221,7 +221,7 @@ function show_rts_dot(data, alert) {
     }
 
     if ((!Object.keys(data.box).length && !Object.keys(variable.eew_list).length) || data.station[id].alert)
-      variable.station_icon[id] = L.marker([info.lat, info.lon], { icon: icon, zIndexOffset: I * 1000 })
+      if (!variable.focus.status.intensity) variable.station_icon[id] = L.marker([info.lat, info.lon], { icon: icon, zIndexOffset: I * 1000 })
         .bindTooltip(station_text, { opacity: 1 })
         .addTo(variable.map);
   }
