@@ -118,11 +118,11 @@
 
     <div id="info-box" class="info-box">
         <div class="info-title-box">
-            <div class="info-title-box-type" id="info-title-box-type"></div>
+            <div class="info-title-box-type" id="info-title-box-type">暫無生效中的地震預警</div>
             <div class="info-title-box-value" id="info-no"></div>
         </div>
         <div class="info-body-box">
-            <div class="info-body-title-box">
+            <div class="info-body-title-box" style="opacity: 0;">
                 <div class="info-body-title-title-box" id="info-intensity"></div>
                 <div class="info-body-title-body-box">
                     <div class="info-body-location-text" id="info-loc"></div>
@@ -136,7 +136,7 @@
                     </div>
                 </div>
             </div>
-            <div class="info-body-footer">
+            <div class="info-body-footer" style="opacity: 0;">
                 <div class="info-body-footer-title">預估最大震度</div>
                 <div class="info-body-footer-value-container">
                     <span class="info-body-footer-value-time" id="info-time"></span>
@@ -335,7 +335,7 @@
         </div>
     </div>
 
-    <div class="intensity-container">
+    <div class="intensity-container hidden">
         <div class="realtime-box">
             <div class="realtime-container">
                 <div class="realtime-header">即時震度</div>
@@ -364,6 +364,10 @@
     </div>
 
     <div class="report-list-wrapper">
+        <div class="report-list-btn-wrapper">
+            <div class="report-list-btn" style="opacity: 1;"><span>地震報告</span><span
+                    class="nav-item-icon material-symbols-rounded">chevron_left</span></div>
+        </div>
         <div id="report-panel" class="report-list-scrollview panel">
             <div class="report-list-scroller">
                 <div id="list-box" class="report-list">
@@ -537,12 +541,15 @@
         </div>
     </div>
 
-    <div class="time" id="time">---- / -- / -- -- : -- : --</div>
-    <div class="icon">
-        <svg id="connect" width="25" height="25" fill="currentColor" class="bi bi-diagram-2-fill" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-                d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 5 7h2.5V6A1.5 1.5 0 0 1 6 4.5zm-3 8A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5zm6 0a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5z" />
-        </svg>
+    <div class="connect-wrapper">
+        <div class="time" id="time">0000-01-01 00:00:00</div>
+        <div class="icon">
+            <svg id="connect" width="25" height="25" fill="currentColor" class="bi bi-diagram-2-fill"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 5 7h2.5V6A1.5 1.5 0 0 1 6 4.5zm-3 8A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5zm6 0a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5z" />
+            </svg>
+        </div>
     </div>
 
     <!--設定頁面窗口-->
@@ -1090,6 +1097,7 @@
     <script src="../js/eew.js" defer></script>
     <script src="../js/intensity.js" defer></script>
     <script src="../js/report.js" defer></script>
+    <script src="../js/nav.js" defer></script>
 </body>
 
 </html>

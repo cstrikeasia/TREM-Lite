@@ -3,14 +3,17 @@
   top: 8px;
   right: 8px;
   bottom: 8px;
-  display: flex;
+  display: none;
   flex-direction: column;
   width: 20vw;
-  min-width: 450px;
+  min-width: 375px;
   overflow: hidden;
   pointer-events: none;
-  display: none;
   z-index: 1001;
+  opacity: 0;
+  transition-property: opacity, translate;
+  transition-duration: .2s;
+  transition-timing-function: cubic-bezier(0.3, 0, 0.8, 0.15);
 
   .report-list-int {
     width: 100%;

@@ -142,3 +142,23 @@ const domMethods = {
 };
 
 const { querySelector, querySelectorAll, createElement } = domMethods;
+
+function UserCheckBox() {
+  const userCheckbox = JSON.parse(localStorage.getItem("user-checkbox"));
+  return userCheckbox;
+}
+
+function display_element(elements, type) {
+  elements.forEach(element => {
+    if (type)
+      element.style.display = type;
+    else
+      element.style.display = "none";
+  });
+}
+
+function opacity(elements, type) {
+  elements.forEach(element => {
+    element.style.opacity = type;
+  });
+}
