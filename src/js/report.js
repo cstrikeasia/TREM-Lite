@@ -186,6 +186,9 @@ async function ReportInfo(id, int, retryCount = 0) {
     open_DATA = data;
 
     show_element([ReportBoxWrapper], "flex");
+    setTimeout(() => {
+      opacity([ReportBoxWrapper], 1);
+    }, 100);
     const { loc, lon, lat, mag, depth, time } = data;
     ReportLocation.textContent = loc.match(/^[^\(]+/)?.[0]?.trim() || "";
     ReportLongitude.textContent = lon;
@@ -399,6 +402,9 @@ ReportActionOpen.addEventListener("click", () => {
 
 // 地震報告詳細資訊返回
 ReportBackBtn.addEventListener("click", () => {
-  show_element([ReportBoxWrapper], "");
+  opacity([ReportBoxWrapper], 0);
+  setTimeout(() => {
+    show_element([ReportBoxWrapper], "");
+  }, 100);
   opacity([ReportListWrapper, InfoBox], 1);
 });

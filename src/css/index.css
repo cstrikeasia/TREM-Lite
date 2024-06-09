@@ -124,6 +124,9 @@ body {
 }
 
 .info-box {
+  transition-property: opacity, translate;
+  transition-duration: .2s;
+  transition-timing-function: cubic-bezier(0.3, 0, 0.8, 0.15);
   position: absolute;
   top: 0;
   right: 0;

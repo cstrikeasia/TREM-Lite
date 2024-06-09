@@ -10,6 +10,10 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 1001;
+  opacity: 0;
+  transition-property: opacity, translate;
+  transition-duration: .2s;
+  transition-timing-function: cubic-bezier(0.3, 0, 0.8, 0.15);
 
   .report-list-int {
     width: 100%;
