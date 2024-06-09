@@ -143,7 +143,7 @@ const domMethods = {
 
 const { querySelector, querySelectorAll, createElement } = domMethods;
 
-function show_element(elements, type) {
+function display_element(elements, type) {
   elements.forEach(element => {
     if (type)
       element.style.display = type;

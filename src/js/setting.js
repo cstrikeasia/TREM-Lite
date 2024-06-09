@@ -26,7 +26,7 @@ async function localStorage_initialization() {
   await realtimeStation();
 
   const DefSetting = {
-    "current-location"           : { city: "臺南市", town: "歸仁區" },
+    "current-location"           : { city: "臺南市", town: "歸仁區", lat: 22.967286, lon: 120.2940045 },
     "current-warning"            : { "realtime-station": "0級", "estimate-int": "0級" },
     "bg-filter"                  : 20,
     "bg-percentage"              : 100,
@@ -124,6 +124,7 @@ addEventListener("click", (event) => {
 
 // 確定重置按鈕點擊事件
 ResetSure.addEventListener("click", () => {
+  localStorage_initialization();
   ResetConfirmWrapper.style.bottom = "-100%";
 });
 
@@ -137,7 +138,7 @@ SettingBtn.addEventListener("click", () => {
   const _eew_list = Object.keys(variable.eew_list);
   if (_eew_list.length) return;
 
-  show_element([SettingWrapper], "block");
+  display_element([SettingWrapper], "block");
   requestAnimationFrame(() => {
     opacity([SettingWrapper], 1);
   });
@@ -145,7 +146,7 @@ SettingBtn.addEventListener("click", () => {
 
 // 返回按鈕點擊事件
 Back.addEventListener("click", () => {
-  show_element([SettingWrapper]);
+  display_element([SettingWrapper]);
   requestAnimationFrame(() => {
     opacity([SettingWrapper], 0);
   });
@@ -269,8 +270,9 @@ addLocationSelectEvent(localItems, TownItems, TownSelect);
 
 // 所在地-儲存user選擇的city和town到storage
 const SaveSelectedLocationToStorage = (city, town, station) => {
-  const locationData = { city: city, town: town };
-
+  console.log(constant.REGION[city][town]);
+  const coordinate = constant.REGION[city][town];
+  const locationData = { city: city, town: town, lat: coordinate.lat, lon: coordinate.lon };
   localStorage.setItem("current-location", JSON.stringify(locationData));
   localStorage.setItem("current-station", station);
 };
@@ -499,8 +501,8 @@ LogoutBtn.addEventListener("click", async () => {
 
 // 登入-登入成功畫面
 function LoginSuccess(msg) {
-  hidden_element([LoginBtn]);
-  show_element([LogoutBtn], "flex");
+  display_element([LoginBtn]);
+  display_element([LogoutBtn], "flex");
   act.textContent = "Welcome";
   vip.textContent = `VIP-${msg.vip}`;
   localStorage.setItem("user-token", msg.device[0].key);
@@ -509,8 +511,8 @@ function LoginSuccess(msg) {
 
 // 登入-登出成功畫面
 function LogoutSuccess() {
-  hidden_element([LogoutBtn]);
-  show_element([LoginBtn], "flex");
+  display_element([LogoutBtn]);
+  display_element([LoginBtn], "flex");
   act.textContent = "尚未登入";
   vip.textContent = "";
   localStorage.removeItem("user-token", "");
@@ -810,7 +812,7 @@ const Tos = querySelector(".tos");
 const Tos_Sure = querySelector(".tos_sure");
 
 if (!localStorage.getItem("tos")) {
-  show_element([Tos], "flex");
+  display_element([Tos], "flex");
 
   setTimeout(() => {
     const tosWrapper = querySelector(".tos_wrapper");
@@ -823,7 +825,7 @@ Tos_Sure.addEventListener("click", () => {
   opacity([Tos], 0);
 
   setTimeout(() => {
-    hidden_element([Tos]);
+    display_element([Tos]);
     localStorage.setItem("tos", true);
   }, 2000);
 });

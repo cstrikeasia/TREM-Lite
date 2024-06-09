@@ -185,7 +185,7 @@ async function ReportInfo(id, int, retryCount = 0) {
     const check_No = No.split(3)[1];
     open_DATA = data;
 
-    show_element([ReportBoxWrapper], "flex");
+    display_element([ReportBoxWrapper], "flex");
     setTimeout(() => {
       opacity([ReportBoxWrapper], 1);
     }, 100);
@@ -215,7 +215,6 @@ function report_grouped(data) {
   opacity([ReportListWrapper, InfoBox], 0);
   const RepoListWrapper = document.querySelector("#report-intensity-grouped");
   RepoListWrapper.innerHTML = "";
-  let myLocation = null;
 
   const cities = Object.keys(data.list);
   const userLocation = JSON.parse(localStorage.getItem("current-location"));
@@ -275,26 +274,6 @@ function report_grouped(data) {
 
       ReportIntInfo.appendChild(Int);
       ReportIntInfo.appendChild(Town);
-
-      if (userLocation.city === city && userLocation.town === town && !myLocation) {
-        ReportIntInfo.classList.add("user-location");
-
-        myLocation = document.createElement("div");
-        myLocation.classList.add("my_location");
-
-        const usrLocationIcon = document.createElement("span");
-        usrLocationIcon.classList.add("usr_location", "button-leading-icon", "material-symbols-rounded");
-        usrLocationIcon.textContent = "my_location";
-
-        const locationText = document.createElement("span");
-        locationText.classList.add("location");
-        locationText.textContent = "所在地";
-
-        myLocation.appendChild(usrLocationIcon);
-        myLocation.appendChild(locationText);
-        ReportIntInfo.appendChild(myLocation);
-      }
-
       ReportInt.appendChild(ReportIntInfo);
       ReportInts.appendChild(ReportInt);
     });
@@ -333,7 +312,7 @@ function show_rts_list(status) {
   if (status === true) {
     RTS_List.classList.remove("hidden");
     ReportListWrapper.classList.add("hidden");
-    show_element([ReportBoxWrapper]);
+    display_element([ReportBoxWrapper]);
     opacity([ReportListBtn], 0);
     opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], 1);
     toHome(Home_btn);
@@ -412,7 +391,7 @@ ReportActionOpen.addEventListener("click", () => {
 ReportBackBtn.addEventListener("click", () => {
   opacity([ReportBoxWrapper], 0);
   setTimeout(() => {
-    show_element([ReportBoxWrapper], "");
+    display_element([ReportBoxWrapper], "");
   }, 100);
   opacity([ReportListWrapper, InfoBox], 1);
 });
