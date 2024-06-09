@@ -88,33 +88,35 @@ setInterval(() => {
   if (last_map_count >= _eew_list.length) last_map_count = 0;
 
   const data = variable.eew_list[_eew_list[last_map_count]].data;
-  if (variable.intensity_geojson) variable.intensity_geojson.remove();
-  if (data.status != 3) variable.intensity_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "town.json")), {
-    minZoom : 4,
-    maxZoom : 12,
-    buffer  : 256,
-    zIndex  : 5,
-    style   : (args) => {
-      const name = args.COUNTYNAME + " " + args.TOWNNAME;
-      const intensity = intensity_float_to_int(variable.eew_list[_eew_list[last_map_count]].eew_intensity_list[name].i);
-      let color = (!intensity) ? "#3F4045" : int_to_color(intensity);
-      let nsspe = 0;
-      if (data.eq.area)
-        for (const i of Object.keys(data.eq.area))
-          if (data.eq.area[i].includes(region_string_to_code(constant.REGION, args.COUNTYNAME, args.TOWNNAME).toString())) {
-            nsspe = i;
-            break;
-          }
+  if (!variable.focus.status.intensity) {
+    if (variable.intensity_geojson) variable.intensity_geojson.remove();
+    if (data.status != 3) variable.intensity_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "town.json")), {
+      minZoom : 4,
+      maxZoom : 12,
+      buffer  : 256,
+      zIndex  : 5,
+      style   : (args) => {
+        const name = args.COUNTYNAME + " " + args.TOWNNAME;
+        const intensity = intensity_float_to_int(variable.eew_list[_eew_list[last_map_count]].eew_intensity_list[name].i);
+        let color = (!intensity) ? "#3F4045" : int_to_color(intensity);
+        let nsspe = 0;
+        if (data.eq.area)
+          for (const i of Object.keys(data.eq.area))
+            if (data.eq.area[i].includes(region_string_to_code(constant.REGION, args.COUNTYNAME, args.TOWNNAME).toString())) {
+              nsspe = i;
+              break;
+            }
 
-      if (nsspe) color = int_to_color(nsspe);
-      return {
-        color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
-        weight      : (nsspe) ? 1.5 : 0.4,
-        fillColor   : color,
-        fillOpacity : 1,
-      };
-    },
-  }).addTo(variable.map);
+        if (nsspe) color = int_to_color(nsspe);
+        return {
+          color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
+          weight      : (nsspe) ? 1.5 : 0.4,
+          fillColor   : color,
+          fillOpacity : 1,
+        };
+      },
+    }).addTo(variable.map);
+  }
   document.getElementById("info-depth").textContent = data.eq.depth;
   document.getElementById("info-no").textContent = `第${data.serial}報${(data.final) ? "(最終)" : ""}`;
   document.getElementById("info-loc").textContent = data.eq.loc;
@@ -190,9 +192,25 @@ function show_eew(data) {
       show_rts_list(false);
     } else
       if (UserCheckBox()["sound-effects-EEW"] === true) constant.AUDIO.EEW.play();
+
+    if (!variable.eew_list[data.id])
+      if (variable.speech_status) {
+        if (speech.speaking()) speech.cancel();
+        speech.speak({ text: `${data.eq.loc}地震` });
+        setTimeout(() => {
+          const max = variable.eew_list[data.id].data.eq.max;
+          speech.speak({ text: `預估最大震度${intensity_list[max].replace("⁺", "強").replace("⁻", "弱")}` });
+          variable.eew_list[data.id].speech.max = max;
+        }, 3000);
+      }
+
     variable.eew_list[data.id] = {
-      data  : data,
-      layer : {
+      data   : data,
+      speech : {
+        loc : "",
+        max : -1,
+      },
+      layer: {
         epicenterIcon: L.marker([data.eq.lat, data.eq.lon], { icon: L.icon({
           iconUrl   : "../resource/image/cross.png",
           iconSize  : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
@@ -231,7 +249,7 @@ function show_eew(data) {
         delete variable.eew_list[data.id].layer.epicenterTooltip;
       }
   } else
-    if (data.serial != variable.eew_list[data.id].data.serial) {
+    if (data.serial > variable.eew_list[data.id].data.serial) {
       if (UserCheckBox()["sound-effects-Update"] === true) constant.AUDIO.UPDATE.play();
       if (!variable.eew_list[data.id].data.status && data.status) {
         variable.eew_list[data.id].layer.s.remove();

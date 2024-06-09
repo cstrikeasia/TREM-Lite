@@ -97,53 +97,57 @@ let intensity_focus = 0;
 let map_focus = 0;
 
 setInterval(() => {
-  if (variable.intensity_time && Date.now() - variable.intensity_time > 300000) {
-    variable.intensity_time = 0;
-    if (variable.intensity_geojson) variable.intensity_geojson.remove();
-  }
-  if (map_focus && !variable.focus.status.intensity && !variable.focus.status.rts && !variable.focus.status.eew) {
-    map_focus = 0;
-    variable.map.setView([23.6, 120.4], 7.8);
-    return;
-  }
-  if (variable.focus.status.intensity) {
-    if (Date.now() - variable.focus.status.intensity > 10000) {
-      variable.focus.status.intensity = 0;
-      intensity_focus = 0;
-    } else if (!intensity_focus) {
-      intensity_focus = 1;
-      const zoom_now = variable.map.getZoom();
-      const center_now = variable.map.getCenter();
-      const center = variable.focus.bounds.intensity.getCenter();
-      let zoom = variable.map.getBoundsZoom(variable.focus.bounds.intensity) - 0.7;
-      if (Math.abs(zoom - zoom_now) < 0.2) zoom = zoom_now;
-      const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
-      variable.map.setView((set_center > 10) ? center : center_now, zoom);
-      map_focus = 1;
+  try {
+    if (variable.intensity_time && Date.now() - variable.intensity_time > 300000) {
+      variable.intensity_time = 0;
+      if (variable.intensity_geojson) variable.intensity_geojson.remove();
     }
-  } else {
-    if (variable.focus.status.rts) {
-      variable.focus.status.rts = 0;
-      const zoom_now = variable.map.getZoom();
-      const center_now = variable.map.getCenter();
-      const center = variable.focus.bounds.rts.getCenter();
-      let zoom = variable.map.getBoundsZoom(variable.focus.bounds.rts) - 0.7;
-      if (Math.abs(zoom - zoom_now) < 0.2) zoom = zoom_now;
-      const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
-      variable.map.setView((set_center > 10) ? center : center_now, zoom);
-      map_focus = 1;
+    if (map_focus && !variable.focus.status.intensity && !variable.focus.status.rts && !variable.focus.status.eew) {
+      map_focus = 0;
+      variable.map.setView([23.6, 120.4], 7.8);
+      return;
     }
-    if (variable.focus.status.eew) {
-      variable.focus.status.eew = 0;
-      const zoom_now = variable.map.getZoom();
-      const center_now = variable.map.getCenter();
-      const center = variable.focus.bounds.eew.getCenter();
-      let zoom = variable.map.getBoundsZoom(variable.focus.bounds.eew) - 0.7;
-      if (Math.abs(zoom - zoom_now) < 0.2) zoom = zoom_now;
-      if (zoom < 6.5) zoom = 6.5;
-      const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
-      variable.map.setView((set_center > 10) ? center : center_now, zoom);
-      map_focus = 1;
+    if (variable.focus.status.intensity) {
+      if (Date.now() - variable.focus.status.intensity > 10000) {
+        variable.focus.status.intensity = 0;
+        intensity_focus = 0;
+      } else if (!intensity_focus) {
+        intensity_focus = 1;
+        const zoom_now = variable.map.getZoom();
+        const center_now = variable.map.getCenter();
+        const center = variable.focus.bounds.intensity.getCenter();
+        let zoom = variable.map.getBoundsZoom(variable.focus.bounds.intensity) - 0.7;
+        if (Math.abs(zoom - zoom_now) < 0.2) zoom = zoom_now;
+        const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
+        variable.map.setView((set_center > 10) ? center : center_now, zoom);
+        map_focus = 1;
+      }
+    } else {
+      if (variable.focus.status.rts) {
+        variable.focus.status.rts = 0;
+        const zoom_now = variable.map.getZoom();
+        const center_now = variable.map.getCenter();
+        const center = variable.focus.bounds.rts.getCenter();
+        let zoom = variable.map.getBoundsZoom(variable.focus.bounds.rts) - 0.7;
+        if (Math.abs(zoom - zoom_now) < 0.2) zoom = zoom_now;
+        const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
+        variable.map.setView((set_center > 10) ? center : center_now, zoom);
+        map_focus = 1;
+      }
+      if (variable.focus.status.eew) {
+        variable.focus.status.eew = 0;
+        const zoom_now = variable.map.getZoom();
+        const center_now = variable.map.getCenter();
+        const center = variable.focus.bounds.eew.getCenter();
+        let zoom = variable.map.getBoundsZoom(variable.focus.bounds.eew) - 0.7;
+        if (Math.abs(zoom - zoom_now) < 0.2) zoom = zoom_now;
+        if (zoom < 6.5) zoom = 6.5;
+        const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
+        variable.map.setView((set_center > 10) ? center : center_now, zoom);
+        map_focus = 1;
+      }
     }
+  } catch (err) {
+    console.log(err);
   }
 }, 100);

@@ -134,6 +134,7 @@ const variable = {
       rts       : 0,
     },
   },
+  speech_status: 0,
 };
 
 const domMethods = {
