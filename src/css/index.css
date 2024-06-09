@@ -886,6 +886,7 @@ body:has(#report-panel.show) .pga_dot {
   z-index: 1000;
   text-align: center;
   font-weight: 500;
+  pointer-events: none;
 }
 
 #max-pga {
@@ -906,6 +907,7 @@ body:has(#report-panel.show) .pga_dot {
   z-index: 1000;
   text-align: center;
   font-weight: 500;
+  pointer-events: none;
 }
 
 .rts-info-body {

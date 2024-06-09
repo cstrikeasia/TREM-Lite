@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-shadow */
 /* eslint-disable no-undef */
 const EEWInfoTitle = querySelector("#info-title-box-type");
@@ -171,13 +172,6 @@ async function report(retryCount = 0) {
 }
 report();
 
-// eslint-disable-next-line space-before-function-paren
-ReportListBtn.addEventListener("click", function () {
-  const ArrowSpan = this.querySelector(".nav-item-icon");
-  ArrowSpan.textContent = ArrowSpan.textContent.trim() === "chevron_right" ? "chevron_left" : "chevron_right";
-  ReportListWrapper.classList.toggle("hidden");
-});
-
 let open_DATA = {};
 const Info_maxRetries = 3;
 
@@ -192,22 +186,16 @@ async function ReportInfo(id, int, retryCount = 0) {
     open_DATA = data;
 
     show_element([ReportBoxWrapper], "flex");
-    // eslint-disable-next-line no-useless-escape
-    ReportLocation.textContent = data.loc.match(/^[^\(]+/)[0].trim();
-    ReportLongitude.textContent = data.lon;
-    ReportLatitude.textContent = data.lat;
-    ReportMagitude.textContent = data.mag < 10 ? data.mag.toFixed(1) : data.mag;
-    ReportDepth.textContent = data.depth;
-    ReportTime.textContent = formatTime(data.time).replace(/\//g, "-");
-    ReportTitle.textContent = LocalReplace(data.loc);
+    const { loc, lon, lat, mag, depth, time } = data;
+    ReportLocation.textContent = loc.match(/^[^\(]+/)?.[0]?.trim() || "";
+    ReportLongitude.textContent = lon;
+    ReportLatitude.textContent = lat;
+    ReportMagitude.textContent = mag < 10 ? mag.toFixed(1) : mag;
+    ReportDepth.textContent = depth;
+    ReportTime.textContent = formatTime(time).replace(/\//g, "-");
+    ReportTitle.textContent = LocalReplace(loc);
     ReportSubTitle.textContent = `${check_No !== "000" ? `編號 ${No}` : "小區域有感地震"}`;
-
-    ReportMaxIntensity.classList.forEach(className => {
-      if (className.startsWith("intensity-"))
-        ReportMaxIntensity.classList.remove(className);
-
-    });
-    ReportMaxIntensity.classList.add(`intensity-${int}`);
+    ReportMaxIntensity.className = `report-max-intensity intensity-${int}`;
     report_grouped(data);
     report_all(data);
   } catch (error) {
@@ -220,24 +208,8 @@ async function ReportInfo(id, int, retryCount = 0) {
   }
 }
 
-ReportActionOpen.addEventListener("click", () => {
-  window.open(`https://www.cwa.gov.tw/V8/C/E/EQ/EQ${open_DATA.id.replace("2024-", "")}.html`, "_blank");
-});
-
-ReportItem.addEventListener("click", (event) => {
-  const closestDiv = event.target.closest(".report-list-item-index");
-  const ReportID = closestDiv.getAttribute("data-report-id");
-  const ThisReport = Report_DATA.find(ReportInt => ReportInt.id === ReportID);
-  opacity([ReportListWrapper, InfoBox], 0);
-  ReportInfo(ReportID, ThisReport.int);
-});
-
-ReportBackBtn.addEventListener("click", () => {
-  hidden_element([ReportBoxWrapper], "");
-  opacity([ReportListWrapper, InfoBox], 1);
-});
-
 function report_grouped(data) {
+  opacity([ReportListWrapper, InfoBox], 0);
   const RepoListWrapper = document.querySelector("#report-intensity-grouped");
   RepoListWrapper.innerHTML = "";
 
@@ -282,7 +254,6 @@ function report_grouped(data) {
 
     Towns.forEach(town => {
       const townData = CityData.town[town];
-
       const ReportInt = document.createElement("div");
       ReportInt.classList.add("report-int-item");
 
@@ -314,13 +285,10 @@ function report_grouped(data) {
       ReportIntInfo.appendChild(Int);
       ReportIntInfo.appendChild(Town);
       // ReportIntInfo.appendChild(myLocation);
-
       ReportInt.appendChild(ReportIntInfo);
       ReportInts.appendChild(ReportInt);
     });
-
     ReportListWrapper.appendChild(ReportInts);
-
     RepoListWrapper.appendChild(ReportListWrapper);
   });
 }
@@ -329,10 +297,7 @@ function report_all(data) {
   const reportContainer = document.getElementById("report-intensity-all");
   reportContainer.innerHTML = "";
 
-  Object.keys(data.list).forEach(city => {
-    const cityData = data.list[city];
-    const cityIntensity = cityData.int;
-
+  Object.entries(data.list).forEach(([city, { int: cityIntensity }]) => {
     const reportItem = document.createElement("div");
     reportItem.classList.add("report-list-item");
 
@@ -357,9 +322,10 @@ function show_rts_list(status) {
   if (status === true) {
     RTS_List.classList.remove("hidden");
     ReportListWrapper.classList.add("hidden");
-    hidden_element([ReportBoxWrapper]);
+    show_element([ReportBoxWrapper]);
     opacity([ReportListBtn], 0);
     opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], 1);
+    toHome(Home_btn);
   } else {
     RTS_List.classList.add("hidden");
     if (window.getComputedStyle(ReportBoxWrapper).display !== "flex")
@@ -395,3 +361,44 @@ function ReportTimeFormat(timestamp) {
   const minutes = date.getMinutes().toString().padStart(2, "0");
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
+
+
+/** Report Click事件**/
+// eslint-disable-next-line space-before-function-paren
+// 地震報告收展
+ReportListBtn.addEventListener("click", function() {
+  const ArrowSpan = this.querySelector(".nav-item-icon");
+  ArrowSpan.textContent = ArrowSpan.textContent.trim() === "chevron_right" ? "chevron_left" : "chevron_right";
+  ReportListWrapper.classList.toggle("hidden");
+});
+
+// 地震報告項目
+ReportItem.addEventListener("click", (event) => {
+  const { dataset: { reportId: ReportID } } = event.target.closest(".report-list-item-index");
+  const ThisReport = Report_DATA.find(ReportInt => ReportInt.id === ReportID);
+  ReportInfo(ReportID, ThisReport.int);
+});
+
+// 地震報告詳細資訊各地震度下拉
+document.addEventListener("click", (event) => {
+  const ReportListItem = event.target.closest(".report-list-item");
+  if (ReportListItem) {
+    const wrapper = ReportListItem.closest(".report-list-item-wrapper");
+    const ArrowSpan = ReportListItem.querySelector(".report-arrow-down");
+    ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
+    wrapper.classList.toggle("active");
+  }
+});
+
+// 報告頁面
+ReportActionOpen.addEventListener("click", () => {
+  const id = open_DATA.id.split("-");
+  const filtered = id.filter((part, index) => index !== 1).join("-");
+  window.open(`https://www.cwa.gov.tw/V8/C/E/EQ/EQ${filtered}.html`, "_blank");
+});
+
+// 地震報告詳細資訊返回
+ReportBackBtn.addEventListener("click", () => {
+  show_element([ReportBoxWrapper], "");
+  opacity([ReportListWrapper, InfoBox], 1);
+});

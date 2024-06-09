@@ -145,7 +145,7 @@ SettingBtn.addEventListener("click", () => {
 
 // 返回按鈕點擊事件
 Back.addEventListener("click", () => {
-  hidden_element([SettingWrapper]);
+  show_element([SettingWrapper]);
   requestAnimationFrame(() => {
     opacity([SettingWrapper], 0);
   });
@@ -159,19 +159,20 @@ Location.addEventListener("click", function() {
 });
 
 // 所在地-點擊選項事件
-const addLocationSelectEvent = (localItemsContainer, CityItemsContainer, selectElement) => {
-  [localItemsContainer, CityItemsContainer].forEach(container => {
+const addLocationSelectEvent = (localItemsContainer, cityItemsContainer, selectElement) => {
+  [localItemsContainer, cityItemsContainer].forEach(container => {
     container.addEventListener("click", (event) => {
       const closestDiv = event.target.closest(".usr-location .select-items > div");
       if (closestDiv) {
-        selectElement.textContent = closestDiv.textContent;
-
+        const selectedOption = closestDiv.textContent;
+        selectElement.textContent = selectedOption;
         container.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
         closestDiv.classList.add("select-option-selected");
       }
     });
   });
 };
+
 // 所在地-更新目前選項的city、town
 const updateLocationSelectItems = (itemsContainer, items) => {
   itemsContainer.innerHTML = "";
@@ -825,19 +826,6 @@ Tos_Sure.addEventListener("click", () => {
     hidden_element([Tos]);
     localStorage.setItem("tos", true);
   }, 2000);
-});
-
-
-/** Report **/
-document.addEventListener("click", (event) => {
-  const ReportListItem = event.target.closest(".report-list-item");
-
-  if (ReportListItem) {
-    const wrapper = ReportListItem.closest(".report-list-item-wrapper");
-    const ArrowSpan = ReportListItem.querySelector(".report-arrow-down");
-    ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
-    wrapper.classList.toggle("active");
-  }
 });
 
 

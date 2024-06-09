@@ -145,13 +145,10 @@ const { querySelector, querySelectorAll, createElement } = domMethods;
 
 function show_element(elements, type) {
   elements.forEach(element => {
-    element.style.display = type;
-  });
-}
-
-function hidden_element(elements) {
-  elements.forEach(element => {
-    element.style.display = "none";
+    if (type)
+      element.style.display = type;
+    else
+      element.style.display = "none";
   });
 }
 
