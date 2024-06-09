@@ -215,8 +215,10 @@ function report_grouped(data) {
   opacity([ReportListWrapper, InfoBox], 0);
   const RepoListWrapper = document.querySelector("#report-intensity-grouped");
   RepoListWrapper.innerHTML = "";
+  let myLocation = null;
 
   const cities = Object.keys(data.list);
+  const userLocation = JSON.parse(localStorage.getItem("current-location"));
 
   cities.forEach(city => {
     const CityData = data.list[city];
@@ -271,26 +273,32 @@ function report_grouped(data) {
       Town.classList.add("town");
       Town.textContent = town;
 
-      // const myLocation = document.createElement("div");
-      // myLocation.classList.add("my_location");
-
-      // const usrLocationIcon = document.createElement("span");
-      // usrLocationIcon.classList.add("usr_location", "button-leading-icon", "material-symbols-rounded");
-      // usrLocationIcon.textContent = "my_location";
-
-      // const locationText = document.createElement("span");
-      // locationText.classList.add("location");
-      // locationText.textContent = "所在地";
-
-      // myLocation.appendChild(usrLocationIcon);
-      // myLocation.appendChild(locationText);
-
       ReportIntInfo.appendChild(Int);
       ReportIntInfo.appendChild(Town);
-      // ReportIntInfo.appendChild(myLocation);
+
+      if (userLocation.city === city && userLocation.town === town && !myLocation) {
+        ReportIntInfo.classList.add("user-location");
+
+        myLocation = document.createElement("div");
+        myLocation.classList.add("my_location");
+
+        const usrLocationIcon = document.createElement("span");
+        usrLocationIcon.classList.add("usr_location", "button-leading-icon", "material-symbols-rounded");
+        usrLocationIcon.textContent = "my_location";
+
+        const locationText = document.createElement("span");
+        locationText.classList.add("location");
+        locationText.textContent = "所在地";
+
+        myLocation.appendChild(usrLocationIcon);
+        myLocation.appendChild(locationText);
+        ReportIntInfo.appendChild(myLocation);
+      }
+
       ReportInt.appendChild(ReportIntInfo);
       ReportInts.appendChild(ReportInt);
     });
+
     ReportListWrapper.appendChild(ReportInts);
     RepoListWrapper.appendChild(ReportListWrapper);
   });
