@@ -23,14 +23,15 @@ const InfoBodyFooter = querySelector(".info-body-footer");
 const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
 
 let Report_DATA = {};
+let last_report = {};
 const List_maxRetries = 3;
-
 async function report(retryCount = 0) {
   try {
+    logger.info("[Fetch] Fetching report data...");
     const ReportList = document.querySelector(".report-list-items");
     const res = await fetchData(`${API_url()}v2/eq/report?limit=20`);
-    if (!res.ok) throw new Error("Network response was not ok");
-
+    if (!res.ok) return;
+    logger.info("[Fetch] Got report data");
     const data = await res.json();
     Report_DATA = data;
     ReportList.innerHTML = "";
@@ -40,6 +41,11 @@ async function report(retryCount = 0) {
     const First = document.createElement("div");
     First.classList.add("report-list-item-index", "first");
     First.setAttribute("data-report-id", FirstItem.id);
+
+    if (!last_report || JSON.stringify(last_report) !== JSON.stringify({ id: FirstItem.id })) {
+      last_report = { id: FirstItem.id };
+      constant.AUDIO.REPORT.play();
+    }
 
     const No = FirstItem.id.split("-");
     const check_No = No[0].split(3)[1];
@@ -162,12 +168,10 @@ async function report(retryCount = 0) {
     }
   } catch (error) {
     if (retryCount < List_maxRetries) {
-      console.log(`Retry ${retryCount + 1}/${List_maxRetries}...`);
+      logger.error(`[Fetch] ${error} (Try #${retryCount})`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       await report(retryCount + 1);
-    } else
-      console.error("Failed to fetch data after several attempts:", error);
-
+    }
   }
 }
 report();
@@ -177,8 +181,11 @@ const Info_maxRetries = 3;
 
 async function ReportInfo(id, int, retryCount = 0) {
   try {
+    logger.info("[Fetch] Fetching report info data");
     const res = await fetchData(`${API_url()}v2/eq/report/${id}`);
-    if (!res.ok) throw new Error("Network response was not ok");
+    if (!res.ok) return;
+
+    logger.info("[Fetch] Got report info data");
 
     const data = await res.json();
     const No = data.id.split("-")[0];
@@ -203,11 +210,10 @@ async function ReportInfo(id, int, retryCount = 0) {
     report_all(data);
   } catch (error) {
     if (retryCount < Info_maxRetries) {
+      logger.error(`[Fetch] ${error} (Try #${retryCount})`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       await ReportInfo(id, int, retryCount + 1);
-    } else
-      console.error("Failed to fetch data after several attempts:", error);
-
+    }
   }
 }
 
