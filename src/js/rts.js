@@ -155,10 +155,10 @@ function show_rts_dot(data, alert) {
     if (alert) {
       if (pga > variable.audio.pga) {
         if (pga > 200 && variable.audio.status.pga != 2) {
-          if (userCheckbox["sound-effects-PGA2"] === true) constant.AUDIO.PGA2.play();
+          if (UserCheckBox()["sound-effects-PGA2"] === true) constant.AUDIO.PGA2.play();
           variable.audio.status.pga = 2;
         } else if (pga > 8 && !variable.audio.status.pga) {
-          if (userCheckbox["sound-effects-PGA1"] === true) constant.AUDIO.PGA1.play();
+          if (UserCheckBox()["sound-effects-PGA1"] === true) constant.AUDIO.PGA1.play();
           variable.audio.status.pga = 1;
         }
         variable.audio.pga = pga;
@@ -167,13 +167,13 @@ function show_rts_dot(data, alert) {
       }
       if (i > variable.audio.shindo) {
         if (i > 3 && variable.audio.status.shindo != 3) {
-          if (userCheckbox["sound-effects-Shindo2"] === true) constant.AUDIO.SHINDO2.play();
+          if (UserCheckBox()["sound-effects-Shindo2"] === true) constant.AUDIO.SHINDO2.play();
           variable.audio.status.shindo = 3;
         } else if (i > 1 && variable.audio.status.shindo < 2) {
-          if (userCheckbox["sound-effects-Shindo1"] === true) constant.AUDIO.SHINDO1.play();
+          if (UserCheckBox()["sound-effects-Shindo1"] === true) constant.AUDIO.SHINDO1.play();
           variable.audio.status.shindo = 2;
         } else if (!variable.audio.status.shindo) {
-          if (userCheckbox["sound-effects-Shindo0"] === true) constant.AUDIO.SHINDO0.play();
+          if (UserCheckBox()["sound-effects-Shindo0"] === true) constant.AUDIO.SHINDO0.play();
           variable.audio.status.shindo = 1;
         }
         if (i > 3) variable.audio.count.shindo_2 = 0;

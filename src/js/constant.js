@@ -142,7 +142,11 @@ const domMethods = {
 };
 
 const { querySelector, querySelectorAll, createElement } = domMethods;
-const userCheckbox = JSON.parse(localStorage.getItem("user-checkbox"));
+
+function UserCheckBox() {
+  const userCheckbox = JSON.parse(localStorage.getItem("user-checkbox"));
+  return userCheckbox;
+}
 
 function display_element(elements, type) {
   elements.forEach(element => {

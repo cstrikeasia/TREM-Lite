@@ -41,7 +41,7 @@ async function report(retryCount = 0) {
     const First = document.createElement("div");
     First.classList.add("report-list-item-index", "first");
     First.setAttribute("data-report-id", FirstItem.id);
-    if ((!last_report || JSON.stringify(last_report) !== JSON.stringify({ id: FirstItem.id })) && userCheckbox["sound-effects-Report"] === true) {
+    if ((!last_report || JSON.stringify(last_report) !== JSON.stringify({ id: FirstItem.id })) && UserCheckBox()["sound-effects-Report"] === true) {
       last_report = { id: FirstItem.id };
       constant.AUDIO.REPORT.play();
     }

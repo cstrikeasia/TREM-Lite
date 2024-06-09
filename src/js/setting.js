@@ -45,42 +45,44 @@ async function localStorage_initialization() {
     localStorage.setItem("current-station", JSON.stringify(NearStation(def_loc_info.lat, def_loc_info.lon)));
 
 
-  const UserCheckBoxDef = {
-    "early-warning-CWA"        : false,
-    "early-warning-JMA"        : false,
-    "early-warning-KMA"        : false,
-    "early-warning-NIED"       : false,
-    "early-warning-SCDZJ"      : false,
-    "graphics-block-auto-zoom" : false,
-    "graphics-show-plates"     : false,
-    "other-auto-start"         : false,
-    "other-voice"              : false,
-    "show-window-detect"       : false,
-    "show-window-eew"          : false,
-    "show-window-realtime-int" : false,
-    "show-window-report"       : false,
-    "sound-effects-EEW"        : false,
-    "sound-effects-EEW2"       : false,
-    "sound-effects-PAlert"     : false,
-    "sound-effects-PGA1"       : false,
-    "sound-effects-PGA2"       : false,
-    "sound-effects-Report"     : false,
-    "sound-effects-Shindo0"    : false,
-    "sound-effects-Shindo1"    : false,
-    "sound-effects-Shindo2"    : false,
-    "sound-effects-Update"     : false,
-    "sound-effects-dong"       : false,
-  };
+  if (!localStorage.getItem("user-checkbox")) {
+    const UserCheckBoxDef = {
+      "early-warning-CWA"        : true,
+      "early-warning-JMA"        : true,
+      "early-warning-KMA"        : true,
+      "early-warning-NIED"       : true,
+      "early-warning-SCDZJ"      : true,
+      "graphics-block-auto-zoom" : true,
+      "graphics-show-plates"     : true,
+      "other-auto-start"         : true,
+      "other-voice"              : true,
+      "show-window-detect"       : true,
+      "show-window-eew"          : true,
+      "show-window-realtime-int" : true,
+      "show-window-report"       : true,
+      "sound-effects-EEW"        : true,
+      "sound-effects-EEW2"       : true,
+      "sound-effects-PAlert"     : true,
+      "sound-effects-PGA1"       : true,
+      "sound-effects-PGA2"       : true,
+      "sound-effects-Report"     : true,
+      "sound-effects-Shindo0"    : true,
+      "sound-effects-Shindo1"    : true,
+      "sound-effects-Shindo2"    : true,
+      "sound-effects-Update"     : true,
+      "sound-effects-dong"       : true,
+    };
 
-  const UserCheckBox = JSON.parse(localStorage.getItem("user-checkbox") || "{}");
+    const UserCheckBox = JSON.parse(localStorage.getItem("user-checkbox") || "{}");
 
-  Object.entries(UserCheckBoxDef).forEach(([key, defaultValue]) => {
-    if (!(key in UserCheckBox))
-      UserCheckBox[key] = defaultValue;
+    Object.entries(UserCheckBoxDef).forEach(([key, defaultValue]) => {
+      if (!(key in UserCheckBox))
+        UserCheckBox[key] = defaultValue;
 
-  });
+    });
 
-  localStorage.setItem("user-checkbox", JSON.stringify(UserCheckBox));
+    localStorage.setItem("user-checkbox", JSON.stringify(UserCheckBox));
+  }
 }
 
 localStorage_initialization();
