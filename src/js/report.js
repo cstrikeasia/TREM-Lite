@@ -2,6 +2,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-undef */
 const EEWInfoTitle = querySelector("#info-title-box-type");
+
 const ReportListWrapper = querySelector(".report-list-wrapper");
 const ReportListBtn = querySelector(".report-list-btn");
 const ReportItem = querySelector(".report-list-items");
@@ -17,10 +18,12 @@ const ReportMagitude = querySelector("#report-magnitude");
 const ReportDepth = querySelector("#report-depth");
 const ReportTime = querySelector("#report-time");
 const ReportBackBtn = querySelector("#report-back-btn");
+const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
+
 const InfoBox = querySelector(".info-box");
 const InfoBodyTitleBox = querySelector(".info-body-title-box");
 const InfoBodyFooter = querySelector(".info-body-footer");
-const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
+const InfoNo = querySelector("#info-no");
 
 async function report(retryCount = 0) {
   let s = variable.report.survey;
@@ -43,7 +46,7 @@ async function report(retryCount = 0) {
     First.classList.add("report-list-item-index", "first");
     First.setAttribute("data-report-id", s ? "" : FirstItem.id);
 
-    if ((!variable.report.last || JSON.stringify(variable.report.last) !== JSON.stringify({ id: FirstItem.id })) && UserCheckBox()["sound-effects-Report"] == 1) {
+    if ((!variable.report.last || JSON.stringify(variable.report.last) !== JSON.stringify({ id: FirstItem.id })) && checkbox("sound-effects-Report") == 1) {
       variable.report.last = { id: FirstItem.id };
       constant.AUDIO.REPORT.play();
     }
@@ -141,7 +144,7 @@ async function ReportInfo(id, int, retryCount = 0) {
 function report_more(data, int) {
   const No = data.id.split("-")[0];
   const CheckNo = No.split(3)[1];
-  display_element([ReportBoxWrapper], "flex");
+  display([ReportBoxWrapper], "flex");
   setTimeout(() => opacity([ReportBoxWrapper], 1), 100);
 
   const { loc, lon, lat, mag, depth, time } = data;
@@ -232,7 +235,7 @@ function show_rts_list(status) {
   if (status == 1) {
     RTS_List.classList.remove("hidden");
     ReportListWrapper.classList.add("hidden");
-    display_element([ReportBoxWrapper]);
+    display([ReportBoxWrapper]);
     opacity([ReportListBtn], 0);
     opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], 1);
     toHome(Home_btn);
@@ -243,8 +246,9 @@ function show_rts_list(status) {
     else
       opacity([InfoBox], 0);
 
-    opacity([InfoBodyTitleBox], 0);
+    opacity([InfoBodyTitleBox, InfoBodyFooter], 0);
     opacity([ReportListBtn], 1);
+    InfoNo.textContent = "";
     InfoBox.style.backgroundColor = "#505050c7";
     EEWInfoTitle.textContent = "暫無生效中的地震預警";
   }
@@ -314,6 +318,6 @@ ReportActionOpen.addEventListener("click", () => {
 // 地震報告詳細資訊返回
 ReportBackBtn.addEventListener("click", () => {
   opacity([ReportBoxWrapper], 0);
-  setTimeout(() => display_element([ReportBoxWrapper], ""), 100);
+  setTimeout(() => display([ReportBoxWrapper], ""), 100);
   opacity([ReportListWrapper, InfoBox], 1);
 });

@@ -12,6 +12,7 @@ setInterval(() => {
 }, 1000);
 
 setInterval(() => {
+  if (variable.replay_list.length || _eew_list.length) return;
   report();
 }, 10000);
 

@@ -27,8 +27,8 @@ Tsunami_btn.addEventListener("click", (event) => {
 
   const closestDiv = event.target.closest(".nav-btn");
   removeOnClass(closestDiv);
-  display_element([ReportBoxWrapper, ReportListWrapper, InfoBox]);
-  display_element([Warning_msg, TsunamiReport, TsunamiInfoBox], "flex");
+  display([ReportBoxWrapper, ReportListWrapper, InfoBox]);
+  display([Warning_msg, TsunamiReport, TsunamiInfoBox], "flex");
 });
 
 function removeOnClass(element) {
@@ -38,8 +38,8 @@ function removeOnClass(element) {
 
 function toHome(element) {
   if (element) removeOnClass(element);
-  display_element([ReportListWrapper, InfoBox], "flex");
-  display_element([Warning_msg, TsunamiReport, TsunamiInfoBox, SettingWrapper]);
+  display([ReportListWrapper, InfoBox], "flex");
+  display([Warning_msg, TsunamiReport, TsunamiInfoBox, SettingWrapper]);
   opacity([ReportListWrapper], 1);
   opacity([SettingWrapper], 0);
 }

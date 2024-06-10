@@ -135,12 +135,13 @@ const domMethods = {
 
 const { querySelector, querySelectorAll, createElement } = domMethods;
 
-function UserCheckBox() {
-  const userCheckbox = JSON.parse(localStorage.getItem("user-checkbox"));
-  return userCheckbox;
+function checkbox(type) {
+  const box = JSON.parse(localStorage.getItem("user-checkbox"));
+  const value = box[type];
+  return value;
 }
 
-function display_element(elements, type) {
+function display(elements, type) {
   elements.forEach(element => {
     if (type)
       element.style.display = type;

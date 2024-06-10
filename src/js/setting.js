@@ -88,7 +88,7 @@ SettingBtn.addEventListener("click", () => {
   const _eew_list = Object.keys(variable.eew_list);
   if (_eew_list.length) return;
 
-  display_element([SettingWrapper], "block");
+  display([SettingWrapper], "block");
   requestAnimationFrame(() => {
     opacity([SettingWrapper], 1);
   });
@@ -96,7 +96,7 @@ SettingBtn.addEventListener("click", () => {
 
 // 返回按鈕點擊事件
 Back.addEventListener("click", () => {
-  display_element([SettingWrapper]);
+  display([SettingWrapper]);
   requestAnimationFrame(() => {
     opacity([SettingWrapper], 0);
   });
@@ -358,8 +358,8 @@ const url = "https://api.exptech.com.tw/api/v3/et/";
 
 // 登入-切換登入表單和帳號資訊
 function toggleForms(isLogin) {
-  display_element([LoginFormContent], isLogin ? "grid" : "none");
-  display_element([AccountInfoContent], isLogin ? "none" : "block");
+  display([LoginFormContent], isLogin ? "grid" : "none");
+  display([AccountInfoContent], isLogin ? "none" : "block");
 }
 
 // 登入-跳轉到登入表單
@@ -395,8 +395,8 @@ LogoutBtn.addEventListener("click", async () => {
 
 // 登入-登入成功畫面
 function LoginSuccess(msg) {
-  display_element([LoginBtn]);
-  display_element([LogoutBtn], "flex");
+  display([LoginBtn]);
+  display([LogoutBtn], "flex");
   act.textContent = "Welcome";
   vip.textContent = `VIP-${msg.vip}`;
   set_ls("user-token", msg.device[0].key);
@@ -405,8 +405,8 @@ function LoginSuccess(msg) {
 
 // 登入-登出成功畫面
 function LogoutSuccess() {
-  display_element([LogoutBtn]);
-  display_element([LoginBtn], "flex");
+  display([LogoutBtn]);
+  display([LoginBtn], "flex");
   act.textContent = "尚未登入";
   vip.textContent = "";
   localStorage.removeItem("user-token", "");
@@ -674,7 +674,7 @@ const Tos = querySelector(".tos");
 const Tos_Sure = querySelector(".tos_sure");
 
 if (!localStorage.getItem("tos")) {
-  display_element([Tos], "flex");
+  display([Tos], "flex");
   setTimeout(() => {
     const tosWrapper = querySelector(".tos_wrapper");
     tosWrapper.style.height = "19em";
@@ -685,7 +685,7 @@ if (!localStorage.getItem("tos")) {
 Tos_Sure.addEventListener("click", () => {
   opacity([Tos], 0);
   setTimeout(() => {
-    display_element([Tos]);
+    display([Tos]);
     set_ls("tos", 1);
   }, 2000);
 });
