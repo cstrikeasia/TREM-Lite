@@ -22,7 +22,7 @@ const InfoBodyTitleBox = querySelector(".info-body-title-box");
 const InfoBodyFooter = querySelector(".info-body-footer");
 const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
 
-function createLocationElement(textContent, className, bgText, html, attr) {
+function CreateElement(textContent, className, bgText, html, attr) {
   const element = createElement("div");
   element.classList = className;
   element.textContent = textContent;
@@ -65,27 +65,27 @@ async function report(retryCount = 0) {
     const CheckNo = s ? "" : No[0].split(3)[1];
     if (CheckNo == "000") variable.report.withoutNo = "Normal";
 
-    const IntWrapper = createLocationElement("", "report-list-item-int-wrapper");
-    const Int = createLocationElement(s ? s.max : FirstItem.int, `report-list-item-int intensity-${s ? s.max : FirstItem.int}`);
-    const IntTitle = createLocationElement("觀測最大震度", "report-list-item-int-title");
+    const IntWrapper = CreateElement("", "report-list-item-int-wrapper");
+    const Int = CreateElement(s ? s.max : FirstItem.int, `report-list-item-int intensity-${s ? s.max : FirstItem.int}`);
+    const IntTitle = CreateElement("觀測最大震度", "report-list-item-int-title");
 
     IntWrapper.appendChild(Int);
     IntWrapper.appendChild(IntTitle);
     First.appendChild(IntWrapper);
 
-    let InfoWrapper = createLocationElement("", "report-list-item-info-wrapper");
-    const Info = createLocationElement("", "report-list-item-info");
-    const Location = createLocationElement(s ? "震源 調查中" : LocalReplace(FirstItem.loc), "report-list-item-location");
-    const Time = createLocationElement(ReportTimeFormat(s ? s.id : FirstItem.time), "report-list-item-time");
+    let InfoWrapper = CreateElement("", "report-list-item-info-wrapper");
+    const Info = CreateElement("", "report-list-item-info");
+    const Location = CreateElement(s ? "震源 調查中" : LocalReplace(FirstItem.loc), "report-list-item-location");
+    const Time = CreateElement(ReportTimeFormat(s ? s.id : FirstItem.time), "report-list-item-time");
 
     Info.appendChild(Location);
     Info.appendChild(Time);
     InfoWrapper.appendChild(Info);
 
     if (!s) {
-      const MagDepthWrapper = createLocationElement("", "report-list-item-mag-depth");
-      const Mag = createLocationElement("", "report-list-item-mag", "規模", `<div class="report-list-item-magnitude ${variable.report.withoutNo}">${FirstItem.mag < 10 ? FirstItem.mag.toFixed(1) : FirstItem.mag}</div>`);
-      const KM = createLocationElement("", "report-list-item-km", "深度", `<div class="km">${FirstItem.depth}</div>`);
+      const MagDepthWrapper = CreateElement("", "report-list-item-mag-depth");
+      const Mag = CreateElement("", "report-list-item-mag", "規模", `<div class="report-list-item-magnitude ${variable.report.withoutNo}">${FirstItem.mag < 10 ? FirstItem.mag.toFixed(1) : FirstItem.mag}</div>`);
+      const KM = CreateElement("", "report-list-item-km", "深度", `<div class="km">${FirstItem.depth}</div>`);
 
       MagDepthWrapper.appendChild(Mag);
       MagDepthWrapper.appendChild(KM);
@@ -106,20 +106,18 @@ async function report(retryCount = 0) {
 
       if (CheckNo == "000") variable.report.withoutNo = "Normal";
 
-      const Element = createLocationElement("", "report-list-item-index", "", "", { "data-report-id": item.id });
-      const IntItem = createLocationElement(item.int, `report-list-item-int intensity-${item.int}`);
-      InfoWrapper = createLocationElement("", "report-list-item-info-wrapper");
+      InfoWrapper = CreateElement("", "report-list-item-info-wrapper");
+      MagDepthWrapper = CreateElement("", "report-list-item-mag-depth");
+      const Element = CreateElement("", "report-list-item-index", "", "", { "data-report-id": item.id });
+      const IntItem = CreateElement(item.int, `report-list-item-int intensity-${item.int}`);
+      const InfoItem = CreateElement("", "report-list-item-info");
+      const LocationItem = CreateElement(LocalReplace(item.loc), "report-list-item-location");
+      const TimeItem = CreateElement(ReportTimeFormat(item.time), "report-list-item-time");
+      const MagDepth = CreateElement("", "report-list-item-mag report-list-item-mag-depth", "規模", `<div class="report-list-item-magnitude ${variable.report.withoutNo}">M ${item.mag < 10 ? item.mag.toFixed(1) : item.mag}</div>`);
 
-      const InfoItem = createLocationElement("", "report-list-item-info");
-      const LocationItem = createLocationElement(LocalReplace(item.loc), "report-list-item-location");
-      const TimeItem = createLocationElement(ReportTimeFormat(item.time), "report-list-item-time");
 
       InfoItem.appendChild(LocationItem);
       InfoItem.appendChild(TimeItem);
-
-      MagDepthWrapper = createLocationElement("", "report-list-item-mag-depth");
-      const MagDepth = createLocationElement("", "report-list-item-mag report-list-item-mag-depth", "規模", `<div class="report-list-item-magnitude ${variable.report.withoutNo}">M ${item.mag < 10 ? item.mag.toFixed(1) : item.mag}</div>`);
-
       MagDepthWrapper.appendChild(MagDepth);
       InfoWrapper.appendChild(InfoItem);
       InfoWrapper.appendChild(MagDepthWrapper);
@@ -145,7 +143,6 @@ async function ReportInfo(id, int, retryCount = 0) {
     logger.info("[Fetch] Fetching report info data");
     const res = await fetchData(`${API_url()}v2/eq/report/${id}`);
     if (!res.ok) return;
-
     logger.info("[Fetch] Got report info data");
 
     const data = await res.json();
@@ -157,15 +154,17 @@ async function ReportInfo(id, int, retryCount = 0) {
     setTimeout(() => {
       opacity([ReportBoxWrapper], 1);
     }, 100);
+
     const { loc, lon, lat, mag, depth, time } = data;
-    ReportLocation.textContent = loc.match(/^[^\(]+/)?.[0]?.trim() || "";
-    ReportLongitude.textContent = lon;
-    ReportLatitude.textContent = lat;
-    ReportMagitude.textContent = mag < 10 ? mag.toFixed(1) : mag;
-    ReportDepth.textContent = depth;
-    ReportTime.textContent = formatTime(time).replace(/\//g, "-");
-    ReportTitle.textContent = LocalReplace(loc);
-    ReportSubTitle.textContent = `${CheckNo !== "000" ? `編號 ${No}` : "小區域有感地震"}`;
+    const text = (el, val) => {el.textContent = val;};
+    text(ReportLocation, loc.match(/^[^\(]+/)?.[0]?.trim() || "");
+    text(ReportLatitude, lat);
+    text(ReportLongitude, lon);
+    text(ReportMagitude, mag < 10 ? mag.toFixed(1) : mag);
+    text(ReportDepth, depth);
+    text(ReportTime, formatTime(time).replace(/\//g, "-"));
+    text(ReportTitle, LocalReplace(loc));
+    text(ReportSubTitle, CheckNo !== "000" ? `編號 ${No}` : "小區域有感地震");
     ReportMaxIntensity.className = `report-max-intensity intensity-${int}`;
     report_grouped(data);
     report_all(data);
