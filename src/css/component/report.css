@@ -283,11 +283,11 @@
             overflow-y: hidden;
             height: 500em;
 
-            &:-webkit-scrollbar-track {
+            &::-webkit-scrollbar-track {
               background-color: hsl(var(--background-variant-hsl));
             }
 
-            &:-webkit-scrollbar-button {
+            &::-webkit-scrollbar-button {
               background-color: transparent;
               height: 4px;
             }
