@@ -12,7 +12,7 @@ setInterval(() => {
 }, 1000);
 
 setInterval(() => {
-  if (variable.replay_list.length || _eew_list && _eew_list.length) return;
+  if (variable.replay_list.length || Object.keys(variable.eew_list).length !== 0) return;
   report();
 }, 10000);
 
