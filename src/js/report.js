@@ -183,60 +183,34 @@ function report_grouped(data) {
   RepoListWrapper.innerHTML = "";
 
   const cities = Object.keys(data.list);
-  const userLocation = JSON.parse(localStorage.getItem("current-location"));
 
   cities.forEach(city => {
     const CityData = data.list[city];
 
-    const ReportListWrapper = createElement("div");
-    ReportListWrapper.classList.add("report-list-item-wrapper", "active");
+    const ReportListWrapper = CreateElement("", "report-list-item-wrapper active");
+    const ReportList = CreateElement("", "report-list-item");
+    const ReportListInt = CreateElement("", "report-list-int");
+    const ReportIntensity = CreateElement(CityData.int, `report-intensity intensity-${CityData.int}`);
+    const ReportLoc = CreateElement(city, "report-location");
+    const ReportArrowDown = CreateElement("keyboard_arrow_down", "report-arrow-down button-leading-icon material-symbols-rounded");
 
-    const ReportList = createElement("div");
-    ReportList.classList.add("report-list-item");
-
-    const ReportListInt = createElement("div");
-    ReportListInt.classList.add("report-list-int");
-
-    const ReportIntensity = createElement("div");
-    ReportIntensity.classList.add("report-intensity", `intensity-${CityData.int}`);
-    ReportIntensity.textContent = CityData.int;
-
-    const ReportLoc = createElement("div");
-    ReportLoc.classList.add("report-location");
-    ReportLoc.textContent = city;
 
     ReportListInt.appendChild(ReportIntensity);
     ReportListInt.appendChild(ReportLoc);
     ReportList.appendChild(ReportListInt);
-
-    const ReportArrowDown = createElement("span");
-    ReportArrowDown.classList.add("report-arrow-down", "button-leading-icon", "material-symbols-rounded");
-    ReportArrowDown.textContent = "keyboard_arrow_down";
-
     ReportList.appendChild(ReportArrowDown);
-
     ReportListWrapper.appendChild(ReportList);
 
-    const ReportInts = createElement("div");
-    ReportInts.classList.add("report-int-items");
+    const ReportInts = CreateElement("", "report-int-items");
 
     const Towns = Object.keys(CityData.town);
 
     Towns.forEach(town => {
       const townData = CityData.town[town];
-      const ReportInt = createElement("div");
-      ReportInt.classList.add("report-int-item");
-
-      const ReportIntInfo = createElement("div");
-      ReportIntInfo.classList.add("report-int-item-info");
-
-      const Int = createElement("div");
-      Int.classList.add("int", `intensity-${townData.int}`);
-      Int.textContent = townData.int;
-
-      const Town = createElement("div");
-      Town.classList.add("town");
-      Town.textContent = town;
+      const ReportInt = CreateElement("", "report-int-item");
+      const ReportIntInfo = CreateElement("", "report-int-item-info");
+      const Int = CreateElement(townData.int, `int intensity-${townData.int}`);
+      const Town = CreateElement(town, "town");
 
       ReportIntInfo.appendChild(Int);
       ReportIntInfo.appendChild(Town);
