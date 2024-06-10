@@ -128,34 +128,42 @@ async function ReportInfo(id, int, retryCount = 0) {
     logger.info("[Fetch] Got report info data");
 
     const data = await res.json();
-    const No = data.id.split("-")[0];
-    const CheckNo = No.split(3)[1];
-    variable.report.more = data;
-
-    display_element([ReportBoxWrapper], "flex");
-    setTimeout(() => {
-      opacity([ReportBoxWrapper], 1);
-    }, 100);
-
-    const { loc, lon, lat, mag, depth, time } = data;
-    const text = (el, val) => {el.textContent = val;};
-    text(ReportLocation, loc.match(/^[^\(]+/)?.[0]?.trim() || "");
-    text(ReportLatitude, lat);
-    text(ReportLongitude, lon);
-    text(ReportMagitude, mag < 10 ? mag.toFixed(1) : mag);
-    text(ReportDepth, depth);
-    text(ReportTime, formatTime(time).replace(/\//g, "-"));
-    text(ReportTitle, LocalReplace(loc));
-    text(ReportSubTitle, CheckNo !== "000" ? `編號 ${No}` : "小區域有感地震");
-    ReportMaxIntensity.className = `report-max-intensity intensity-${int}`;
-    report_grouped(data);
-    report_all(data);
+    report_more(data, int);
   } catch (error) {
     if (retryCount < variable.report.list_retry) {
       logger.error(`[Fetch] ${error} (Try #${retryCount})`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       await ReportInfo(id, int, retryCount + 1);
     }
+  }
+}
+
+function report_more(data, int) {
+  const No = data.id.split("-")[0];
+  const CheckNo = No.split(3)[1];
+  display_element([ReportBoxWrapper], "flex");
+  setTimeout(() => opacity([ReportBoxWrapper], 1), 100);
+
+  const { loc, lon, lat, mag, depth, time } = data;
+  const text = (el, val) => {el.textContent = val;};
+  text(ReportLocation, loc.match(/^[^\(]+/)?.[0]?.trim() || "");
+  text(ReportLatitude, lat);
+  text(ReportLongitude, lon);
+  text(ReportMagitude, mag < 10 ? mag.toFixed(1) : mag);
+  text(ReportDepth, depth);
+  text(ReportTime, formatTime(time).replace(/\//g, "-"));
+  text(ReportTitle, LocalReplace(loc));
+  text(ReportSubTitle, CheckNo !== "000" ? `編號 ${No}` : "小區域有感地震");
+  ReportMaxIntensity.className = `report-max-intensity intensity-${int}`;
+  report_grouped(data);
+  report_all(data);
+
+  const More = localStorage.getItem("report-more");
+  const existMore = More ? JSON.parse(More) : [];
+  const already = existMore.some(item => item.id === data.id);
+  if (!already) {
+    existMore.push(data);
+    localStorage.setItem("report-more", JSON.stringify(existMore));
   }
 }
 
@@ -277,8 +285,12 @@ ReportListBtn.addEventListener("click", function() {
 // 地震報告項目
 ReportItem.addEventListener("click", (event) => {
   const { dataset: { reportId: ReportID } } = event.target.closest(".report-list-item-index");
-  const ThisReport = variable.report.data.find(ReportInt => ReportInt.id == ReportID);
-  if (ThisReport) ReportInfo(ReportID, ThisReport.int);
+  const t = variable.report.data.find(ReportInt => ReportInt.id == ReportID);
+  if (t) {
+    const localStorageData = localStorage.getItem("report-more");
+    const exists = localStorageData ? JSON.parse(localStorageData).find(report => report.id === ReportID) : null;
+    exists ? report_more(exists, t.int) : ReportInfo(ReportID, t.int);
+  }
 });
 
 // 地震報告詳細資訊各地震度下拉
@@ -302,8 +314,6 @@ ReportActionOpen.addEventListener("click", () => {
 // 地震報告詳細資訊返回
 ReportBackBtn.addEventListener("click", () => {
   opacity([ReportBoxWrapper], 0);
-  setTimeout(() => {
-    display_element([ReportBoxWrapper], "");
-  }, 100);
+  setTimeout(() => display_element([ReportBoxWrapper], ""), 100);
   opacity([ReportListWrapper, InfoBox], 1);
 });

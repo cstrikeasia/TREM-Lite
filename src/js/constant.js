@@ -203,11 +203,11 @@ const variable = {
   },
   report: {
     last       : {},
+    more       : {},
     data       : [],
+    check_     : 1,
     list_retry : 3,
     survey     : null,
-    check_     : 1,
     withoutNo  : "",
-    more       : {},
   },
 };
