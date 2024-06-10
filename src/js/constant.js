@@ -208,6 +208,7 @@ const variable = {
     survey     : null,
     check_     : 1,
     withoutNo  : "",
+    more       : {},
   },
 };
 

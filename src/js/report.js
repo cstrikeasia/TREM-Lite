@@ -93,14 +93,12 @@ async function report(retryCount = 0) {
     }
 
     First.appendChild(InfoWrapper);
-
     ReportList.appendChild(First);
 
     // 非First
     for (let i = variable.report.check_; i < data.length; i++) {
       variable.report.withoutNo = "";
       const item = data[i];
-
       const No = item.id.split("-");
       const CheckNo = No[0].split(3)[1];
 
@@ -135,9 +133,6 @@ async function report(retryCount = 0) {
 }
 report();
 
-let open_DATA = {};
-const Info_maxRetries = 3;
-
 async function ReportInfo(id, int, retryCount = 0) {
   try {
     logger.info("[Fetch] Fetching report info data");
@@ -148,7 +143,7 @@ async function ReportInfo(id, int, retryCount = 0) {
     const data = await res.json();
     const No = data.id.split("-")[0];
     const CheckNo = No.split(3)[1];
-    open_DATA = data;
+    variable.report.more = data;
 
     display_element([ReportBoxWrapper], "flex");
     setTimeout(() => {
@@ -169,7 +164,7 @@ async function ReportInfo(id, int, retryCount = 0) {
     report_grouped(data);
     report_all(data);
   } catch (error) {
-    if (retryCount < Info_maxRetries) {
+    if (retryCount < variable.report.list_retry) {
       logger.error(`[Fetch] ${error} (Try #${retryCount})`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       await ReportInfo(id, int, retryCount + 1);
@@ -183,7 +178,6 @@ function report_grouped(data) {
   RepoListWrapper.innerHTML = "";
 
   const cities = Object.keys(data.list);
-
   cities.forEach(city => {
     const CityData = data.list[city];
 
@@ -193,7 +187,6 @@ function report_grouped(data) {
     const ReportIntensity = CreatEle(CityData.int, `report-intensity intensity-${CityData.int}`);
     const ReportLoc = CreatEle(city, "report-location");
     const ReportArrowDown = CreatEle("keyboard_arrow_down", "report-arrow-down button-leading-icon material-symbols-rounded");
-
 
     ReportListInt.appendChild(ReportIntensity);
     ReportListInt.appendChild(ReportLoc);
@@ -314,7 +307,7 @@ document.addEventListener("click", (event) => {
 
 // 報告頁面
 ReportActionOpen.addEventListener("click", () => {
-  const id = open_DATA.id.split("-");
+  const id = variable.report.more.id.split("-");
   const filtered = id.filter((part, index) => index !== 1).join("-");
   window.open(`https://www.cwa.gov.tw/V8/C/E/EQ/EQ${filtered}.html`, "_blank");
 });
