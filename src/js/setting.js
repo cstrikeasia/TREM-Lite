@@ -263,7 +263,7 @@ function RenderStationReg() {
   const sortedRegion = uniqueRegions.sort();
 
   sortedRegion.forEach(city => {
-    const cityDiv = CreatEle(text);
+    const cityDiv = CreatEle(city);
     StationLocalItems.appendChild(cityDiv);
   });
 }
