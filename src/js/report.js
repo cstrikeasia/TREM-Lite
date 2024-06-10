@@ -22,7 +22,7 @@ const InfoBodyTitleBox = querySelector(".info-body-title-box");
 const InfoBodyFooter = querySelector(".info-body-footer");
 const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
 
-function CreateElement(textContent, className, bgText, html, attr) {
+function CreatEle(textContent, className, bgText, html, attr) {
   const element = createElement("div");
   element.classList = className;
   element.textContent = textContent;
@@ -65,27 +65,27 @@ async function report(retryCount = 0) {
     const CheckNo = s ? "" : No[0].split(3)[1];
     if (CheckNo == "000") variable.report.withoutNo = "Normal";
 
-    const IntWrapper = CreateElement("", "report-list-item-int-wrapper");
-    const Int = CreateElement(s ? s.max : FirstItem.int, `report-list-item-int intensity-${s ? s.max : FirstItem.int}`);
-    const IntTitle = CreateElement("觀測最大震度", "report-list-item-int-title");
+    const IntWrapper = CreatEle("", "report-list-item-int-wrapper");
+    const Int = CreatEle(s ? s.max : FirstItem.int, `report-list-item-int intensity-${s ? s.max : FirstItem.int}`);
+    const IntTitle = CreatEle("觀測最大震度", "report-list-item-int-title");
 
     IntWrapper.appendChild(Int);
     IntWrapper.appendChild(IntTitle);
     First.appendChild(IntWrapper);
 
-    let InfoWrapper = CreateElement("", "report-list-item-info-wrapper");
-    const Info = CreateElement("", "report-list-item-info");
-    const Location = CreateElement(s ? "震源 調查中" : LocalReplace(FirstItem.loc), "report-list-item-location");
-    const Time = CreateElement(ReportTimeFormat(s ? s.id : FirstItem.time), "report-list-item-time");
+    let InfoWrapper = CreatEle("", "report-list-item-info-wrapper");
+    const Info = CreatEle("", "report-list-item-info");
+    const Location = CreatEle(s ? "震源 調查中" : LocalReplace(FirstItem.loc), "report-list-item-location");
+    const Time = CreatEle(ReportTimeFormat(s ? s.id : FirstItem.time), "report-list-item-time");
 
     Info.appendChild(Location);
     Info.appendChild(Time);
     InfoWrapper.appendChild(Info);
 
     if (!s) {
-      const MagDepthWrapper = CreateElement("", "report-list-item-mag-depth");
-      const Mag = CreateElement("", "report-list-item-mag", "規模", `<div class="report-list-item-magnitude ${variable.report.withoutNo}">${FirstItem.mag < 10 ? FirstItem.mag.toFixed(1) : FirstItem.mag}</div>`);
-      const KM = CreateElement("", "report-list-item-km", "深度", `<div class="km">${FirstItem.depth}</div>`);
+      const MagDepthWrapper = CreatEle("", "report-list-item-mag-depth");
+      const Mag = CreatEle("", "report-list-item-mag", "規模", `<div class="report-list-item-magnitude ${variable.report.withoutNo}">${FirstItem.mag < 10 ? FirstItem.mag.toFixed(1) : FirstItem.mag}</div>`);
+      const KM = CreatEle("", "report-list-item-km", "深度", `<div class="km">${FirstItem.depth}</div>`);
 
       MagDepthWrapper.appendChild(Mag);
       MagDepthWrapper.appendChild(KM);
@@ -106,14 +106,14 @@ async function report(retryCount = 0) {
 
       if (CheckNo == "000") variable.report.withoutNo = "Normal";
 
-      InfoWrapper = CreateElement("", "report-list-item-info-wrapper");
-      MagDepthWrapper = CreateElement("", "report-list-item-mag-depth");
-      const Element = CreateElement("", "report-list-item-index", "", "", { "data-report-id": item.id });
-      const IntItem = CreateElement(item.int, `report-list-item-int intensity-${item.int}`);
-      const InfoItem = CreateElement("", "report-list-item-info");
-      const LocationItem = CreateElement(LocalReplace(item.loc), "report-list-item-location");
-      const TimeItem = CreateElement(ReportTimeFormat(item.time), "report-list-item-time");
-      const MagDepth = CreateElement("", "report-list-item-mag report-list-item-mag-depth", "規模", `<div class="report-list-item-magnitude ${variable.report.withoutNo}">M ${item.mag < 10 ? item.mag.toFixed(1) : item.mag}</div>`);
+      InfoWrapper = CreatEle("", "report-list-item-info-wrapper");
+      MagDepthWrapper = CreatEle("", "report-list-item-mag-depth");
+      const Element = CreatEle("", "report-list-item-index", "", "", { "data-report-id": item.id });
+      const IntItem = CreatEle(item.int, `report-list-item-int intensity-${item.int}`);
+      const InfoItem = CreatEle("", "report-list-item-info");
+      const LocationItem = CreatEle(LocalReplace(item.loc), "report-list-item-location");
+      const TimeItem = CreatEle(ReportTimeFormat(item.time), "report-list-item-time");
+      const MagDepth = CreatEle("", "report-list-item-mag report-list-item-mag-depth", "規模", `<div class="report-list-item-magnitude ${variable.report.withoutNo}">M ${item.mag < 10 ? item.mag.toFixed(1) : item.mag}</div>`);
 
 
       InfoItem.appendChild(LocationItem);
@@ -187,12 +187,12 @@ function report_grouped(data) {
   cities.forEach(city => {
     const CityData = data.list[city];
 
-    const ReportListWrapper = CreateElement("", "report-list-item-wrapper active");
-    const ReportList = CreateElement("", "report-list-item");
-    const ReportListInt = CreateElement("", "report-list-int");
-    const ReportIntensity = CreateElement(CityData.int, `report-intensity intensity-${CityData.int}`);
-    const ReportLoc = CreateElement(city, "report-location");
-    const ReportArrowDown = CreateElement("keyboard_arrow_down", "report-arrow-down button-leading-icon material-symbols-rounded");
+    const ReportListWrapper = CreatEle("", "report-list-item-wrapper active");
+    const ReportList = CreatEle("", "report-list-item");
+    const ReportListInt = CreatEle("", "report-list-int");
+    const ReportIntensity = CreatEle(CityData.int, `report-intensity intensity-${CityData.int}`);
+    const ReportLoc = CreatEle(city, "report-location");
+    const ReportArrowDown = CreatEle("keyboard_arrow_down", "report-arrow-down button-leading-icon material-symbols-rounded");
 
 
     ReportListInt.appendChild(ReportIntensity);
@@ -201,16 +201,16 @@ function report_grouped(data) {
     ReportList.appendChild(ReportArrowDown);
     ReportListWrapper.appendChild(ReportList);
 
-    const ReportInts = CreateElement("", "report-int-items");
+    const ReportInts = CreatEle("", "report-int-items");
 
     const Towns = Object.keys(CityData.town);
 
     Towns.forEach(town => {
       const townData = CityData.town[town];
-      const ReportInt = CreateElement("", "report-int-item");
-      const ReportIntInfo = CreateElement("", "report-int-item-info");
-      const Int = CreateElement(townData.int, `int intensity-${townData.int}`);
-      const Town = CreateElement(town, "town");
+      const ReportInt = CreatEle("", "report-int-item");
+      const ReportIntInfo = CreatEle("", "report-int-item-info");
+      const Int = CreatEle(townData.int, `int intensity-${townData.int}`);
+      const Town = CreatEle(town, "town");
 
       ReportIntInfo.appendChild(Int);
       ReportIntInfo.appendChild(Town);
@@ -228,20 +228,12 @@ function report_all(data) {
   reportContainer.innerHTML = "";
 
   Object.entries(data.list).forEach(([city, { int: cityIntensity }]) => {
-    const reportItem = createElement("div");
-    reportItem.classList.add("report-list-item");
-
-    const intensityDiv = createElement("div");
-    intensityDiv.classList.add("report-intensity", `intensity-${cityIntensity}`);
-    intensityDiv.textContent = cityIntensity;
-
-    const locationDiv = createElement("div");
-    locationDiv.classList.add("report-location");
-    locationDiv.textContent = city;
+    const reportItem = CreatEle("", "report-list-item");
+    const intensityDiv = CreatEle(cityIntensity, `report-intensity intensity-${cityIntensity}`);
+    const locationDiv = CreatEle(city, "report-location");
 
     reportItem.appendChild(intensityDiv);
     reportItem.appendChild(locationDiv);
-
     reportContainer.appendChild(reportItem);
   });
 }
