@@ -22,19 +22,6 @@ const InfoBodyTitleBox = querySelector(".info-body-title-box");
 const InfoBodyFooter = querySelector(".info-body-footer");
 const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
 
-function CreatEle(textContent, className, bgText, html, attr) {
-  const element = createElement("div");
-  element.classList = className;
-  element.textContent = textContent;
-  if (bgText) element.dataset.backgroundText = bgText;
-  if (html) element.innerHTML = html;
-  if (attr)
-    Object.entries(attr).forEach(([key, value]) => {
-      element.setAttribute(key, value);
-    });
-  return element;
-}
-
 async function report(retryCount = 0) {
   let s = variable.report.survey;
   for (const int in variable.intensity_list)

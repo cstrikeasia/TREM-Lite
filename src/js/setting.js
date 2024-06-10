@@ -263,8 +263,7 @@ function RenderStationReg() {
   const sortedRegion = uniqueRegions.sort();
 
   sortedRegion.forEach(city => {
-    const cityDiv = createElement("div");
-    cityDiv.textContent = city;
+    const cityDiv = CreatEle(text);
     StationLocalItems.appendChild(cityDiv);
   });
 }
@@ -291,24 +290,25 @@ function renderFilteredStations(stations) {
   StationItems.innerHTML = "";
 
   stations.forEach(station => {
-    const stationDiv = createElement("div");
-    stationDiv.setAttribute("data-net", station.net);
-    stationDiv.setAttribute("data-code", station.code);
-    stationDiv.setAttribute("data-name", station.name);
-    stationDiv.setAttribute("data-loc", station.loc);
-    stationDiv.setAttribute("data-lat", station.lat);
-    stationDiv.setAttribute("data-lon", station.lon);
+    const stationAttr = {
+      "data-net"  : station.net,
+      "data-code" : station.code,
+      "data-name" : station.name,
+      "data-loc"  : station.loc,
+      "data-lat"  : station.lat,
+      "data-lon"  : station.lon,
+    };
+    const stationDiv = CreatEle("", "", "", "", stationAttr);
 
     const netSpan = createElement("span");
     netSpan.textContent = station.net;
-    netSpan.classList.add(station.net);
+    netSpan.classList = station.net;
 
     const infoSpan = createElement("span");
     infoSpan.textContent = `${station.code}-${station.name} ${station.loc}`;
 
     stationDiv.appendChild(netSpan);
     stationDiv.appendChild(infoSpan);
-
     StationItems.appendChild(stationDiv);
   });
 }
@@ -336,7 +336,6 @@ function StationSelEvent(itemsContainer) {
       if (match) {
         StationSel.textContent = `${match[1]} ${match[2]}`;
         querySelector(".current-station").textContent = `${match[1]} ${match[2]}`;
-
         const stationData = Object.fromEntries(["net", "code", "name", "loc", "lat", "lon"].map(attr => [attr, closestDiv.getAttribute(`data-${attr}`)]));
         set_ls("current-station", JSON.stringify(stationData));
       }
@@ -538,8 +537,7 @@ initializeSel(WEI, WEILocation, WEIShowInt, WEISelWrapper, WEIItems);
 const Ints = querySelectorAll(".select-wrapper .int");
 Ints.forEach(Int => {
   constant.SETTING.INTENSITY.forEach(text => {
-    const intItem = document.createElement("div");
-    intItem.textContent = text;
+    const intItem = CreatEle(text);
     Int.appendChild(intItem);
   });
 });
@@ -637,9 +635,7 @@ const MapDisplayEffItems = MapDisplayEffSelWrapper.querySelector(".effect");
 
 if (MapDisplayEffItems)
   for (const [text, value] of Object.entries(constant.SETTING.MAP_DISPLAY)) {
-    const intItem = document.createElement("div");
-    intItem.setAttribute("data-value", value);
-    intItem.textContent = text;
+    const intItem = CreatEle(text, "", "", "", { "data-value": value });
     MapDisplayEffItems.appendChild(intItem);
   }
 

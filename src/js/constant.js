@@ -239,3 +239,16 @@ function opacity(elements, type) {
     element.style.opacity = type;
   });
 }
+
+function CreatEle(text, className, bgText, html, attr) {
+  const element = createElement("div");
+  element.textContent = text;
+  if (className) element.classList = className;
+  if (bgText) element.dataset.backgroundText = bgText;
+  if (html) element.innerHTML = html;
+  if (attr)
+    Object.entries(attr).forEach(([key, value]) => {
+      element.setAttribute(key, value);
+    });
+  return element;
+}
