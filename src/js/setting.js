@@ -47,30 +47,30 @@ async function localStorage_initialization() {
 
   if (!localStorage.getItem("user-checkbox")) {
     const UserCheckBoxDef = {
-      "early-warning-CWA"        : true,
-      "early-warning-JMA"        : true,
-      "early-warning-KMA"        : true,
-      "early-warning-NIED"       : true,
-      "early-warning-SCDZJ"      : true,
-      "graphics-block-auto-zoom" : true,
-      "graphics-show-plates"     : true,
-      "other-auto-start"         : true,
-      "other-voice"              : true,
-      "show-window-detect"       : true,
-      "show-window-eew"          : true,
-      "show-window-realtime-int" : true,
-      "show-window-report"       : true,
-      "sound-effects-EEW"        : true,
-      "sound-effects-EEW2"       : true,
-      "sound-effects-PAlert"     : true,
-      "sound-effects-PGA1"       : true,
-      "sound-effects-PGA2"       : true,
-      "sound-effects-Report"     : true,
-      "sound-effects-Shindo0"    : true,
-      "sound-effects-Shindo1"    : true,
-      "sound-effects-Shindo2"    : true,
-      "sound-effects-Update"     : true,
-      "sound-effects-dong"       : true,
+      "early-warning-CWA"        : 1,
+      "early-warning-JMA"        : 1,
+      "early-warning-KMA"        : 1,
+      "early-warning-NIED"       : 1,
+      "early-warning-SCDZJ"      : 1,
+      "graphics-block-auto-zoom" : 1,
+      "graphics-show-plates"     : 1,
+      "other-auto-start"         : 1,
+      "other-voice"              : 1,
+      "show-window-detect"       : 1,
+      "show-window-eew"          : 1,
+      "show-window-realtime-int" : 1,
+      "show-window-report"       : 1,
+      "sound-effects-EEW"        : 1,
+      "sound-effects-EEW2"       : 1,
+      "sound-effects-PAlert"     : 1,
+      "sound-effects-PGA1"       : 1,
+      "sound-effects-PGA2"       : 1,
+      "sound-effects-Report"     : 1,
+      "sound-effects-Shindo0"    : 1,
+      "sound-effects-Shindo1"    : 1,
+      "sound-effects-Shindo2"    : 1,
+      "sound-effects-Update"     : 1,
+      "sound-effects-dong"       : 1,
     };
 
     const UserCheckBox = JSON.parse(localStorage.getItem("user-checkbox") || "{}");
@@ -472,7 +472,7 @@ function toggleForms(isLoginFormVisible) {
 
 // 登入-跳轉到登入表單
 LoginBtn.addEventListener("click", () => {
-  toggleForms(true);
+  toggleForms(1);
   requestAnimationFrame(() => {
     LoginFormContent.classList.add("show-login-form");
     AccountInfoContent.classList.remove("show-account-info");
@@ -481,7 +481,7 @@ LoginBtn.addEventListener("click", () => {
 
 // 登入-返回登入首頁/帳號資訊
 LoginBack.addEventListener("click", () => {
-  toggleForms(false);
+  toggleForms(0);
   requestAnimationFrame(() => {
     AccountInfoContent.classList.add("show-account-info");
     LoginFormContent.classList.remove("show-login-form");
@@ -529,7 +529,7 @@ async function handleUserAction(endpoint, options) {
 
     LoginMsg.classList.remove("success", "error", "shake");
 
-    switch (true) {
+    switch (1) {
       case response.ok: {
         LoginMsg.classList.add("success");
         LoginMsg.textContent = `${options.method === "POST" ? "登入" : "登出"}成功！`;
@@ -551,7 +551,7 @@ async function handleUserAction(endpoint, options) {
 
     LoginMsg.addEventListener("animationend", () => {
       LoginMsg.classList.remove("shake");
-    }, { once: true });
+    }, { once: 1 });
 
   } catch (error) {
     console.error("Error:", error);
@@ -594,8 +594,8 @@ async function getUserInfo(token) {
 }
 
 const clickEvent = new MouseEvent("click", {
-  bubbles    : true,
-  cancelable : true,
+  bubbles    : 1,
+  cancelable : 1,
   view       : window,
 });
 
@@ -675,14 +675,14 @@ const sliderContainer = querySelector(".slider-container");
 const sliderTrack = querySelector(".slider-track");
 const sliderThumb = querySelector(".slider-thumb");
 
-let isDragging = false;
+let isDragging = 0;
 
 sliderThumb.addEventListener("mousedown", () => {
-  isDragging = true;
+  isDragging = 1;
 });
 
 addEventListener("mouseup", () => {
-  isDragging = false;
+  isDragging = 0;
 });
 
 addEventListener("mousemove", (event) => {
@@ -749,9 +749,9 @@ const RenderSelectedFromStorage = () => {
   checkboxes.forEach((checkbox) => {
     const id = checkbox.id;
     if (SelectedCheckBoxes[id])
-      checkbox.checked = true;
+      checkbox.checked = 1;
     else
-      checkbox.checked = false;
+      checkbox.checked = 0;
 
   });
 };
@@ -828,7 +828,7 @@ Tos_Sure.addEventListener("click", () => {
 
   setTimeout(() => {
     display_element([Tos]);
-    localStorage.setItem("tos", true);
+    localStorage.setItem("tos", 1);
   }, 2000);
 });
 
@@ -842,7 +842,7 @@ checkboxes.forEach((checkbox) => {
 
     checkboxes.forEach((cb) => {
       if (cb.checked)
-        selectedcheckbox[cb.id] = true;
+        selectedcheckbox[cb.id] = 1;
 
     });
 
