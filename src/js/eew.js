@@ -5,12 +5,7 @@ let last_map_count = 0;
 setInterval(() => {
   const _eew_list = Object.keys(variable.eew_list);
 
-  if (!_eew_list.length)
-    return;
-
-
-  if (_eew_list.length)
-    show_rts_list(1);
+  if (!_eew_list.length) return;
 
   if (draw_lock) return;
   draw_lock = true;
@@ -25,7 +20,7 @@ setInterval(() => {
       if (variable.eew_list[data.id].layer.p)variable.eew_list[data.id].layer.p.remove();
       variable.eew_list[data.id].layer.epicenterIcon.remove();
       delete variable.eew_list[data.id];
-      last_map_update = 0;
+      variable.last_map_update = 0;
       continue;
     }
     const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
@@ -77,10 +72,7 @@ setInterval(() => {
 setInterval(() => {
   const _eew_list = Object.keys(variable.eew_list);
 
-  if (!_eew_list.length) {
-    show_rts_list(false);
-    return;
-  }
+  if (!_eew_list.length) return;
 
   const now_local_time = Date.now();
   if (now_local_time - variable.last_map_update < 10000) return;
@@ -174,7 +166,7 @@ function show_eew(data) {
       delete variable.eew_list[data.id];
     }, 30000);
     else {
-      last_map_update = 0;
+      variable.last_map_update = 0;
       if (!variable.eew_list[data.id].cancel) {
         if (variable.speech_status) speech.speak({ text: `剛才的${(variable.eew_list[data.id].data.status == 1) ? "緊急地震速報" : "地震速報"}被取消了` });
         variable.eew_list[data.id].cancel = true;
@@ -323,7 +315,7 @@ function show_eew(data) {
 
   variable.eew_list[data.id].eew_intensity_list = eew_area_pga(data.eq.lat, data.eq.lon, data.eq.depth, data.eq.mag);
   // console.log(intensity_list);
-  last_map_update = 0;
+  variable.last_map_update = 0;
   toHome();
 }
 
