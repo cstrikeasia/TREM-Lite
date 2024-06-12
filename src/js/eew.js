@@ -81,7 +81,7 @@ setInterval(() => {
   if (last_map_count >= _eew_list.length) last_map_count = 0;
 
   const data = variable.eew_list[_eew_list[last_map_count]].data;
-  if (!variable.focus.status.intensity) {
+  if (!variable.focus.status.intensity && variable.eew_list[_eew_list[last_map_count]].eew_intensity_list) {
     const hash = crypto.createHash("sha256").update(JSON.stringify(variable.eew_list[_eew_list[last_map_count]].eew_intensity_list));
     const digest = hash.digest("hex");
     if (variable.last_map_hash != digest) {
