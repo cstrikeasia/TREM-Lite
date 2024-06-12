@@ -295,7 +295,7 @@ function show_eew(data) {
           pane           : "circlePane",
         }).addTo(variable.map);
         variable.eew_list[data.id].layer.epicenterIcon.setIcon(icon);
-      }
+      } else if (data.detail == 0) variable.eew_list[data.id].layer.epicenterIcon.setIcon(icon);
       variable.eew_list[data.id].data = data;
       variable.eew_list[data.id].layer.epicenterIcon.setLatLng([data.eq.lat, data.eq.lon]);
       if (variable.eew_list[data.id].layer.p) variable.eew_list[data.id].layer.p.setLatLng([data.eq.lat, data.eq.lon]);
