@@ -173,9 +173,9 @@ function show_eew(data) {
       delete variable.eew_list[data.id];
     }, 30000);
     else {
-      variable.eew_list[data.id].data = data;
       last_map_update = 0;
       if (!variable.eew_list[data.id].cancel) {
+        if (variable.speech_status) speech.speak({ text: `剛才的${(variable.eew_list[data.id].data.status == 1) ? "緊急地震速報" : "地震速報"}被取消了` });
         variable.eew_list[data.id].cancel = true;
         if (checkbox("sound-effects-Update") == true) constant.AUDIO.UPDATE.play();
         variable.eew_list[data.id].layer.s.remove();
@@ -188,33 +188,25 @@ function show_eew(data) {
           iconElement.style.visibility = "visible";
         }
       }
+      variable.eew_list[data.id].data = data;
     }
     return;
   }
 
   if (!variable.eew_list[data.id] || variable.eew_list[data.id].cancel) {
     if (variable.eew_list[data.id] && variable.eew_list[data.id].cancel) {
+      delete variable.eew_list[data.id].cancel;
       variable.eew_list[data.id].layer.epicenterIcon.remove();
       show_rts_list(false);
     } else
       if (checkbox("sound-effects-EEW") == 1) constant.AUDIO.EEW.play();
 
-    if (!variable.eew_list[data.id])
-      if (variable.speech_status) {
-        if (speech.speaking()) speech.cancel();
-        speech.speak({ text: `${data.eq.loc}地震` });
-        setTimeout(() => {
-          const max = variable.eew_list[data.id].data.eq.max;
-          speech.speak({ text: `預估最大震度${intensity_list[max].replace("⁺", "強").replace("⁻", "弱")}` });
-          variable.eew_list[data.id].speech.max = max;
-        }, 3000);
-      }
-
     variable.eew_list[data.id] = {
       data   : data,
       speech : {
-        loc : "",
-        max : -1,
+        loc   : "",
+        max   : -1,
+        timer : null,
       },
       layer: {
         epicenterIcon: L.marker([data.eq.lat, data.eq.lon], { icon: L.icon({
@@ -279,6 +271,22 @@ function show_eew(data) {
       variable.eew_list[data.id].layer.epicenterIcon.setLatLng([data.eq.lat, data.eq.lon]);
       variable.eew_list[data.id].layer.p.setLatLng([data.eq.lat, data.eq.lon]);
     } else return;
+
+  if (variable.speech_status) {
+    const max = variable.eew_list[data.id].data.eq.max;
+    if (variable.eew_list[data.id].speech.loc != data.eq.loc) {
+      variable.eew_list[data.id].speech.loc = data.eq.loc;
+      speech.speak({ text: `${data.eq.loc}地震` });
+    }
+    if (variable.eew_list[data.id].speech.max < max) {
+      variable.eew_list[data.id].speech.max = max;
+      if (!variable.eew_list[data.id].speech.timer)
+        variable.eew_list[data.id].speech.timer = setTimeout(() => {
+          speech.speak({ text: `預估最大震度${intensity_list[variable.eew_list[data.id].speech.max].replace("⁺", "強").replace("⁻", "弱")}` });
+          variable.eew_list[data.id].speech.timer = null;
+        }, 3000);
+    }
+  }
 
   if (data.eq.max > 4 && !variable.eew_list[data.id].alert) {
     variable.eew_list[data.id].alert = true;
