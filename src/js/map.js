@@ -111,6 +111,7 @@ setInterval(() => {
       if (Date.now() - variable.focus.status.intensity > 5000) {
         variable.focus.status.intensity = 0;
         intensity_focus = 0;
+        variable.last_map_update = 0;
       } else if (!intensity_focus) {
         intensity_focus = 1;
         const zoom_now = variable.map.getZoom();

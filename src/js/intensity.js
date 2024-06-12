@@ -87,6 +87,5 @@ function show_intensity(data) {
       },
     }).addTo(variable.map);
     variable.last_map_hash = "";
-    variable.last_map_update = 0;
   }
 }
