@@ -824,6 +824,13 @@ body:has(#report-panel.show) .pga_dot {
   /*max-width: 15px;*/
 }
 
+.nsspe_dot {
+  border: 2px solid white;
+  border-radius: 50%;
+  max-height: 20px;
+  max-width: 20px;
+}
+
 .dot_max {
   display: grid;
   align-items: center;

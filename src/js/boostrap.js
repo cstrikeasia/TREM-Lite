@@ -9,5 +9,5 @@ const speech = new Speech.default();
   //   speech.setLanguage("ja-JP");
   //   speech.setVoice("Microsoft Sayaka - Japanese (Japan)");
   speech.setRate(1.5);
-  variable.speech_status = 1;
+  // variable.speech_status = 1;
 })();

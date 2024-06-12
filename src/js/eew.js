@@ -21,9 +21,9 @@ setInterval(() => {
     const data = variable.eew_list[id].data;
     const now_time = data.time + (now() - data.timestamp);
     if (now_time - data.eq.time > 240_000) {
-      variable.eew_list[data.id].layer.s.remove();
-      variable.eew_list[data.id].layer.s_fill.remove();
-      variable.eew_list[data.id].layer.p.remove();
+      if (variable.eew_list[data.id].layer.s)variable.eew_list[data.id].layer.s.remove();
+      if (variable.eew_list[data.id].layer.s_fill)variable.eew_list[data.id].layer.s_fill.remove();
+      if (variable.eew_list[data.id].layer.p)variable.eew_list[data.id].layer.p.remove();
       variable.eew_list[data.id].layer.epicenterIcon.remove();
       delete variable.eew_list[data.id];
       last_map_update = 0;
@@ -34,12 +34,14 @@ setInterval(() => {
     const s_dist = (dist.s_dist < 0) ? 0 : dist.s_dist;
     variable.eew_list[data.id].dist = s_dist;
     const s_t = dist.s_t;
-    variable.eew_list[data.id].layer.p.setRadius(p_dist);
-    variable.eew_list[data.id].layer.s.setRadius(s_dist);
-    variable.eew_list[data.id].layer.s_fill.setRadius(s_dist);
+    if (variable.eew_list[data.id].layer.p)variable.eew_list[data.id].layer.p.setRadius(p_dist);
+    if (variable.eew_list[data.id].layer.s)variable.eew_list[data.id].layer.s.setRadius(s_dist);
+    if (variable.eew_list[data.id].layer.s_fill)variable.eew_list[data.id].layer.s_fill.setRadius(s_dist);
     if (_eew_list[last_map_count] == id) {
       variable.focus.bounds.eew.extend([data.eq.lat, data.eq.lon]);
-      if (!data.eq.max) variable.focus.bounds.eew.extend(variable.eew_list[data.id].layer.s.getBounds());
+      if (data.detail == 0) {
+
+      } else if (!data.eq.max) variable.focus.bounds.eew.extend(variable.eew_list[data.id].layer.s.getBounds());
       else {
         const intensity_list = variable.eew_list[_eew_list[last_map_count]].eew_intensity_list;
         for (const name of Object.keys(intensity_list)) {
@@ -159,13 +161,13 @@ setInterval(() => {
 
 function show_eew(data) {
   // console.log(data);
+  const id_str = `${data.id}-${data.serial}-${(data.status == 3) ? 1 : 0}`;
+  if (variable.time_cache_list.includes(id_str)) return;
+  variable.time_cache_list.push(id_str);
   const now_time = data.time + (now() - data.timestamp);
   const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
   const p_dist = dist.p_dist;
   const s_dist = dist.s_dist || 0;
-
-  if (data.serial == 10 || data.serial == 11 || data.serial == 12 || data.serial == 13)
-    data.status = 3;
 
   if (data.status == 3) {
     if (data.final) variable.eew_list[data.id].cancel_timer = setTimeout(() => {
@@ -178,9 +180,9 @@ function show_eew(data) {
         if (variable.speech_status) speech.speak({ text: `剛才的${(variable.eew_list[data.id].data.status == 1) ? "緊急地震速報" : "地震速報"}被取消了` });
         variable.eew_list[data.id].cancel = true;
         if (checkbox("sound-effects-Update") == true) constant.AUDIO.UPDATE.play();
-        variable.eew_list[data.id].layer.s.remove();
-        variable.eew_list[data.id].layer.s_fill.remove();
-        variable.eew_list[data.id].layer.p.remove();
+        if (variable.eew_list[data.id].layer.s) variable.eew_list[data.id].layer.s.remove();
+        if (variable.eew_list[data.id].layer.s_fill) variable.eew_list[data.id].layer.s_fill.remove();
+        if (variable.eew_list[data.id].layer.p) variable.eew_list[data.id].layer.p.remove();
         const iconElement = variable.eew_list[data.id].layer.epicenterIcon.getElement();
         if (iconElement) {
           iconElement.style.opacity = "0.5";
@@ -193,11 +195,20 @@ function show_eew(data) {
     return;
   }
 
+  const icon = (data.detail == 0) ? L.divIcon({
+    html      : "<span></span>",
+    iconSize  : [20 + variable.icon_size, 20 + variable.icon_size],
+    className : `nsspe_dot flash intensity-${data.eq.max}`,
+  }) : L.icon({
+    iconUrl   : "../resource/image/cross.png",
+    iconSize  : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
+    className : "flash",
+  });
+
   if (!variable.eew_list[data.id] || variable.eew_list[data.id].cancel) {
     if (variable.eew_list[data.id] && variable.eew_list[data.id].cancel) {
       delete variable.eew_list[data.id].cancel;
       variable.eew_list[data.id].layer.epicenterIcon.remove();
-      show_rts_list(false);
     } else
       if (checkbox("sound-effects-EEW") == 1) constant.AUDIO.EEW.play();
 
@@ -209,25 +220,21 @@ function show_eew(data) {
         timer : null,
       },
       layer: {
-        epicenterIcon: L.marker([data.eq.lat, data.eq.lon], { icon: L.icon({
-          iconUrl   : "../resource/image/cross.png",
-          iconSize  : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
-          className : "flash",
-        }), zIndexOffset: 20000 })
+        epicenterIcon: L.marker([data.eq.lat, data.eq.lon], { icon, zIndexOffset: 20000 })
           .addTo(variable.map),
-        p: L.circle([data.eq.lat, data.eq.lon], {
+        p: (data.detail == 0) ? null : L.circle([data.eq.lat, data.eq.lon], {
           color     : "#00FFFF",
           fillColor : "transparent",
           radius    : p_dist,
           weight    : 2,
         }).addTo(variable.map),
-        s: L.circle([data.eq.lat, data.eq.lon], {
+        s: (data.detail == 0) ? null : L.circle([data.eq.lat, data.eq.lon], {
           color     : (data.status) ? "red" : "#FF9224",
           fillColor : "transparent",
           radius    : s_dist,
           weight    : 2,
         }).addTo(variable.map),
-        s_fill: L.gradientCircle([data.eq.lat, data.eq.lon], {
+        s_fill: (data.detail == 0) ? null : L.gradientCircle([data.eq.lat, data.eq.lon], {
           radius         : s_dist,
           gradientColors : (data.status) ? ["rgba(255, 0, 0, 0)", "rgba(255, 0, 0, 0.6)"] : ["rgba(255, 146, 36, 0)", "rgba(255, 146, 36, 0.6)"],
           pane           : "circlePane",
@@ -250,26 +257,48 @@ function show_eew(data) {
     if (data.serial > variable.eew_list[data.id].data.serial) {
       if (checkbox("sound-effects-Update") == 1) constant.AUDIO.UPDATE.play();
       if (!variable.eew_list[data.id].data.status && data.status) {
-        variable.eew_list[data.id].layer.s.remove();
-        variable.eew_list[data.id].layer.s_fill.remove();
-        variable.eew_list[data.id].layer.s = L.circle([data.eq.lat, data.eq.lon], {
+        if (variable.eew_list[data.id].layer.s) variable.eew_list[data.id].layer.s.remove();
+        if (variable.eew_list[data.id].layer.s_fill) variable.eew_list[data.id].layer.s_fill.remove();
+        if (data.detail != 0) {
+          variable.eew_list[data.id].layer.s = L.circle([data.eq.lat, data.eq.lon], {
+            color     : (data.status) ? "red" : "#FF9224",
+            fillColor : "transparent",
+            radius    : s_dist,
+            weight    : 2,
+          }).addTo(variable.map);
+          variable.eew_list[data.id].layer.s_fill = L.gradientCircle([data.eq.lat, data.eq.lon], {
+            radius         : s_dist,
+            gradientColors : (data.status) ? ["rgba(255, 0, 0, 0)", "rgba(255, 0, 0, 0.6)"] : ["rgba(255, 146, 36, 0)", "rgba(255, 146, 36, 0.6)"],
+            pane           : "circlePane",
+          }).addTo(variable.map);
+        }
+      } else {
+        if (variable.eew_list[data.id].layer.s) variable.eew_list[data.id].layer.s.setLatLng([data.eq.lat, data.eq.lon]);
+        if (variable.eew_list[data.id].layer.s_fill)variable.eew_list[data.id].layer.s_fill.setLatLng([data.eq.lat, data.eq.lon]);
+      }
+      if (data.detail == 1 && variable.eew_list[data.id].data.detail == 0) {
+        variable.eew_list[data.id].layer.p = L.circle([data.eq.lat, data.eq.lon], {
+          color     : "#00FFFF",
+          fillColor : "transparent",
+          radius    : p_dist,
+          weight    : 2,
+        }).addTo(variable.map);
+        if (!variable.eew_list[data.id].layer.s) variable.eew_list[data.id].layer.s = L.circle([data.eq.lat, data.eq.lon], {
           color     : (data.status) ? "red" : "#FF9224",
           fillColor : "transparent",
           radius    : s_dist,
           weight    : 2,
         }).addTo(variable.map);
-        variable.eew_list[data.id].layer.s_fill = L.gradientCircle([data.eq.lat, data.eq.lon], {
+        if (!variable.eew_list[data.id].layer.s_fill) variable.eew_list[data.id].layer.s_fill = L.gradientCircle([data.eq.lat, data.eq.lon], {
           radius         : s_dist,
           gradientColors : (data.status) ? ["rgba(255, 0, 0, 0)", "rgba(255, 0, 0, 0.6)"] : ["rgba(255, 146, 36, 0)", "rgba(255, 146, 36, 0.6)"],
           pane           : "circlePane",
         }).addTo(variable.map);
-      } else {
-        variable.eew_list[data.id].layer.s.setLatLng([data.eq.lat, data.eq.lon]);
-        variable.eew_list[data.id].layer.s_fill.setLatLng([data.eq.lat, data.eq.lon]);
+        variable.eew_list[data.id].layer.epicenterIcon.setIcon(icon);
       }
       variable.eew_list[data.id].data = data;
       variable.eew_list[data.id].layer.epicenterIcon.setLatLng([data.eq.lat, data.eq.lon]);
-      variable.eew_list[data.id].layer.p.setLatLng([data.eq.lat, data.eq.lon]);
+      if (variable.eew_list[data.id].layer.p) variable.eew_list[data.id].layer.p.setLatLng([data.eq.lat, data.eq.lon]);
     } else return;
 
   if (variable.speech_status) {

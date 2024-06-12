@@ -144,8 +144,9 @@ const constant = {
 };
 
 const variable = {
-  map       : null,
-  map_layer : {
+  time_cache_list : [],
+  map             : null,
+  map_layer       : {
     eew: {},
   },
   subscripted_list   : [],
