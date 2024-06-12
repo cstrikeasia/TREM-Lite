@@ -7,7 +7,7 @@
   right: 8px;
   margin-top: .5em;
   width: 375px;
-  max-width: 355px;
+  max-width: 340px;
   z-index: 1000;
   overflow: hidden;
   filter: none;
@@ -26,7 +26,7 @@
 }
 
 .report-list-wrapper.hidden {
-  translate: 73%;
+  translate: 93%;
 }
 
 .report-list-scrollview {
@@ -63,11 +63,11 @@
     min-height: 0;
     overflow-y: hidden;
 
-    &::-webkit-scrollbar-track {
+    &:-webkit-scrollbar-track {
       background-color: hsl(var(--background-variant-hsl));
     }
 
-    &::-webkit-scrollbar-button {
+    &:-webkit-scrollbar-button {
       background-color: transparent;
       height: 4px;
     }
@@ -127,7 +127,7 @@
     font-size: 18px;
     font-variant-numeric: tabular-nums;
 
-    &::before {
+    &:before {
       content: "M";
       margin-right: 4px;
       font-size: 75%;
@@ -370,7 +370,7 @@
     font-size: 28px;
     flex: 1 1 0%;
 
-    &::before {
+    &:before {
       background-color: rgb(255, 31, 0);
       content: "";
       display: block;
@@ -393,7 +393,7 @@
   }
 
   .report-list-item-magnitude {
-    &::before {
+    &:before {
       margin-right: 4px;
       content: "𝖬";
       font-size: 23px;
@@ -404,7 +404,7 @@
     font-size: 24px;
     line-height: 36px;
 
-    &::after {
+    &:after {
       margin-left: 4px;
       content: "km";
       font-size: 14px;
@@ -440,7 +440,7 @@
       margin-right: 4px;
     }
 
-    &::after {
+    &:after {
       background-color: rgb(255, 31, 0);
       content: "";
       display: block;
@@ -465,18 +465,18 @@
 
 .report-list-btn-wrapper {
   height: auto;
-  width: 40px;
+  width: 27px;
   display: flex;
 }
 
 .report-list-btn {
   border: 1px solid #00000000;
-  height: 35px;
+  height: 20px;
   width: 20px;
   background: #464646;
   border-radius: 5px;
   position: relative;
-  top: 1em;
+  top: .3em;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -497,18 +497,8 @@
   width: 1em;
 }
 
-.hidden .report-list-btn {
-  width: 100px;
-}
-
-
-.report-list-btn span:first-child {
-  display: none;
-}
-
 .hidden .report-list-btn span:first-child {
   width: 4em;
-  margin-left: .3em;
   display: flex;
 }
 

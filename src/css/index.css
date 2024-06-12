@@ -264,7 +264,7 @@ body {
             flex: 1;
             font-size: 28px;
 
-            &::before
+            &:before
 
             /*! 規模色條顏色 */
               {
@@ -272,7 +272,7 @@ body {
             }
 
             >.info-body-magnitude-value {
-              &::before {
+              &:before {
                 margin-right: 4px;
                 content: "𝖬";
                 font-size: 16px;
@@ -281,14 +281,14 @@ body {
           }
 
           >.info-body-depth {
-            &::before
+            &:before
 
             /*! 背景文字位置 */
               {
               right: 0;
             }
 
-            &::after
+            &:after
 
             /*! 深度色條顏色 */
               {
@@ -299,7 +299,7 @@ body {
               font-size: 20px;
               line-height: 36px;
 
-              &::after {
+              &:after {
                 margin-left: 4px;
                 content: "㎞";
                 font-size: 12px;
@@ -768,6 +768,7 @@ body {
   align-items: flex-start;
   flex-wrap: wrap;
   align-content: space-around;
+  z-index: 1001;
 }
 
 .icon {
@@ -1240,7 +1241,7 @@ body:has(#report-panel.show) .pga_dot {
 .tsunami-report-container .tsunami-arrival-height {
   width: 60px;
   height: 49.27px;
-  border-radius: 18px 18px 18px 18px;
+  border-radius: 15px;
   font-family: "Open Sans", sans-serif;
   display: flex;
   align-items: center;
@@ -1256,6 +1257,8 @@ body:has(#report-panel.show) .pga_dot {
   }
 }
 
+
+
 .tsunami-arrival-info {
   display: flex;
   flex-direction: column;
@@ -1268,6 +1271,24 @@ body:has(#report-panel.show) .pga_dot {
 
 .lift .tsunami-arrival-height {
   width: 100px;
+  border-radius: 10px;
+
+  &:after {
+    font-size: .7em;
+  }
+}
+
+.lift .tsunami-height-number {
+  font-size: 1.3em;
+}
+
+.lift .nav-item-icon {
+  left: 0.9rem !important;
+  font-weight: bold;
+}
+
+.lift .tsunami-arrival-info {
+  flex-direction: row;
 }
 
 .tsunami-report-container .tsunami-area-item {

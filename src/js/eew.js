@@ -11,7 +11,7 @@ setInterval(() => {
 
 
   if (_eew_list.length)
-    show_rts_list(true);
+    show_rts_list(1);
 
   if (draw_lock) return;
   draw_lock = true;
@@ -177,7 +177,7 @@ function show_eew(data) {
       last_map_update = 0;
       if (!variable.eew_list[data.id].cancel) {
         variable.eew_list[data.id].cancel = true;
-        if (UserCheckBox()["sound-effects-Update"] === true) constant.AUDIO.UPDATE.play();
+        if (checkbox("sound-effects-Update") == true) constant.AUDIO.UPDATE.play();
         variable.eew_list[data.id].layer.s.remove();
         variable.eew_list[data.id].layer.s_fill.remove();
         variable.eew_list[data.id].layer.p.remove();
@@ -197,7 +197,7 @@ function show_eew(data) {
       variable.eew_list[data.id].layer.epicenterIcon.remove();
       show_rts_list(false);
     } else
-      if (UserCheckBox()["sound-effects-EEW"] === true) constant.AUDIO.EEW.play();
+      if (checkbox("sound-effects-EEW") == 1) constant.AUDIO.EEW.play();
 
     if (!variable.eew_list[data.id])
       if (variable.speech_status) {
@@ -256,7 +256,7 @@ function show_eew(data) {
       }
   } else
     if (data.serial > variable.eew_list[data.id].data.serial) {
-      if (UserCheckBox()["sound-effects-Update"] === true) constant.AUDIO.UPDATE.play();
+      if (checkbox("sound-effects-Update") == 1) constant.AUDIO.UPDATE.play();
       if (!variable.eew_list[data.id].data.status && data.status) {
         variable.eew_list[data.id].layer.s.remove();
         variable.eew_list[data.id].layer.s_fill.remove();
@@ -282,7 +282,7 @@ function show_eew(data) {
 
   if (data.eq.max > 4 && !variable.eew_list[data.id].alert) {
     variable.eew_list[data.id].alert = true;
-    if (UserCheckBox()["sound-effects-EEW2"] === true) constant.AUDIO.ALERT.play();
+    if (checkbox("sound-effects-EEW2") == 1) constant.AUDIO.ALERT.play();
   }
 
   variable.eew_list[data.id].eew_intensity_list = eew_area_pga(data.eq.lat, data.eq.lon, data.eq.depth, data.eq.mag);

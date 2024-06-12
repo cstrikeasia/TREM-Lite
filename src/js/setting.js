@@ -12,95 +12,43 @@ const LoginBtn = querySelector(".login-btn");
 
 const LocationWrapper = querySelector(".usr-location");
 const Location = LocationWrapper.querySelector(".location");
-const LocationSelectWrapper = LocationWrapper.querySelector(".select-wrapper");
-const localItems = LocationSelectWrapper.querySelector(".local");
-const CitySelect = LocationSelectWrapper.querySelector(".current-city");
-const CityItems = LocationSelectWrapper.querySelector(".city");
-const TownSelect = LocationSelectWrapper.querySelector(".current-town");
-const TownItems = LocationSelectWrapper.querySelector(".town");
+const LocationSelWrapper = LocationWrapper.querySelector(".select-wrapper");
+const localItems = LocationSelWrapper.querySelector(".local");
+const CitySel = LocationSelWrapper.querySelector(".current-city");
+const CityItems = LocationSelWrapper.querySelector(".city");
+const TownSel = LocationSelWrapper.querySelector(".current-town");
+const TownItems = LocationSelWrapper.querySelector(".town");
 
 // 版本號、UUID
 version.textContent = "2.0.0";
 
-async function localStorage_initialization() {
+function set_ls(key, data) {
+  localStorage.setItem(key, data);
+}
+
+async function ls_initialization() {
   await realtimeStation();
-
-  const DefSetting = {
-    "current-location"           : { city: "臺南市", town: "歸仁區", lat: 22.967286, lon: 120.2940045 },
-    "current-warning"            : { "realtime-station": "0級", "estimate-int": "0級" },
-    "bg-filter"                  : 20,
-    "bg-percentage"              : 100,
-    "current-map-display-effect" : 1,
-  };
-
-  for (const [key, value] of Object.entries(DefSetting))
+  Object.entries(constant.SETTING.LOCALSTORAGE_DEF).forEach(([key, value]) => {
     if (!localStorage.getItem(key))
-      localStorage.setItem(key, JSON.stringify(value));
+      set_ls(key, JSON.stringify(value));
 
+  });
 
-  const def_loc = DefSetting["current-location"];
+  const def_loc = constant.SETTING.LOCALSTORAGE_DEF["current-location"];
   const def_loc_info = constant.REGION[def_loc.city][def_loc.town];
 
   if (!localStorage.getItem("current-station"))
-    localStorage.setItem("current-station", JSON.stringify(NearStation(def_loc_info.lat, def_loc_info.lon)));
+    set_ls("current-station", JSON.stringify(NearStation(def_loc_info.lat, def_loc_info.lon)));
 
+  const userCheckbox = JSON.parse(localStorage.getItem("user-checkbox") || "{}");
+  Object.entries(constant.SETTING.CHECKBOX_DEF).forEach(([key, defaultValue]) => {
+    if (!(key in userCheckbox))
+      userCheckbox[key] = defaultValue;
 
-  if (!localStorage.getItem("user-checkbox")) {
-    const UserCheckBoxDef = {
-      "early-warning-CWA"        : true,
-      "early-warning-JMA"        : true,
-      "early-warning-KMA"        : true,
-      "early-warning-NIED"       : true,
-      "early-warning-SCDZJ"      : true,
-      "graphics-block-auto-zoom" : true,
-      "graphics-show-plates"     : true,
-      "other-auto-start"         : true,
-      "other-voice"              : true,
-      "show-window-detect"       : true,
-      "show-window-eew"          : true,
-      "show-window-realtime-int" : true,
-      "show-window-report"       : true,
-      "sound-effects-EEW"        : true,
-      "sound-effects-EEW2"       : true,
-      "sound-effects-PAlert"     : true,
-      "sound-effects-PGA1"       : true,
-      "sound-effects-PGA2"       : true,
-      "sound-effects-Report"     : true,
-      "sound-effects-Shindo0"    : true,
-      "sound-effects-Shindo1"    : true,
-      "sound-effects-Shindo2"    : true,
-      "sound-effects-Update"     : true,
-      "sound-effects-dong"       : true,
-    };
-
-    const UserCheckBox = JSON.parse(localStorage.getItem("user-checkbox") || "{}");
-
-    Object.entries(UserCheckBoxDef).forEach(([key, defaultValue]) => {
-      if (!(key in UserCheckBox))
-        UserCheckBox[key] = defaultValue;
-
-    });
-
-    localStorage.setItem("user-checkbox", JSON.stringify(UserCheckBox));
-  }
+  });
+  set_ls("user-checkbox", JSON.stringify(userCheckbox));
 }
-
-localStorage_initialization();
-
-const localArr = {
-  "北部" : ["臺北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣"],
-  "中部" : ["臺中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣"],
-  "南部" : ["高雄市", "臺南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣"],
-  "東部" : ["花蓮縣", "臺東縣"],
-  "外島" : ["金門縣", "連江縣"],
-  "南韓" : ["南陽州市"],
-  "中國" : ["重慶市"],
-};
-
-const cityToTowns = {
-  "南陽州市" : ["和道邑"],
-  "重慶市"  : ["北碚區"],
-};
+ls_initialization();
 
 // 左側選單按鈕點擊
 querySelectorAll(".setting-buttons .button").forEach(button => {
@@ -126,7 +74,7 @@ addEventListener("click", (event) => {
 
 // 確定重置按鈕點擊事件
 ResetSure.addEventListener("click", () => {
-  localStorage_initialization();
+  ls_initialization();
   ResetConfirmWrapper.style.bottom = "-100%";
 });
 
@@ -140,7 +88,7 @@ SettingBtn.addEventListener("click", () => {
   const _eew_list = Object.keys(variable.eew_list);
   if (_eew_list.length) return;
 
-  display_element([SettingWrapper], "block");
+  display([SettingWrapper], "block");
   requestAnimationFrame(() => {
     opacity([SettingWrapper], 1);
   });
@@ -148,7 +96,7 @@ SettingBtn.addEventListener("click", () => {
 
 // 返回按鈕點擊事件
 Back.addEventListener("click", () => {
-  display_element([SettingWrapper]);
+  display([SettingWrapper]);
   requestAnimationFrame(() => {
     opacity([SettingWrapper], 0);
   });
@@ -157,8 +105,8 @@ Back.addEventListener("click", () => {
 // 所在地-下拉選單點擊事件
 Location.addEventListener("click", function() {
   const ArrowSpan = this.querySelector(".selected-btn");
-  ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
-  LocationSelectWrapper.classList.toggle("select-show-big");
+  ArrowSpan.textContent = ArrowSpan.textContent.trim() == "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
+  LocationSelWrapper.classList.toggle("select-show-big");
 });
 
 // 所在地-點擊選項事件
@@ -178,24 +126,19 @@ const addLocationSelectEvent = (localItemsContainer, cityItemsContainer, selectE
 
 // 所在地-更新目前選項的city、town
 const updateLocationSelectItems = (itemsContainer, items) => {
-  itemsContainer.innerHTML = "";
-  items.forEach(item => {
-    const div = createElement("div");
-    div.textContent = item;
-    itemsContainer.appendChild(div);
-  });
+  itemsContainer.innerHTML = items.map(item => `<div>${item}</div>`).join("");
 };
 
 // 所在地-將town推入city數組
 Object.keys(constant.REGION).forEach(city => {
-  cityToTowns[city] = Object.keys(constant.REGION[city]);
+  constant.SETTING.SPECIAL_LOCAL[city] = Object.keys(constant.REGION[city]);
 });
 
 // 所在地-local選單點擊事件
 localItems.addEventListener("click", (event) => {
   const closestDiv = event.target.closest(".usr-location .select-items > div");
   if (closestDiv) {
-    updateLocationSelectItems(CityItems, localArr[closestDiv.textContent]);
+    updateLocationSelectItems(CityItems, constant.SETTING.LOCAL_ARRAY[closestDiv.textContent]);
     updateLocationSelectItems(TownItems, []);
   }
 });
@@ -204,8 +147,8 @@ localItems.addEventListener("click", (event) => {
 CityItems.addEventListener("click", (event) => {
   const closestDiv = event.target.closest(".usr-location .select-items > div");
   if (closestDiv) {
-    CitySelect.textContent = closestDiv.textContent;
-    updateLocationSelectItems(TownItems, cityToTowns[closestDiv.textContent] || []);
+    CitySel.textContent = closestDiv.textContent;
+    updateLocationSelectItems(TownItems, constant.SETTING.SPECIAL_LOCAL[closestDiv.textContent] || []);
   }
 });
 
@@ -214,85 +157,62 @@ TownItems.addEventListener("click", (event) => {
   const closestDiv = event.target.closest(".usr-location .select-items > div");
   if (closestDiv) {
     let usrLocalStation = [];
-    TownSelect.textContent = closestDiv.textContent;
-    querySelector(".current-city").textContent = CitySelect.textContent;
+    TownSel.textContent = closestDiv.textContent;
+    querySelector(".current-city").textContent = CitySel.textContent;
     querySelector(".current-town").textContent = closestDiv.textContent;
 
-    if (CitySelect.textContent !== "南陽州市" && CitySelect.textContent !== "重慶市") {
-      const usr_location_info = constant.REGION[CitySelect.textContent][closestDiv.textContent];
+    if (CitySel.textContent !== "南陽州市" && CitySel.textContent !== "重慶市") {
+      const usr_location_info = constant.REGION[CitySel.textContent][closestDiv.textContent];
       usrLocalStation = NearStation(usr_location_info.lat, usr_location_info.lon);
     } else
-      usrLocalStation = findStationByLocation(CitySelect.textContent, closestDiv.textContent);
+      usrLocalStation = findStationByLocation(CitySel.textContent, closestDiv.textContent);
 
     querySelector(".current-station").textContent = `${usrLocalStation.net} ${usrLocalStation.code}-${usrLocalStation.name} ${usrLocalStation.loc}`;
-    SaveSelectedLocationToStorage(CitySelect.textContent, closestDiv.textContent, JSON.stringify(usrLocalStation));
+    SaveSelectedLocationToStorage(CitySel.textContent, closestDiv.textContent, JSON.stringify(usrLocalStation));
   }
 });
 
 function findStationByLocation(city, town) {
   const location = `${city}${town}`;
-  for (const station of StationList)
-    if (station.loc === location)
-      return station;
-
-
-  return null;
+  return variable.setting.station.find(station => station.loc == location) || null;
 }
 
 function NearStation(la, lo) {
   let min = Infinity;
   let closestStation = null;
 
-  for (const id of Object.keys(StationList)) {
-    const dist_surface = Math.sqrt(Math.pow((la - StationList[id].lat) * 111, 2) + Math.pow((lo - StationList[id].lon) * 101, 2));
+  for (const station of variable.setting.station) {
+    const dist_surface = Math.sqrt((la - station.lat) ** 2 * 111 ** 2 + (lo - station.lon) ** 2 * 101 ** 2);
     if (dist_surface < min) {
       min = dist_surface;
-      closestStation = StationList[id];
+      closestStation = station;
     }
   }
 
-  if (closestStation) {
-    const result = {
-      net  : closestStation.net,
-      code : closestStation.code,
-      name : closestStation.name,
-      loc  : closestStation.loc,
-      lat  : closestStation.lat,
-      lon  : closestStation.lon,
-    };
-    return result;
-  }
-
-  return null;
+  return closestStation ? { ...closestStation } : null;
 }
 
 
-addLocationSelectEvent(localItems, CityItems, CitySelect);
-addLocationSelectEvent(localItems, TownItems, TownSelect);
+addLocationSelectEvent(localItems, CityItems, CitySel);
+addLocationSelectEvent(localItems, TownItems, TownSel);
 
 // 所在地-儲存user選擇的city和town到storage
 const SaveSelectedLocationToStorage = (city, town, station) => {
-  console.log(constant.REGION[city][town]);
-  const coordinate = constant.REGION[city][town];
-  const locationData = { city: city, town: town, lat: coordinate.lat, lon: coordinate.lon };
-  localStorage.setItem("current-location", JSON.stringify(locationData));
-  localStorage.setItem("current-station", station);
+  if (city !== "重慶市" && city !== "南陽州市") {
+    const coordinate = constant.REGION[city][town];
+    const locationData = { city, town, lat: coordinate.lat, lon: coordinate.lon };
+    set_ls("current-location", JSON.stringify(locationData));
+    set_ls("current-station", station);
+  }
 };
 
 
 const StationWrapper = querySelector(".realtime-station");
 const StationLocation = StationWrapper.querySelector(".location");
-const StationSelectWrapper = StationWrapper.querySelector(".select-wrapper");
-const StationLocalItems = StationSelectWrapper.querySelector(".local");
-const StationSelect = StationSelectWrapper.querySelector(".current-station");
-const StationItems = StationSelectWrapper.querySelector(".station");
-const StationList = [];
-const StationRegion = [];
-
-function clearArrays() {
-  StationList.length = 0;
-  StationRegion.length = 0;
-}
+const StationSelWrapper = StationWrapper.querySelector(".select-wrapper");
+const StationLocalItems = StationSelWrapper.querySelector(".local");
+const StationSel = StationSelWrapper.querySelector(".current-station");
+const StationItems = StationSelWrapper.querySelector(".station");
 
 // 即時測站-取得即時測站
 async function realtimeStation() {
@@ -301,9 +221,8 @@ async function realtimeStation() {
     const data = await res.json();
 
     if (data) {
-      clearArrays();
       processStationData(data);
-      renderStationRegion();
+      RenderStationReg();
     }
   } catch (err) {
     logger.error(`[Fetch] ${err}`);
@@ -314,53 +233,37 @@ async function realtimeStation() {
 function processStationData(data) {
   Object.keys(data).forEach(station => {
     const info = data[station].info[data[station].info.length - 1];
-    let loc = region_code_to_string(constant.REGION, info.code);
+    const loc = region_code_to_string(constant.REGION, info.code) || getFallbackLocation(station);
 
-    if (loc && !StationRegion.includes(loc.city))
-      StationRegion.push(loc.city);
+    if (loc.city && !constant.SETTING.STATION_REGION.includes(loc.city))
+      constant.SETTING.STATION_REGION.push(loc.city);
 
-    if (!loc)
-      loc = getFallbackLocation(station);
-    else
-      loc = `${loc.city}${loc.town}`;
-
-
-    const stationInfo = {
+    variable.setting.station.push({
       name : station,
       net  : data[station].net,
-      loc  : loc,
+      loc  : loc.city ? `${loc.city}${loc.town}` : loc,
       code : info.code,
       lat  : info.lat,
       lon  : info.lon,
-    };
-
-    StationList.push(stationInfo);
+    });
   });
 }
 
 // 即時測站-取得未知站點名稱
 function getFallbackLocation(station) {
-  switch (station) {
-    case "13379360":
-      return "重慶市北碚區";
-    case "7735548":
-      return "南陽州市和道邑";
-    default:
-      return "未知區域";
-  }
+  return constant.SETTING.LOCALFALLBACK[station] || "未知區域";
 }
 
 // 即時測站-渲染測站站點
-function renderStationRegion() {
+function RenderStationReg() {
   StationLocalItems.innerHTML = "";
 
-  const uniqueRegions = [...new Set(StationRegion.map(city => city.slice(0, -1)))];
+  const uniqueRegions = [...new Set(constant.SETTING.STATION_REGION.map(city => city.slice(0, -1)))];
 
   const sortedRegion = uniqueRegions.sort();
 
   sortedRegion.forEach(city => {
-    const cityDiv = createElement("div");
-    cityDiv.textContent = city;
+    const cityDiv = CreatEle(city);
     StationLocalItems.appendChild(cityDiv);
   });
 }
@@ -375,7 +278,7 @@ function handleCityItemClick(event) {
     target.classList.add("select-option-selected");
 
     const selectedCity = target.textContent;
-    const filteredStations = StationList.filter(station => station.loc.includes(selectedCity));
+    const filteredStations = variable.setting.station.filter(station => station.loc.includes(selectedCity));
     renderFilteredStations(filteredStations);
   }
 }
@@ -387,24 +290,25 @@ function renderFilteredStations(stations) {
   StationItems.innerHTML = "";
 
   stations.forEach(station => {
-    const stationDiv = createElement("div");
-    stationDiv.setAttribute("data-net", station.net);
-    stationDiv.setAttribute("data-code", station.code);
-    stationDiv.setAttribute("data-name", station.name);
-    stationDiv.setAttribute("data-loc", station.loc);
-    stationDiv.setAttribute("data-lat", station.lat);
-    stationDiv.setAttribute("data-lon", station.lon);
+    const stationAttr = {
+      "data-net"  : station.net,
+      "data-code" : station.code,
+      "data-name" : station.name,
+      "data-loc"  : station.loc,
+      "data-lat"  : station.lat,
+      "data-lon"  : station.lon,
+    };
+    const stationDiv = CreatEle("", "", "", "", stationAttr);
 
     const netSpan = createElement("span");
     netSpan.textContent = station.net;
-    netSpan.classList.add(station.net);
+    netSpan.classList = station.net;
 
     const infoSpan = createElement("span");
     infoSpan.textContent = `${station.code}-${station.name} ${station.loc}`;
 
     stationDiv.appendChild(netSpan);
     stationDiv.appendChild(infoSpan);
-
     StationItems.appendChild(stationDiv);
   });
 }
@@ -414,38 +318,26 @@ StationLocation.addEventListener("click", handleLocationClick);
 
 function handleLocationClick() {
   const ArrowSpan = this.querySelector(".selected-btn");
-  ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
-  StationSelectWrapper.classList.toggle("select-show-big");
+  ArrowSpan.textContent = ArrowSpan.textContent.trim() == "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
+  StationSelWrapper.classList.toggle("select-show-big");
 }
 
 // 即時測站-點擊測站選項事件
-addStationSelectEvent(StationItems);
+StationSelEvent(StationItems);
 
-function addStationSelectEvent(itemsContainer) {
+function StationSelEvent(itemsContainer) {
   itemsContainer.addEventListener("click", (event) => {
     const closestDiv = event.target.closest(".realtime-station .select-items > div");
     if (closestDiv) {
-      const selectedStation = closestDiv.textContent;
-
       itemsContainer.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
       closestDiv.classList.add("select-option-selected");
-
       const regex = /^(MS-Net|SE-Net)(\d+-\d+.*)$/;
-      const match = selectedStation.match(regex);
+      const match = closestDiv.textContent.match(regex);
       if (match) {
-        StationSelect.textContent = `${match[1]} ${match[2]}`;
+        StationSel.textContent = `${match[1]} ${match[2]}`;
         querySelector(".current-station").textContent = `${match[1]} ${match[2]}`;
-
-        const stationData = {
-          net  : closestDiv.getAttribute("data-net"),
-          code : closestDiv.getAttribute("data-code"),
-          name : closestDiv.getAttribute("data-name"),
-          loc  : closestDiv.getAttribute("data-loc"),
-          lat  : closestDiv.getAttribute("data-lat"),
-          lon  : closestDiv.getAttribute("data-lon"),
-        };
-
-        localStorage.setItem("current-station", JSON.stringify(stationData));
+        const stationData = Object.fromEntries(["net", "code", "name", "loc", "lat", "lon"].map(attr => [attr, closestDiv.getAttribute(`data-${attr}`)]));
+        set_ls("current-station", JSON.stringify(stationData));
       }
     }
   });
@@ -465,14 +357,14 @@ const LoginMsg = querySelector(".login_msg");
 const url = "https://api.exptech.com.tw/api/v3/et/";
 
 // 登入-切換登入表單和帳號資訊
-function toggleForms(isLoginFormVisible) {
-  LoginFormContent.style.display = isLoginFormVisible ? "grid" : "none";
-  AccountInfoContent.style.display = isLoginFormVisible ? "none" : "block";
+function toggleForms(isLogin) {
+  display([LoginFormContent], isLogin ? "grid" : "none");
+  display([AccountInfoContent], isLogin ? "none" : "block");
 }
 
 // 登入-跳轉到登入表單
 LoginBtn.addEventListener("click", () => {
-  toggleForms(true);
+  toggleForms(1);
   requestAnimationFrame(() => {
     LoginFormContent.classList.add("show-login-form");
     AccountInfoContent.classList.remove("show-account-info");
@@ -481,7 +373,7 @@ LoginBtn.addEventListener("click", () => {
 
 // 登入-返回登入首頁/帳號資訊
 LoginBack.addEventListener("click", () => {
-  toggleForms(false);
+  toggleForms(0);
   requestAnimationFrame(() => {
     AccountInfoContent.classList.add("show-account-info");
     LoginFormContent.classList.remove("show-login-form");
@@ -503,18 +395,18 @@ LogoutBtn.addEventListener("click", async () => {
 
 // 登入-登入成功畫面
 function LoginSuccess(msg) {
-  display_element([LoginBtn]);
-  display_element([LogoutBtn], "flex");
+  display([LoginBtn]);
+  display([LogoutBtn], "flex");
   act.textContent = "Welcome";
   vip.textContent = `VIP-${msg.vip}`;
-  localStorage.setItem("user-token", msg.device[0].key);
+  set_ls("user-token", msg.device[0].key);
   LoginBack.dispatchEvent(clickEvent);
 }
 
 // 登入-登出成功畫面
 function LogoutSuccess() {
-  display_element([LogoutBtn]);
-  display_element([LoginBtn], "flex");
+  display([LogoutBtn]);
+  display([LoginBtn], "flex");
   act.textContent = "尚未登入";
   vip.textContent = "";
   localStorage.removeItem("user-token", "");
@@ -527,26 +419,20 @@ async function handleUserAction(endpoint, options) {
     const response = await fetch(`${url}${endpoint}`, options);
     const responseData = await response.text();
 
+    const isSuccess = response.ok;
     LoginMsg.classList.remove("success", "error", "shake");
+    LoginMsg.classList.add(isSuccess ? "success" : "error");
 
-    switch (true) {
-      case response.ok: {
-        LoginMsg.classList.add("success");
-        LoginMsg.textContent = `${options.method === "POST" ? "登入" : "登出"}成功！`;
-        if (endpoint === "login") LoginSuccess(await getUserInfo(responseData));
-        if (endpoint === "logout") LogoutSuccess();
-        break;
-      }
-      case response.status === 400 || response.status === 401:
-        LoginMsg.classList.add("error");
-        LoginMsg.textContent = "帳號或密碼錯誤！";
-        LoginMsg.classList.add("shake");
-        break;
-      default:
-        LoginMsg.classList.add("error");
-        LoginMsg.textContent = `伺服器異常(error ${response.status})`;
-        LoginMsg.classList.add("shake");
-        break;
+    if (isSuccess) {
+      LoginMsg.textContent = `${options.method == "POST" ? "登入" : "登出"}成功！`;
+      if (endpoint == "login") LoginSuccess(await getUserInfo(responseData));
+      if (endpoint == "logout") LogoutSuccess();
+    } else if (response.status == 400 || response.status == 401) {
+      LoginMsg.textContent = "帳號或密碼錯誤！";
+      LoginMsg.classList.add("shake");
+    } else {
+      LoginMsg.textContent = `伺服器異常(error ${response.status})`;
+      LoginMsg.classList.add("shake");
     }
 
     LoginMsg.addEventListener("animationend", () => {
@@ -594,17 +480,17 @@ async function getUserInfo(token) {
 }
 
 const clickEvent = new MouseEvent("click", {
-  bubbles    : true,
-  cancelable : true,
+  bubbles    : 1,
+  cancelable : 1,
   view       : window,
 });
 
 
 // 預警條件
-function initializeSelect(type, location, showInt, selectWrapper, items) {
-  location.addEventListener("click", function() {
-    const ArrowSpan = this.querySelector(".selected-btn");
-    ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
+function initializeSel(type, location, showInt, selectWrapper, items) {
+  location.addEventListener("click", () => {
+    const ArrowSpan = location.querySelector(".selected-btn");
+    ArrowSpan.textContent = ArrowSpan.textContent.trim() == "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
     selectWrapper.classList.toggle("select-show-big");
   });
 
@@ -624,47 +510,34 @@ function initializeSelect(type, location, showInt, selectWrapper, items) {
 
 function updateLocalStorage(typeClassName, selectedValue) {
   const data = JSON.parse(localStorage.getItem("current-warning")) || {};
-
-  if (typeClassName.indexOf("warning-realtime-station") > 0) {
-    if (!data["realtime-station"])
-      data["realtime-station"] = "";
-
-    data["realtime-station"] = selectedValue;
-  } else {
-    if (!data["estimate-int"])
-      data["estimate-int"] = "";
-
-    data["estimate-int"] = selectedValue;
-  }
-
-  localStorage.setItem("current-warning", JSON.stringify(data));
+  const key = typeClassName.includes("warning-realtime-station") ? "realtime-station" : "estimate-int";
+  data[key] = selectedValue;
+  set_ls("current-warning", JSON.stringify(data));
 }
 
 // 預警條件-即時測站
 const WRTS = querySelector(".warning-realtime-station");
 const WRTSLocation = WRTS.querySelector(".location");
 const WRTSShowInt = WRTS.querySelector(".realtime-int");
-const WRTSSelectWrapper = WRTS.querySelector(".select-wrapper");
-const WRTSItems = WRTSSelectWrapper.querySelector(".int");
+const WRTSSelWrapper = WRTS.querySelector(".select-wrapper");
+const WRTSItems = WRTSSelWrapper.querySelector(".int");
 
-initializeSelect(WRTS, WRTSLocation, WRTSShowInt, WRTSSelectWrapper, WRTSItems);
+initializeSel(WRTS, WRTSLocation, WRTSShowInt, WRTSSelWrapper, WRTSItems);
 
 // 預警條件-預估震度
 const WEI = querySelector(".warning-estimate-int");
 const WEILocation = WEI.querySelector(".location");
 const WEIShowInt = WEI.querySelector(".estimate-int");
-const WEISelectWrapper = WEI.querySelector(".select-wrapper");
-const WEIItems = WEISelectWrapper.querySelector(".int");
+const WEISelWrapper = WEI.querySelector(".select-wrapper");
+const WEIItems = WEISelWrapper.querySelector(".int");
 
-initializeSelect(WEI, WEILocation, WEIShowInt, WEISelectWrapper, WEIItems);
+initializeSel(WEI, WEILocation, WEIShowInt, WEISelWrapper, WEIItems);
 
 // 渲染震度選項列表
 const Ints = querySelectorAll(".select-wrapper .int");
-const intensity_text = ["0級", "1級", "2級", "3級", "4級", "5弱", "5強", "6弱", "6強", "7級"];
 Ints.forEach(Int => {
-  intensity_text.forEach(text => {
-    const intItem = document.createElement("div");
-    intItem.textContent = text;
+  constant.SETTING.INTENSITY.forEach(text => {
+    const intItem = CreatEle(text);
     Int.appendChild(intItem);
   });
 });
@@ -674,32 +547,28 @@ Ints.forEach(Int => {
 const sliderContainer = querySelector(".slider-container");
 const sliderTrack = querySelector(".slider-track");
 const sliderThumb = querySelector(".slider-thumb");
-
-let isDragging = false;
+let isDragging = 0;
 
 sliderThumb.addEventListener("mousedown", () => {
-  isDragging = true;
+  isDragging = 1;
 });
 
 addEventListener("mouseup", () => {
-  isDragging = false;
+  isDragging = 0;
 });
 
 addEventListener("mousemove", (event) => {
   if (isDragging) {
     const containerRect = sliderContainer.getBoundingClientRect();
     let newLeft = event.clientX - containerRect.left;
-
     newLeft = Math.max(0, Math.min(newLeft, containerRect.width));
-
     const percentage = (newLeft / containerRect.width) * 100;
     const blurValue = (newLeft / containerRect.width) * 20;
-
     sliderThumb.style.left = `${percentage}%`;
     sliderTrack.style.width = `${percentage}%`;
     SettingWrapper.style.backdropFilter = `blur(${blurValue}px)`;
-    localStorage.setItem("bg-percentage", percentage);
-    localStorage.setItem("bg-filter", blurValue);
+    set_ls("bg-percentage", percentage);
+    set_ls("bg-filter", blurValue);
   }
 });
 
@@ -707,17 +576,15 @@ addEventListener("mousemove", (event) => {
 const GetSelectedFromStorage = () => {
   const locationData = JSON.parse(localStorage.getItem("current-location")) || {};
   const warningData = JSON.parse(localStorage.getItem("current-warning")) || {};
-
   sliderThumb.style.left = `${localStorage.getItem("bg-percentage") ? localStorage.getItem("bg-percentage") : 100 }%`;
   sliderTrack.style.width = `${localStorage.getItem("bg-percentage") ? localStorage.getItem("bg-percentage") : 100 }%`;
   SettingWrapper.style.backdropFilter = `blur(${localStorage.getItem("bg-filter") ? localStorage.getItem("bg-filter") : 20 }px)`;
-
   return {
     city             : locationData.city ? locationData.city : "臺南市",
     town             : locationData.town ? locationData.town : "歸仁區",
     station          : localStorage.getItem("current-station") ? localStorage.getItem("current-station") : "未知區域",
-    wrts             : warningData["realtime-station"] ? warningData["realtime-station"] : intensity_text[0],
-    wei              : warningData["estimate-int"] ? warningData["estimate-int"] : intensity_text[0],
+    wrts             : warningData["realtime-station"] ? warningData["realtime-station"] : constant.SETTING.INTENSITY[0],
+    wei              : warningData["estimate-int"] ? warningData["estimate-int"] : constant.SETTING.INTENSITY[0],
     effect           : localStorage.getItem("current-map-display-effect") ? localStorage.getItem("current-map-display-effect") : "1",
     selectedcheckbox : localStorage.getItem("user-checkbox"),
   };
@@ -739,7 +606,7 @@ const RenderSelectedFromStorage = () => {
   } else
     current_station.textContent = "未知區域";
 
-  const keys = Object.keys(EffectArr);
+  const keys = Object.keys(constant.SETTING.MAP_DISPLAY);
   const effect_text = keys[effect - 1] || "unknown";
   querySelector(".current-effect").textContent = effect_text;
 
@@ -749,9 +616,9 @@ const RenderSelectedFromStorage = () => {
   checkboxes.forEach((checkbox) => {
     const id = checkbox.id;
     if (SelectedCheckBoxes[id])
-      checkbox.checked = true;
+      checkbox.checked = 1;
     else
-      checkbox.checked = false;
+      checkbox.checked = 0;
 
   });
 };
@@ -760,62 +627,54 @@ const RenderSelectedFromStorage = () => {
 addEventListener("DOMContentLoaded", RenderSelectedFromStorage);
 
 
-const MapDisplayEffect = querySelector(".map-display-effect");
-const MapDisplayEffectSelect = MapDisplayEffect.querySelector(".current-effect");
-const MapDisplayEffectLocation = MapDisplayEffect.querySelector(".location");
-const MapDisplayEffectSelectWrapper = MapDisplayEffect.querySelector(".select-wrapper");
-const MapDisplayEffectItems = MapDisplayEffectSelectWrapper.querySelector(".effect");
+const MapDisplayEff = querySelector(".map-display-effect");
+const MapDisplayEffSel = MapDisplayEff.querySelector(".current-effect");
+const MapDisplayEffLocation = MapDisplayEff.querySelector(".location");
+const MapDisplayEffSelWrapper = MapDisplayEff.querySelector(".select-wrapper");
+const MapDisplayEffItems = MapDisplayEffSelWrapper.querySelector(".effect");
 
-const EffectArr = { "實測震度 + 預估震度": 1, "即時加速度 + 預估震度": 2, "預估震度": 3, "即時加速度": 4, "實測震度": 5 };
-
-if (MapDisplayEffectItems)
-  for (const [text, value] of Object.entries(EffectArr)) {
-    const intItem = document.createElement("div");
-    intItem.setAttribute("data-value", value);
-    intItem.textContent = text;
-    MapDisplayEffectItems.appendChild(intItem);
+if (MapDisplayEffItems)
+  for (const [text, value] of Object.entries(constant.SETTING.MAP_DISPLAY)) {
+    const intItem = CreatEle(text, "", "", "", { "data-value": value });
+    MapDisplayEffItems.appendChild(intItem);
   }
 
 
-const addMapDisplayEffectSelectEvent = (MapDisplayEffectContainer, selectElement) => {
-  [MapDisplayEffectContainer].forEach(container => {
-    container.addEventListener("click", (event) => {
-      const closestDiv = event.target.closest(".usr-location .select-items > div");
-      if (closestDiv) {
-        selectElement.textContent = closestDiv.textContent;
-
-        container.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
-        closestDiv.classList.add("select-option-selected");
-      }
-    });
+const addMapDisplayEffSelEvent = (container, selectElement) => {
+  container.addEventListener("click", (event) => {
+    const closestDiv = event.target.closest(".usr-location .select-items > div");
+    if (closestDiv) {
+      selectElement.textContent = closestDiv.textContent;
+      container.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
+      closestDiv.classList.add("select-option-selected");
+    }
   });
 };
 
-MapDisplayEffectLocation.addEventListener("click", function() {
+MapDisplayEffLocation.addEventListener("click", function() {
   const ArrowSpan = this.querySelector(".selected-btn");
-  ArrowSpan.textContent = ArrowSpan.textContent.trim() === "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
-  MapDisplayEffectSelectWrapper.classList.toggle("select-show-big");
+  ArrowSpan.textContent = ArrowSpan.textContent.trim() == "keyboard_arrow_up" ? "keyboard_arrow_down" : "keyboard_arrow_up";
+  MapDisplayEffSelWrapper.classList.toggle("select-show-big");
 });
 
-MapDisplayEffectItems.addEventListener("click", (event) => {
+MapDisplayEffItems.addEventListener("click", (event) => {
   const closestDiv = event.target.closest(".map-display-effect .select-items > div");
   if (closestDiv) {
-    MapDisplayEffectSelect.textContent = closestDiv.textContent;
-    MapDisplayEffectSelectWrapper.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
+    MapDisplayEffSel.textContent = closestDiv.textContent;
+    MapDisplayEffSelWrapper.querySelectorAll("div").forEach(div => div.classList.remove("select-option-selected"));
     closestDiv.classList.toggle("select-option-selected");
-    localStorage.setItem("current-map-display-effect", closestDiv.dataset.value);
+    set_ls("current-map-display-effect", closestDiv.dataset.value);
   }
 });
 
-addMapDisplayEffectSelectEvent(MapDisplayEffectItems, MapDisplayEffectSelect);
+addMapDisplayEffSelEvent(MapDisplayEffItems, MapDisplayEffSel);
 
 
 const Tos = querySelector(".tos");
 const Tos_Sure = querySelector(".tos_sure");
 
 if (!localStorage.getItem("tos")) {
-  display_element([Tos], "flex");
-
+  display([Tos], "flex");
   setTimeout(() => {
     const tosWrapper = querySelector(".tos_wrapper");
     tosWrapper.style.height = "19em";
@@ -825,28 +684,20 @@ if (!localStorage.getItem("tos")) {
 
 Tos_Sure.addEventListener("click", () => {
   opacity([Tos], 0);
-
   setTimeout(() => {
-    display_element([Tos]);
-    localStorage.setItem("tos", true);
+    display([Tos]);
+    set_ls("tos", 1);
   }, 2000);
 });
 
-
 /** 滑條選中**/
 const checkboxes = querySelectorAll(".switch input[type='checkbox']");
+const updateCheckboxesLocalStorage = () => {
+  const selectedCheckbox = Array.from(checkboxes).reduce((acc, cb) => {
+    if (cb.checked) acc[cb.id] = 1;
+    return acc;
+  }, {});
+  set_ls("user-checkbox", JSON.stringify(selectedCheckbox));
+};
 
-checkboxes.forEach((checkbox) => {
-  checkbox.addEventListener("change", () => {
-    const selectedcheckbox = {};
-
-    checkboxes.forEach((cb) => {
-      if (cb.checked)
-        selectedcheckbox[cb.id] = true;
-
-    });
-
-    const selectedcheckboxJSON = JSON.stringify(selectedcheckbox);
-    localStorage.setItem("user-checkbox", selectedcheckboxJSON);
-  });
-});
+checkboxes.forEach(checkbox => checkbox.addEventListener("change", updateCheckboxesLocalStorage));

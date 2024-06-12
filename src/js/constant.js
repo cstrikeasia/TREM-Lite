@@ -80,6 +80,67 @@ const constant = {
     TSUNAMI   : new Audio("../audio/TSUNAMI.wav"),
     UPDATE    : new Audio("../audio/UPDATE.wav"),
   },
+  SETTING: {
+    MAP_DISPLAY: {
+      "實測震度 + 預估震度"  : 1,
+      "即時加速度 + 預估震度" : 2,
+      "預估震度"         : 3,
+      "即時加速度"        : 4,
+      "實測震度"         : 5,
+    },
+    LOCAL_ARRAY: {
+      "北部" : ["臺北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣"],
+      "中部" : ["臺中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣"],
+      "南部" : ["高雄市", "臺南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣"],
+      "東部" : ["花蓮縣", "臺東縣"],
+      "外島" : ["金門縣", "連江縣"],
+      "南韓" : ["南陽州市"],
+      "中國" : ["重慶市"],
+    },
+    SPECIAL_LOCAL: {
+      "南陽州市" : ["和道邑"],
+      "重慶市"  : ["北碚區"],
+    },
+    CHECKBOX_DEF: {
+      "early-warning-CWA"        : 1,
+      "early-warning-JMA"        : 1,
+      "early-warning-KMA"        : 1,
+      "early-warning-NIED"       : 1,
+      "early-warning-SCDZJ"      : 1,
+      "graphics-block-auto-zoom" : 1,
+      "graphics-show-plates"     : 1,
+      "other-auto-start"         : 1,
+      "other-voice"              : 1,
+      "show-window-detect"       : 1,
+      "show-window-eew"          : 1,
+      "show-window-realtime-int" : 1,
+      "show-window-report"       : 1,
+      "sound-effects-EEW"        : 1,
+      "sound-effects-EEW2"       : 1,
+      "sound-effects-PAlert"     : 1,
+      "sound-effects-PGA1"       : 1,
+      "sound-effects-PGA2"       : 1,
+      "sound-effects-Report"     : 1,
+      "sound-effects-Shindo0"    : 1,
+      "sound-effects-Shindo1"    : 1,
+      "sound-effects-Shindo2"    : 1,
+      "sound-effects-Update"     : 1,
+      "sound-effects-dong"       : 1,
+    },
+    LOCALSTORAGE_DEF: {
+      "current-location"           : { city: "臺南市", town: "歸仁區", lat: 22.967286, lon: 120.2940045 },
+      "current-warning"            : { "realtime-station": "0級", "estimate-int": "0級" },
+      "bg-filter"                  : 20,
+      "bg-percentage"              : 100,
+      "current-map-display-effect" : 1,
+    },
+    LOCALFALLBACK: {
+      "13379360" : "重慶市北碚區",
+      "7735548"  : "南陽州市和道邑",
+    },
+    STATION_REGION : [],
+    INTENSITY      : ["0級", "1級", "2級", "3級", "4級", "5弱", "5強", "6弱", "6強", "7級"],
+  },
 };
 
 const variable = {
@@ -137,32 +198,16 @@ const variable = {
   },
   speech_status : 0,
   last_map_hash : "",
+  setting       : {
+    station: [],
+  },
+  report: {
+    last       : {},
+    more       : {},
+    data       : [],
+    check_     : 1,
+    list_retry : 3,
+    survey     : null,
+    withoutNo  : "",
+  },
 };
-
-const domMethods = {
-  querySelector    : document.querySelector.bind(document),
-  querySelectorAll : document.querySelectorAll.bind(document),
-  createElement    : document.createElement.bind(document),
-};
-
-const { querySelector, querySelectorAll, createElement } = domMethods;
-
-function UserCheckBox() {
-  const userCheckbox = JSON.parse(localStorage.getItem("user-checkbox"));
-  return userCheckbox;
-}
-
-function display_element(elements, type) {
-  elements.forEach(element => {
-    if (type)
-      element.style.display = type;
-    else
-      element.style.display = "none";
-  });
-}
-
-function opacity(elements, type) {
-  elements.forEach(element => {
-    element.style.opacity = type;
-  });
-}

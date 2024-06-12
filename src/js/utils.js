@@ -127,6 +127,48 @@ function int_to_color(int) {
   return list[int];
 }
 
+const domMethods = {
+  querySelector    : document.querySelector.bind(document),
+  querySelectorAll : document.querySelectorAll.bind(document),
+  createElement    : document.createElement.bind(document),
+};
+
+const { querySelector, querySelectorAll, createElement } = domMethods;
+
+function checkbox(type) {
+  const box = JSON.parse(localStorage.getItem("user-checkbox"));
+  const value = box[type];
+  return value;
+}
+
+function display(elements, type) {
+  elements.forEach(element => {
+    if (type)
+      element.style.display = type;
+    else
+      element.style.display = "none";
+  });
+}
+
+function opacity(elements, type) {
+  elements.forEach(element => {
+    element.style.opacity = type;
+  });
+}
+
+function CreatEle(text, className, bgText, html, attr) {
+  const element = createElement("div");
+  element.textContent = text;
+  if (className) element.classList = className;
+  if (bgText) element.dataset.backgroundText = bgText;
+  if (html) element.innerHTML = html;
+  if (attr)
+    Object.entries(attr).forEach(([key, value]) => {
+      element.setAttribute(key, value);
+    });
+  return element;
+}
+
 async function fetchData(url, timeout = 1000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
