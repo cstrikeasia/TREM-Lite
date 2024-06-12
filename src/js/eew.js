@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 let draw_lock = false;
 let last_show_epicenter_time = 0;
-let last_map_update = 0;
 let last_map_count = 0;
 setInterval(() => {
   const _eew_list = Object.keys(variable.eew_list);
@@ -84,8 +83,8 @@ setInterval(() => {
   }
 
   const now_local_time = Date.now();
-  if (now_local_time - last_map_update < 10000) return;
-  last_map_update = now_local_time;
+  if (now_local_time - variable.last_map_update < 10000) return;
+  variable.last_map_update = now_local_time;
   last_map_count++;
   if (last_map_count >= _eew_list.length) last_map_count = 0;
 

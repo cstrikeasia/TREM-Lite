@@ -144,6 +144,7 @@ const constant = {
 };
 
 const variable = {
+  last_map_update : 0,
   time_cache_list : [],
   map             : null,
   map_layer       : {
