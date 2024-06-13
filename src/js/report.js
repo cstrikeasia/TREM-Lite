@@ -239,12 +239,11 @@ function show_rts_list(status) {
   ReportListWrapper.classList.toggle("hidden", isVisible);
   opacity([ReportListBtn], isVisible ? 0 : 1);
   opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], isVisible ? 1 : 0);
-
   if (isVisible) {
-    const eew_id = Object.keys(variable.eew_list)[0];
-    const eew_detail = variable.eew_list[eew_id]?.data.detail;
-    display([InfoBodyEQBox], eew_detail === 0 ? "" : "flex");
-    display([InfoNSSPE], eew_detail === 0 ? "block" : "");
+    const eew_id = Math.max(...Object.keys(variable.eew_list).map(Number)).toString();
+    const last_eew = variable.eew_list[eew_id]?.data.detail;
+    display([InfoBodyEQBox], last_eew === 0 ? "" : "flex");
+    display([InfoNSSPE], last_eew === 0 ? "block" : "");
   } else {
     opacity([InfoBox], window.getComputedStyle(ReportBoxWrapper).display !== "flex" ? 1 : 0);
     InfoNo.textContent = "";

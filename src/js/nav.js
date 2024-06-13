@@ -49,7 +49,7 @@ function toHome(element) {
   if (element) removeOnClass(element);
   if (Object.keys(variable.eew_list).length) display([RTS_List], "flex");
   display([ReportListWrapper, InfoBox], "flex");
-  display([Warning_msg, TsunamiReport, TsunamiInfoBox, SettingWrapper]);
+  display([Warning_msg, TsunamiReport, TsunamiInfoBox, SettingWrapper, ReportBoxWrapper]);
   opacity([ReportListWrapper], 1);
-  opacity([SettingWrapper], 0);
+  opacity([SettingWrapper, ReportBoxWrapper], 0);
 }

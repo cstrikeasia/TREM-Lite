@@ -6,7 +6,7 @@ if (variable.replay_list.length)
 ntp();
 
 setInterval(() => {
-  show_rts_list((Object.keys(variable.eew_list).length !== 0) ? 1 : 0);
+  show_rts_list(Object.keys(variable.eew_list).length !== 0 ? 1 : 0);
 }, 1000);
 
 setInterval(() => {
