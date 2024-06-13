@@ -6,6 +6,10 @@ if (variable.replay_list.length)
 ntp();
 
 setInterval(() => {
+  show_rts_list();
+}, 1000);
+
+setInterval(() => {
   // if (variable.replay_list.length) return;
   realtime_rts();
   realtime_eew();

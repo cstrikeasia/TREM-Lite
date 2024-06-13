@@ -23,6 +23,13 @@ Report_btn.addEventListener("click", (event) => {
 
   const closestDiv = event.target.closest(".nav-btn");
   removeOnClass(closestDiv);
+
+  if (toHomeTimeout) clearTimeout(toHomeTimeout);
+
+  toHomeTimeout = setTimeout(() => {
+    toHome(Home_btn);
+    toHomeTimeout = null;
+  }, 10000);
   console.log("report");
 });
 

@@ -233,15 +233,17 @@ function report_all(data) {
   });
 }
 
-function show_rts_list(status, nsspe) {
-  const isVisible = status === 1;
-  RTS_List.classList.toggle("hidden", !isVisible);
-  ReportListWrapper.classList.toggle("hidden", isVisible);
-  opacity([ReportListBtn], isVisible ? 0 : 1);
-  opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], isVisible ? 1 : 0);
-  if (isVisible) {
-    display([InfoBodyEQBox], nsspe == 0 ? "" : "flex");
-    display([InfoNSSPE], nsspe == 0 ? "block" : "");
+function show_rts_list() {
+  const _eew_list = Object.keys(variable.eew_list);
+  const len = _eew_list.length;
+  RTS_List.classList.toggle("hidden", !len);
+  ReportListWrapper.classList.toggle("hidden", len);
+  opacity([ReportListBtn], len ? 0 : 1);
+  opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], len ? 1 : 0);
+  if (len) {
+    const current_eew = variable.eew_list[_eew_list[last_map_count]].data;
+    display([InfoBodyEQBox], current_eew.detail == 0 ? "" : "flex");
+    display([InfoNSSPE], current_eew.detail == 0 ? "block" : "");
   } else {
     opacity([InfoBox], window.getComputedStyle(ReportBoxWrapper).display !== "flex" ? 1 : 0);
     InfoNo.textContent = "";

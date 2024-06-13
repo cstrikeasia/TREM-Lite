@@ -125,7 +125,6 @@ setInterval(() => {
   const info_intensity = getElementById("info-intensity");
   info_intensity.textContent = intensity_list[data.eq.max];
   info_intensity.className = `info-body-title-title-box intensity-${data.eq.max}`;
-  show_rts_list(1, (data.detail == 0) ? 0 : 1);
 }, 1000);
 
 // setTimeout(() => {
