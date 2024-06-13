@@ -115,16 +115,17 @@ setInterval(() => {
       }).addTo(variable.map);
     }
   }
-  document.getElementById("info-depth").textContent = data.eq.depth;
-  document.getElementById("info-no").textContent = `第${data.serial}報${(data.final) ? "(最終)" : ""}`;
-  document.getElementById("info-loc").textContent = data.eq.loc;
-  document.getElementById("info-mag").textContent = data.eq.mag.toFixed(1);
-  document.getElementById("info-time").textContent = formatTime(data.eq.time);
-  document.getElementById("info-title-box-type").textContent = ((_eew_list.length > 1) ? `${last_map_count + 1}/${_eew_list.length} ` : "") + ((!data.status) ? "地震速報｜CWA" : (data.status == 1) ? "緊急地震速報｜CWA" : "地震速報(取消)｜CWA");
-  document.getElementById("info-box").style.backgroundColor = (!data.status) ? "#FF9900" : (data.status == 1) ? "#C00000" : "#505050";
-  const info_intensity = document.getElementById("info-intensity");
+  getElementById("info-depth").textContent = data.eq.depth;
+  getElementById("info-no").textContent = `第${data.serial}報${(data.final) ? "(最終)" : ""}`;
+  getElementById("info-loc").textContent = data.eq.loc;
+  getElementById("info-mag").textContent = data.eq.mag.toFixed(1);
+  getElementById("info-time").textContent = formatTime(data.eq.time);
+  getElementById("info-title-box-type").textContent = ((_eew_list.length > 1) ? `${last_map_count + 1}/${_eew_list.length} ` : "") + ((!data.status) ? "地震速報｜CWA" : (data.status == 1) ? "緊急地震速報｜CWA" : "地震速報(取消)｜CWA");
+  getElementById("info-box").style.backgroundColor = (!data.status) ? "#FF9900" : (data.status == 1) ? "#C00000" : "#505050";
+  const info_intensity = getElementById("info-intensity");
   info_intensity.textContent = intensity_list[data.eq.max];
   info_intensity.className = `info-body-title-title-box intensity-${data.eq.max}`;
+  show_rts_list(1, (data.detail == 0) ? 0 : 1);
 }, 1000);
 
 // setTimeout(() => {

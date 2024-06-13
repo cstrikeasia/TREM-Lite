@@ -219,7 +219,7 @@ function report_grouped(data) {
 }
 
 function report_all(data) {
-  const reportContainer = document.getElementById("report-intensity-all");
+  const reportContainer = getElementById("report-intensity-all");
   reportContainer.innerHTML = "";
 
   Object.entries(data.list).forEach(([city, { int: cityIntensity }]) => {
@@ -233,17 +233,15 @@ function report_all(data) {
   });
 }
 
-function show_rts_list(status) {
+function show_rts_list(status, nsspe) {
   const isVisible = status === 1;
   RTS_List.classList.toggle("hidden", !isVisible);
   ReportListWrapper.classList.toggle("hidden", isVisible);
   opacity([ReportListBtn], isVisible ? 0 : 1);
   opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], isVisible ? 1 : 0);
   if (isVisible) {
-    const eew_id = Math.max(...Object.keys(variable.eew_list).map(Number)).toString();
-    const last_eew = variable.eew_list[eew_id]?.data.detail;
-    display([InfoBodyEQBox], last_eew === 0 ? "" : "flex");
-    display([InfoNSSPE], last_eew === 0 ? "block" : "");
+    display([InfoBodyEQBox], nsspe == 0 ? "" : "flex");
+    display([InfoNSSPE], nsspe == 0 ? "block" : "");
   } else {
     opacity([InfoBox], window.getComputedStyle(ReportBoxWrapper).display !== "flex" ? 1 : 0);
     InfoNo.textContent = "";
