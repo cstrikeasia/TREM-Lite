@@ -1,20 +1,25 @@
 /* eslint-disable no-undef */
-const Nav_btns = document.querySelectorAll(".nav-btn");
-const Home_btn = document.querySelector("#nav-home");
-const Report_btn = document.querySelector("#nav-report-panel");
-const Tsunami_btn = document.querySelector("#nav-tsunami-panel");
-const Warning_msg = document.querySelector(".warning-message");
-const TsunamiInfoBox = document.querySelector(".tsunami-info-box");
-const TsunamiReport = document.querySelector(".tsunami-report-container");
+const Nav_btns = querySelectorAll(".nav-btn");
+const Home_btn = querySelector("#nav-home");
+const Report_btn = querySelector("#nav-report-panel");
+const Tsunami_btn = querySelector("#nav-tsunami-panel");
+const Warning_msg = querySelector(".warning-message");
+const TsunamiInfoBox = querySelector(".tsunami-info-box");
+const TsunamiReport = querySelector(".tsunami-report-container");
+
+let toHomeTimeout = null;
 
 Home_btn.addEventListener("click", (event) => {
+  if (toHomeTimeout) {
+    clearTimeout(toHomeTimeout);
+    toHomeTimeout = null;
+  }
   const closestDiv = event.target.closest(".nav-btn");
   toHome(closestDiv);
 });
 
 Report_btn.addEventListener("click", (event) => {
-  const _eew_list = Object.keys(variable.eew_list);
-  if (_eew_list.length) return;
+  if (Object.keys(variable.eew_list).length) return;
 
   const closestDiv = event.target.closest(".nav-btn");
   removeOnClass(closestDiv);
@@ -22,13 +27,17 @@ Report_btn.addEventListener("click", (event) => {
 });
 
 Tsunami_btn.addEventListener("click", (event) => {
-  const _eew_list = Object.keys(variable.eew_list);
-  if (_eew_list.length) return;
-
   const closestDiv = event.target.closest(".nav-btn");
   removeOnClass(closestDiv);
-  display([ReportBoxWrapper, ReportListWrapper, InfoBox]);
+  display([ReportBoxWrapper, ReportListWrapper, InfoBox, RTS_List]);
   display([Warning_msg, TsunamiReport, TsunamiInfoBox], "flex");
+
+  if (toHomeTimeout) clearTimeout(toHomeTimeout);
+
+  toHomeTimeout = setTimeout(() => {
+    toHome(Home_btn);
+    toHomeTimeout = null;
+  }, 10000);
 });
 
 function removeOnClass(element) {
@@ -38,6 +47,7 @@ function removeOnClass(element) {
 
 function toHome(element) {
   if (element) removeOnClass(element);
+  if (Object.keys(variable.eew_list).length) display([RTS_List], "flex");
   display([ReportListWrapper, InfoBox], "flex");
   display([Warning_msg, TsunamiReport, TsunamiInfoBox, SettingWrapper]);
   opacity([ReportListWrapper], 1);
