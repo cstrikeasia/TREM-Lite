@@ -33,19 +33,19 @@ Report_btn.addEventListener("click", (event) => {
   console.log("report");
 });
 
-Tsunami_btn.addEventListener("click", (event) => {
-  const closestDiv = event.target.closest(".nav-btn");
-  removeOnClass(closestDiv);
-  display([ReportBoxWrapper, ReportListWrapper, InfoBox, RTS_List]);
-  display([Warning_msg, TsunamiReport, TsunamiInfoBox], "flex");
+// Tsunami_btn.addEventListener("click", (event) => {
+//   const closestDiv = event.target.closest(".nav-btn");
+//   removeOnClass(closestDiv);
+//   display([ReportBoxWrapper, ReportListWrapper, InfoBox, RTS_List]);
+//   display([Warning_msg, TsunamiReport, TsunamiInfoBox], "flex");
 
-  if (toHomeTimeout) clearTimeout(toHomeTimeout);
+//   if (toHomeTimeout) clearTimeout(toHomeTimeout);
 
-  toHomeTimeout = setTimeout(() => {
-    toHome(Home_btn);
-    toHomeTimeout = null;
-  }, 10000);
-});
+//   toHomeTimeout = setTimeout(() => {
+//     toHome(Home_btn);
+//     toHomeTimeout = null;
+//   }, 10000);
+// });
 
 function removeOnClass(element) {
   Nav_btns.forEach(btn => btn.classList.remove("on"));
