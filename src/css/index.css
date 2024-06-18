@@ -1718,3 +1718,21 @@ body:has(#report-panel.show) .pga_dot {
   display: flex;
   justify-content: space-between;
 }
+
+.app-version.new {
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease-in-out;
+  animation: new_version 3s infinite;
+}
+
+@keyframes new_version {
+  0% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #fff900;
+  }
+  100% {
+    border-color: transparent;
+  }
+}

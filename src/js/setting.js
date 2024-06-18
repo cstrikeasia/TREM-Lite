@@ -21,6 +21,7 @@ const CityItems = LocationSelWrapper.querySelector(".city");
 const TownSel = LocationSelWrapper.querySelector(".current-town");
 const TownItems = LocationSelWrapper.querySelector(".town");
 
+const AppVersion = querySelector(".app-version");
 const CurrentVersion = querySelector("#current-version");
 const NewVersion = querySelector("#new-version");
 
@@ -858,7 +859,7 @@ checkboxes.forEach((checkbox) =>
 );
 
 /** 檢查新版本**/
-const currentVersion = app.getVersion();
+const app_version = app.getVersion();
 
 async function checkForNewRelease() {
   try {
@@ -872,17 +873,40 @@ async function checkForNewRelease() {
     if (releases.length > 0) {
       const latestRelease = releases[0];
       const latestVersion = latestRelease.tag_name;
-      CurrentVersion.textContent = app.getVersion();
-      NewVersion.textContent = latestVersion;
+      // const latestVersion = '2.0.0';
 
-      if (latestVersion && (!localStorage.getItem('release') || localStorage.getItem('release') !== currentVersion)) {
-        localStorage.setItem('release', latestVersion);
+      const comparisonResult = compareVersions(latestVersion, app_version);
+      console.log(comparisonResult);
+
+      if (comparisonResult === 1) {
         NewVersion.style.color = '#fff900';
+        AppVersion.classList.toggle("new");
       }
     }
   } catch (error) {
     console.error("Failed to fetch release information:", error);
   }
+}
+
+function compareVersions(last, current) {
+  const lst = last.replace('v', '');
+  const curr = current.split('-')[0];
+  const parts1 = lst.split('.').map(Number);
+  const parts2 = curr.split('.').map(Number);
+  NewVersion.textContent = lst;
+  CurrentVersion.textContent = curr;
+
+  const length = Math.max(parts1.length, parts2.length);
+  for (let i = 0; i < length; i++) {
+    const part1 = parts1[i] || 0;
+    const part2 = parts2[i] || 0;
+    if (part1 > part2) {
+      return 1;
+    } else if (part1 < part2) {
+      return -1;
+    }
+  }
+  return 0;
 }
 
 function scheduleCheck() {
