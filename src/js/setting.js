@@ -21,6 +21,9 @@ const CityItems = LocationSelWrapper.querySelector(".city");
 const TownSel = LocationSelWrapper.querySelector(".current-town");
 const TownItems = LocationSelWrapper.querySelector(".town");
 
+const CurrentVersion = querySelector("#current-version");
+const NewVersion = querySelector("#new-version");
+
 // 版本號、UUID
 version.textContent = app.getVersion();
 system_os.textContent = `${os.version()} (${os.release()})`;
@@ -869,15 +872,12 @@ async function checkForNewRelease() {
     if (releases.length > 0) {
       const latestRelease = releases[0];
       const latestVersion = latestRelease.tag_name;
+      CurrentVersion.textContent = app.getVersion();
+      NewVersion.textContent = latestVersion;
 
       if (latestVersion && (!localStorage.getItem('release') || localStorage.getItem('release') !== currentVersion)) {
         localStorage.setItem('release', latestVersion);
-        notifier.notify({
-          title: "有新版本！",
-          message: `當前版本：${currentVersion}\n最新版本：${latestVersion}`,
-          icon: "./TREM.ico",
-          appID: 'TREM-Lite',
-        });
+        NewVersion.style.color = '#fff900';
       }
     }
   } catch (error) {

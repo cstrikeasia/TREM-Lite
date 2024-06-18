@@ -15,7 +15,6 @@ const fs = require("fs-extra");
 const yaml = require("js-yaml");
 const crypto = require("crypto");
 const os = require("node:os");
-const notifier = require('node-notifier');
 
 constant.TIME_TABLE = require(path.join(__dirname, "../resource/data", "time.json"));
 constant.TIME_TABLE_OBJECT = Object.keys(constant.TIME_TABLE);
