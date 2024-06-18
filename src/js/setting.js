@@ -873,7 +873,6 @@ async function checkForNewRelease() {
     if (releases.length > 0) {
       const latestRelease = releases[0];
       const latestVersion = latestRelease.tag_name;
-      // const latestVersion = '2.0.0';
 
       const comparisonResult = compareVersions(latestVersion, app_version);
       console.log(comparisonResult);
@@ -909,20 +908,8 @@ function compareVersions(last, current) {
   return 0;
 }
 
-function scheduleCheck() {
-  const now = new Date();
-  const minutes = now.getMinutes();
-  const seconds = now.getSeconds();
-  const milliseconds = now.getMilliseconds();
-
-  const nextHalfHour = minutes < 30 ? 30 - minutes : 60 - minutes;
-  const timeToNextCheck = (nextHalfHour * 60 - seconds) * 1000 - milliseconds;
-
-  setTimeout(() => {
-    checkForNewRelease();
-    setInterval(checkForNewRelease, 60 * 60 * 1000);
-  }, timeToNextCheck);
-}
+const hourlyJob = schedule.scheduleJob('0 * * * *', () => {
+  checkForNewRelease();
+});
 
 checkForNewRelease();
-scheduleCheck();
