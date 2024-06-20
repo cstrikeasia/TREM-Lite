@@ -507,27 +507,12 @@ async function handleUserAction(endpoint, options) {
         options.method == "POST" ? "登入" : "登出"
       }成功！`;
 
-      let config;
-      let data = {
-        login: responseData,
-      };
+      let config = ReadConfig() || { setting: {} };
+      let data = { login: responseData };
 
-      try {
-        config = yaml.load(fs.readFileSync("config.yaml", "utf8"));
-      } catch (e) {
-        console.log(e);
-      }
+      config.setting.login = data.login === "OK" ? "" : data.login || "";
 
-      if (config && config.setting) {
-        config.setting.login = data.login;
-      } else {
-        config = {
-          setting: {
-            login: data.login,
-          },
-        };
-      }
-      Config(config);
+      WriteConfig(config);
 
       if (endpoint == "login") LoginSuccess(await getUserInfo(responseData));
       if (endpoint == "logout") LogoutSuccess();
@@ -549,11 +534,6 @@ async function handleUserAction(endpoint, options) {
   } catch (error) {
     console.error("Error:", error);
   }
-}
-
-function Config(data) {
-  let yamlStr = yaml.dump(data);
-  fs.writeFileSync("config.yaml", yamlStr, "utf8");
 }
 
 // 登入-表單登入
@@ -585,7 +565,7 @@ async function logout(token) {
 }
 
 // 登入-取得使用者資訊
-async function getUserInfo(token) {
+async function getUserInfo(token, retryCount = 0) {
   try {
     const response = await fetch(`${url}info`, {
       method: "GET",
@@ -596,10 +576,15 @@ async function getUserInfo(token) {
     });
     if (response.ok) {
       return await response.json();
-    } else throw new Error(`伺服器異常(error ${response.status})`);
+    } else {
+      throw new Error(`伺服器異常(error ${response.status})`);
+    }
   } catch (error) {
-    console.error("error:", error);
-    return {};
+    if (retryCount < variable.report.list_retry) {
+      logger.error(`[Fetch] ${error} (Try #${retryCount})`);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      awaitgetUserInfo(token, retryCount + 1);
+    }
   }
 }
 
@@ -749,10 +734,9 @@ const RenderSelectedFromStorage = () => {
   querySelector(".realtime-int").textContent = wrts;
   querySelector(".estimate-int").textContent = wei;
 
-  console.log(station);
   if (station && station !== "null") {
     const stationData = JSON.parse(localStorage.getItem("current-station"));
-    current_station.textContent = `${stationData.net} ${stationData.code}-${stationData.name} ${stationData.loc}`;
+    if(stationData) current_station.textContent = `${stationData.net} ${stationData.code}-${stationData.name} ${stationData.loc}`;
   } else current_station.textContent = "未知區域";
 
   const keys = Object.keys(constant.SETTING.MAP_DISPLAY);
@@ -875,10 +859,9 @@ async function checkForNewRelease() {
       const latestVersion = latestRelease.tag_name;
 
       const comparisonResult = compareVersions(latestVersion, app_version);
-      console.log(comparisonResult);
 
       if (comparisonResult === 1) {
-        NewVersion.style.color = '#fff900';
+        NewVersion.style.color = "#fff900";
         AppVersion.classList.toggle("new");
       }
     }
@@ -888,10 +871,10 @@ async function checkForNewRelease() {
 }
 
 function compareVersions(last, current) {
-  const lst = last.replace('v', '');
-  const curr = current.split('-')[0];
-  const parts1 = lst.split('.').map(Number);
-  const parts2 = curr.split('.').map(Number);
+  const lst = last.replace("v", "");
+  const curr = current.split("-")[0];
+  const parts1 = lst.split(".").map(Number);
+  const parts2 = curr.split(".").map(Number);
   NewVersion.textContent = lst;
   CurrentVersion.textContent = curr;
 
@@ -907,9 +890,8 @@ function compareVersions(last, current) {
   }
   return 0;
 }
-
-const hourlyJob = schedule.scheduleJob('0 * * * *', () => {
-  checkForNewRelease();
-});
-
 checkForNewRelease();
+
+setInterval(() => {
+  checkForNewRelease();
+}, 3600_000);

@@ -18,20 +18,20 @@ Home_btn.addEventListener("click", (event) => {
   toHome(closestDiv);
 });
 
-Report_btn.addEventListener("click", (event) => {
-  if (Object.keys(variable.eew_list).length) return;
+// Report_btn.addEventListener("click", (event) => {
+//   if (Object.keys(variable.eew_list).length) return;
 
-  const closestDiv = event.target.closest(".nav-btn");
-  removeOnClass(closestDiv);
+//   const closestDiv = event.target.closest(".nav-btn");
+//   removeOnClass(closestDiv);
 
-  if (toHomeTimeout) clearTimeout(toHomeTimeout);
+//   if (toHomeTimeout) clearTimeout(toHomeTimeout);
 
-  toHomeTimeout = setTimeout(() => {
-    toHome(Home_btn);
-    toHomeTimeout = null;
-  }, 10000);
-  console.log("report");
-});
+//   toHomeTimeout = setTimeout(() => {
+//     toHome(Home_btn);
+//     toHomeTimeout = null;
+//   }, 10000);
+//   console.log("report");
+// });
 
 // Tsunami_btn.addEventListener("click", (event) => {
 //   const closestDiv = event.target.closest(".nav-btn");

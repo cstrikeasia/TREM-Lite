@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-setInterval(() => show_tsunami(), 3000);
+// setInterval(() => show_tsunami(), 3000);
 
 function show_tsunami(data) {
   variable.tsunami_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "tsunami.json")), {
