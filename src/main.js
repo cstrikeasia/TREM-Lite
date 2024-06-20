@@ -1,10 +1,18 @@
-const { app, BrowserWindow, ipcMain, shell } = require("electron");
+const { app, BrowserWindow, ipcMain, shell, Tray, nativeImage, Menu } = require("electron");
+const path = require("path");
 
+/**
+ * @type {BrowserWindow}
+ */
 let win;
+let tray = null;
+const hide = (process.argv.includes("--start")) ? true : false;
+
+const test = (process.argv.includes("--raw")) ? 0 : 1;
 
 function createWindow() {
   win = new BrowserWindow({
-    title          : `TREM Lite v${app.getVersion()}`,
+    title              : `TREM Lite v${app.getVersion()}`,
     minHeight      : 540,
     minWidth       : 750,
     width          : 1280,
@@ -17,23 +25,54 @@ function createWindow() {
     },
   });
 
+  process.env.window = win.id;
+
   require("@electron/remote/main").initialize();
   require("@electron/remote/main").enable(win.webContents);
 
+  app.setLoginItemSettings({
+    openAtLogin : true,
+    name        : "TREM Lite",
+    args        : ["--start"],
+  });
+
   win.setMenu(null);
+
+  win.webContents.on("did-finish-load", () => {
+    if (!hide) win.show();
+  });
 
   win.on("close", (event) => {
     if (!app.isQuiting) {
       event.preventDefault();
       win.hide();
-    }
-    return false;
+      event.returnValue = false;
+    } else app.quit();
+  });
+
+  win.on("blur", () => {
+    win.webContents.send("blur");
+  });
+
+  win.on("focus", () => {
+    win.webContents.send("focus");
   });
 
   win.loadFile("./view/index.html");
 }
 
-app.whenReady().then(() => createWindow());
+const shouldQuit = app.requestSingleInstanceLock();
+
+if (!shouldQuit) app.quit();
+else {
+  app.on("second-instance", (event, argv, cwd) => {
+    if (win != null) win.show();
+  });
+  app.whenReady().then(() => {
+    trayIcon();
+    createWindow();
+  });
+}
 
 app.on("window-all-closed", (event) => {
   if (process.platform !== "darwin") event.preventDefault();
@@ -45,6 +84,10 @@ app.on("activate", () => {
 
 app.on("browser-window-created", (e, window) => {
   window.removeMenu();
+});
+
+ipcMain.on("israw", () => {
+	win.webContents.send("israwok", test);
 });
 
 ipcMain.on("openUrl", (_, url) => {
@@ -61,6 +104,10 @@ ipcMain.on("reload", () => {
   if (currentWindow) currentWindow.webContents.reload();
 });
 
+ipcMain.on("minimize", () => {
+  if (win) win.minimize();
+});
+
 ipcMain.on("hide", () => {
   if (win) win.hide();
 });
@@ -68,3 +115,50 @@ ipcMain.on("hide", () => {
 ipcMain.on("toggleFullscreen", () => {
   if (win) win.setFullScreen(!win.isFullScreen());
 });
+
+function trayIcon() {
+  if (tray) {
+    tray.destroy();
+    tray = null;
+  }
+
+  const iconPath = path.join(__dirname, "TREM.ico");
+  tray = new Tray(nativeImage.createFromPath(iconPath));
+  tray.setIgnoreDoubleClickEvents(true);
+  tray.on("click", (e) => {
+    if (win != null)
+      if (win.isVisible()) win.hide();
+      else win.show();
+  });
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label : `TREM Lite v${app.getVersion()}`,
+      type  : "normal",
+      click : () => void 0,
+    },
+    {
+      type: "separator",
+    },
+    {
+      label : "重新啟動",
+      type  : "normal",
+      click : () => restart(),
+    },
+    {
+      label : "強制關閉",
+      type  : "normal",
+      click : () => {
+        app.isQuiting = true;
+        app.exit(0);
+      },
+    },
+  ]);
+  tray.setToolTip(`TREM Lite v${app.getVersion()}`);
+  tray.setContextMenu(contextMenu);
+}
+
+function restart() {
+  app.relaunch();
+  app.isQuiting = true;
+  app.quit();
+}
