@@ -238,13 +238,13 @@ function show_rts_list() {
   const len = _eew_list.length;
   opacity([ReportListBtn], len ? 0 : 1);
   opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], len ? 1 : 0);
-  if (len) {
+  ReportListWrapper.classList.toggle("hidden", len);
+  RTS_List.classList.toggle("hidden", !len);
+  if (len > 0) {
     const current_eew = variable.eew_list[_eew_list[last_map_count]].data;
     display([InfoBodyEQBox], current_eew.detail == 0 ? "" : "flex");
     display([InfoNSSPE], current_eew.detail == 0 ? "block" : "");
   } else {
-    // ReportListWrapper.classList.toggle("hidden", len);
-    RTS_List.classList.toggle("hidden", !len);
     opacity([InfoBox], window.getComputedStyle(ReportBoxWrapper).display !== "flex" ? 1 : 0);
     InfoNo.textContent = "";
     InfoBox.style.backgroundColor = "#505050c7";
