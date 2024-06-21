@@ -23,7 +23,11 @@ const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
 const InfoBox = querySelector(".info-box");
 const InfoBodyTitleBox = querySelector(".info-body-title-box");
 const InfoBodyFooter = querySelector(".info-body-footer");
+const InfoBodyEQBox = querySelector(".info-body-eq-box");
+const InfoNSSPE = querySelector(".info-nsspe");
 const InfoNo = querySelector("#info-no");
+
+const RTS_List = querySelector(".intensity-container");
 
 async function report(retryCount = 0) {
   let s = variable.report.survey;
@@ -215,7 +219,7 @@ function report_grouped(data) {
 }
 
 function report_all(data) {
-  const reportContainer = document.getElementById("report-intensity-all");
+  const reportContainer = getElementById("report-intensity-all");
   reportContainer.innerHTML = "";
 
   Object.entries(data.list).forEach(([city, { int: cityIntensity }]) => {
@@ -229,32 +233,24 @@ function report_all(data) {
   });
 }
 
-function show_rts_list(status) {
-  const RTS_List = querySelector(".intensity-container");
-
-  if (status == 1) {
-    RTS_List.classList.remove("hidden");
-    ReportListWrapper.classList.add("hidden");
-    display([ReportBoxWrapper]);
-    opacity([ReportListBtn], 0);
-    opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], 1);
-    toHome(Home_btn);
+function show_rts_list() {
+  const _eew_list = Object.keys(variable.eew_list);
+  const len = _eew_list.length;
+  opacity([ReportListBtn], len ? 0 : 1);
+  opacity([InfoBox, InfoBodyTitleBox, InfoBodyFooter], len ? 1 : 0);
+  ReportListWrapper.classList.toggle("hidden", len);
+  RTS_List.classList.toggle("hidden", !len);
+  if (len > 0) {
+    const current_eew = variable.eew_list[_eew_list[last_map_count]].data;
+    display([InfoBodyEQBox], current_eew.detail == 0 ? "" : "flex");
+    display([InfoNSSPE], current_eew.detail == 0 ? "block" : "");
   } else {
-    RTS_List.classList.add("hidden");
-    if (window.getComputedStyle(ReportBoxWrapper).display !== "flex")
-      opacity([InfoBox], 1);
-    else
-      opacity([InfoBox], 0);
-
-    opacity([InfoBodyTitleBox, InfoBodyFooter], 0);
-    opacity([ReportListBtn], 1);
+    opacity([InfoBox], window.getComputedStyle(ReportBoxWrapper).display !== "flex" ? 1 : 0);
     InfoNo.textContent = "";
     InfoBox.style.backgroundColor = "#505050c7";
     EEWInfoTitle.textContent = "暫無生效中的地震預警";
   }
-
 }
-show_rts_list(0);
 
 function LocalReplace(loc) {
   const matches = loc.match(/\(([^)]+)\)/);

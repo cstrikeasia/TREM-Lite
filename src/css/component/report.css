@@ -6,7 +6,8 @@
   display: none;
   flex-direction: column;
   width: 20vw;
-  min-width: 375px;
+  min-width: 340px;
+  max-width: 340px;
   overflow: hidden;
   pointer-events: none;
   z-index: 1001;

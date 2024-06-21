@@ -38,6 +38,7 @@
                 <span class="nav-item-icon material-symbols-rounded">home</span>
                 <span class="nav-item-label">首頁畫面</span>
         </div>
+        <!--
         <div class="nav-item">
             <button id="nav-report-panel" class="nav-btn" type="button" data-panel="report">
                 <span class="nav-item-icon material-symbols-rounded">earthquake</span>
@@ -48,6 +49,7 @@
                 <span class="nav-item-icon material-symbols-rounded">tsunami</span>
                 <span class="nav-item-label">海嘯資訊</span>
         </div>
+        -->
         <div class="below-nav">
             <div class="nav-item">
                 <button id="nav-settings-panel" class="nav-btn" type="button" data-panel="settings">
@@ -134,6 +136,7 @@
                             <div class="info-body-depth-value" id="info-depth"></div>
                         </div>
                     </div>
+                    <div class="info-nsspe"><span>NSSPE</span><span>無震源參數推算</span></div>
                 </div>
             </div>
             <div class="info-body-footer" style="opacity: 0;">
@@ -541,7 +544,16 @@
             </div>
         </div>
     </div>
-
+    <div class="app-version">
+        <div class="app-version-body">
+            <div>當前版本</div>
+            <div id="current-version">---</div>
+        </div>
+        <div class="app-version-body">
+            <div>最新版本</div>
+            <div id="new-version">---</div>
+        </div>
+    </div>
     <div class="connect-wrapper">
         <div class="time" id="time">0000-01-01 00:00:00</div>
         <div class="icon">
@@ -811,7 +823,7 @@
                                         <div class="slider round"></div>
                                     </label>
                                 </div>
-                                <div>
+                                <div class="block">
                                     <span>語音播報（繁體中文）</span>
                                     <label class="switch">
                                         <input id="other-voice" type="checkbox">
@@ -1012,12 +1024,20 @@
                             <span class="setting-item-title">關於TREAM Lite</span>
                             <span
                                 class="description">TREM-Lite是一款開源地震速報軟體，提供給您即時的地震資訊，利用自製的測站，顯示各地的即時震度，在地震發生的第一時間取得各管道發布的強震即時警報訊息。</span>
-                            <div class="setting-option">
-                                <div class="setting-version">
-                                    <span>版本</span>
-                                    <span id="version">---</span>
+                                <div class="setting-option">
+                                    <div class="setting-item">
+                                        <span>TREM版本</span>
+                                        <span id="version">---</span>
+                                    </div>
+                                    <div class="setting-item">
+                                        <span>系統版本</span>
+                                        <span id="system_os">---</span>
+                                    </div>
+                                    <div class="setting-item">
+                                        <span>CPU</span>
+                                        <span id="system_cpu">---</span>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
 
                         <div class="setting-item-content setting-info">

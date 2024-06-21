@@ -6,6 +6,10 @@ if (variable.replay_list.length)
 ntp();
 
 setInterval(() => {
+  show_rts_list();
+}, 1000);
+
+setInterval(() => {
   // if (variable.replay_list.length) return;
   realtime_rts();
   realtime_eew();
@@ -63,7 +67,7 @@ async function realtime_rts() {
   if (alert) show_rts_box(data.box);
 
   variable.last_get_data_time = now();
-  document.getElementById("connect").style.color = "goldenrod";
+  getElementById("connect").style.color = "goldenrod";
 }
 
 async function realtime_eew() {

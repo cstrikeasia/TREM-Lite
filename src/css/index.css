@@ -307,6 +307,17 @@ body {
             }
           }
         }
+
+        >.info-nsspe {
+          font-weight: 700;
+          line-height: 20px;
+          margin-top: .5em;
+          font-size: 17px;
+        }
+
+        >.info-nsspe-title {
+          margin-right: .3em;
+        }
       }
     }
 
@@ -743,9 +754,6 @@ body {
 }
 
 .time {
-  margin: 3px;
-  padding: 3px;
-  border-radius: 5px;
   color: red;
   font-size: 15px;
   z-index: 1001;
@@ -755,24 +763,20 @@ body {
   position: absolute;
   bottom: 0.3em;
   left: 0;
-  margin: 3px;
-  padding: 3px;
+  margin: 1px;
+  padding: 1px;
   border-radius: 5px;
   color: red;
-  width: 11.8em;
-  height: 1.5em;
   border: 2px solid #00000008;
   background-color: #00000075;
   pointer-events: none;
   display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  align-content: space-around;
+  align-items: center;
   z-index: 1001;
+  margin-left: 5px;
 }
 
 .icon {
-  padding: 3px;
   color: red;
   z-index: 1000;
 }
@@ -1294,10 +1298,6 @@ body:has(#report-panel.show) .pga_dot {
   font-weight: bold;
 }
 
-.lift .tsunami-arrival-info {
-  flex-direction: row;
-}
-
 .tsunami-report-container .tsunami-area-item {
   display: flex;
   background-color: rgb(40, 40, 40);
@@ -1688,4 +1688,51 @@ body:has(#report-panel.show) .pga_dot {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.app-version {
+  bottom: 4em;
+  left: 55px;
+  margin: 1px;
+  display: flex;
+  align-items: stretch;
+  margin-left: 5px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: absolute;
+  background-color: #00000075;
+  width: 110px;
+  color: white;
+  font-size: 11px;
+  border: 2px solid #00000008;
+  padding: 3px;
+  border-radius: 5px;
+  z-index: 1000;
+  text-align: center;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.app-version-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.app-version.new {
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease-in-out;
+  animation: new_version 3s infinite;
+}
+
+@keyframes new_version {
+  0% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #fff900;
+  }
+  100% {
+    border-color: transparent;
+  }
 }

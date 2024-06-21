@@ -14,6 +14,7 @@ require("winston-daily-rotate-file");
 const fs = require("fs-extra");
 const yaml = require("js-yaml");
 const crypto = require("crypto");
+const os = require("node:os");
 
 constant.TIME_TABLE = require(path.join(__dirname, "../resource/data", "time.json"));
 constant.TIME_TABLE_OBJECT = Object.keys(constant.TIME_TABLE);
@@ -26,3 +27,17 @@ constant.BOX_GEOJSON.features.forEach(feature => feature.properties = {
 const replayPath = path.join(app.getPath("userData"), "replay");
 if (!fs.existsSync(replayPath)) fs.mkdirSync(replayPath);
 variable.replay_list = fs.readdirSync(replayPath);
+
+function ReadConfig() {
+  try {
+    config = yaml.load(fs.readFileSync("config.yaml", "utf8"));
+    return config;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function WriteConfig(data) {
+  let yamlStr = yaml.dump(data);
+  fs.writeFileSync("config.yaml", yamlStr, "utf8");
+}
