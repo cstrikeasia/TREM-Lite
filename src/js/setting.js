@@ -871,12 +871,15 @@ async function checkForNewRelease() {
 }
 
 function compareVersions(last, current) {
-  const lst = last.replace("v", "");
+  let lst = last.replace("v", "");
+
+  NewVersion.textContent = lst;
+  CurrentVersion.textContent = current;
+
+  if(last.includes('-'))  lst = lst.split('-')[0];
   const curr = current.split("-")[0];
   const parts1 = lst.split(".").map(Number);
   const parts2 = curr.split(".").map(Number);
-  NewVersion.textContent = lst;
-  CurrentVersion.textContent = curr;
 
   const length = Math.max(parts1.length, parts2.length);
   for (let i = 0; i < length; i++) {
