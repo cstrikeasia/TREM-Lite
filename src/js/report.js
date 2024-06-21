@@ -29,7 +29,7 @@ const InfoNo = querySelector("#info-no");
 
 const RTS_List = querySelector(".intensity-container");
 
-async function report(retryCount = 0) {
+async function report(t,retryCount = 0) {
   let s = variable.report.survey;
   for (const int in variable.intensity_list)
     s = variable.intensity_list[int].data;
@@ -52,7 +52,10 @@ async function report(retryCount = 0) {
 
     if ((!variable.report.last || JSON.stringify(variable.report.last) !== JSON.stringify({ id: FirstItem.id })) && checkbox("sound-effects-Report") == 1) {
       variable.report.last = { id: FirstItem.id };
-      constant.AUDIO.REPORT.play();
+      if(t == 1) {
+        constant.AUDIO.REPORT.play();
+        t = 1;
+        }
     }
 
     const No = s ? "" : FirstItem.id.split("-");
@@ -121,11 +124,11 @@ async function report(retryCount = 0) {
     if (retryCount < variable.report.list_retry) {
       logger.error(`[Fetch] ${error} (Try #${retryCount})`);
       await new Promise(resolve => setTimeout(resolve, 1000));
-      await report(retryCount + 1);
+      await report(t ,retryCount + 1);
     }
   }
 }
-report();
+report(0);
 
 async function ReportInfo(id, int, retryCount = 0) {
   try {

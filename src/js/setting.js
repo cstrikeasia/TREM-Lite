@@ -883,12 +883,15 @@ function compareVersions(last, current) {
 
   const length = Math.max(parts1.length, parts2.length);
   for (let i = 0; i < length; i++) {
+    AppVersion.style.display = 'flex';
     const part1 = parts1[i] || 0;
     const part2 = parts2[i] || 0;
     if (part1 > part2) {
       return 1;
     } else if (part1 < part2) {
       return -1;
+    } else {
+      AppVersion.style.display = 'none';
     }
   }
   return 0;
