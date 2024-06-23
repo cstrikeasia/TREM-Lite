@@ -1,2 +1,46 @@
 setting:
-  login: ''
+  location:
+    city: 臺南市
+    town: 歸仁區
+    lat: 22.967286
+    lon: 120.2940045
+  warning:
+    realtime-station: 0級
+    estimate-int: 0級
+  bg-filter: 20
+  bg-percentage: 100
+  map-display-effect: 1
+  station:
+    name: '6732340'
+    net: SE-Net
+    loc: 臺南市歸仁區
+    code: 711
+    lat: 22.980406
+    lon: 120.292724
+  user-checkbox:
+    early-warning-CWA: 1
+    early-warning-JMA: 1
+    early-warning-KMA: 1
+    early-warning-NIED: 1
+    early-warning-SCDZJ: 1
+    graphics-block-auto-zoom: 1
+    graphics-show-plates: 1
+    other-auto-start: 1
+    other-voice: 1
+    show-window-detect: 1
+    show-window-eew: 1
+    show-window-realtime-int: 1
+    show-window-report: 1
+    sound-effects-EEW: 1
+    sound-effects-EEW2: 1
+    sound-effects-PAlert: 1
+    sound-effects-PGA1: 1
+    sound-effects-PGA2: 1
+    sound-effects-Report: 1
+    sound-effects-Shindo0: 1
+    sound-effects-Shindo1: 1
+    sound-effects-Shindo2: 1
+    sound-effects-Update: 1
+    sound-effects-dong: 1
+  tos: 1
+  login: f717c836c48b114

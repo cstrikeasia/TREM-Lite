@@ -29,36 +29,38 @@ version.textContent = app.getVersion();
 system_os.textContent = `${os.version()} (${os.release()})`;
 system_cpu.textContent = `${os.cpus()[0].model}`;
 
-function set_ls(key, data) {
-  localStorage.setItem(key, data);
-}
 
-async function ls_initialization() {
+async function ls_init() {
+  let config = ReadConfig() || { setting: {} };
+
   await realtimeStation();
   Object.entries(constant.SETTING.LOCALSTORAGE_DEF).forEach(([key, value]) => {
-    if (!localStorage.getItem(key)) set_ls(key, JSON.stringify(value));
+    if (!config.setting[key]) {
+      config.setting[key] = value;
+      WriteConfig(config);
+    }
   });
-
-  const def_loc = constant.SETTING.LOCALSTORAGE_DEF["current-location"];
+  const def_loc = constant.SETTING.LOCALSTORAGE_DEF["location"];
   const def_loc_info = constant.REGION[def_loc.city][def_loc.town];
 
-  if (!localStorage.getItem("current-station"))
-    set_ls(
-      "current-station",
-      JSON.stringify(NearStation(def_loc_info.lat, def_loc_info.lon))
-    );
+  if (!config.setting['station']) {
+    config.setting['station'] = NearStation(def_loc_info.lat, def_loc_info.lon);
+    WriteConfig(config);
+  }
 
-  const userCheckbox = JSON.parse(
-    localStorage.getItem("user-checkbox") || "{}"
-  );
-  Object.entries(constant.SETTING.CHECKBOX_DEF).forEach(
-    ([key, defaultValue]) => {
-      if (!(key in userCheckbox)) userCheckbox[key] = defaultValue;
+  const userCheckbox = config.setting['user-checkbox'] || {};
+
+  Object.keys(constant.SETTING.CHECKBOX_DEF).forEach(key => {
+    if (!(key in userCheckbox)) {
+      userCheckbox[key] = 1;
     }
-  );
-  set_ls("user-checkbox", JSON.stringify(userCheckbox));
+  });
+
+  config.setting['user-checkbox'] = userCheckbox;
+  WriteConfig(config);
+
 }
-ls_initialization();
+ls_init();
 
 // 左側選單按鈕點擊
 querySelectorAll(".setting-buttons .button").forEach((button) => {
@@ -88,7 +90,7 @@ addEventListener("click", (event) => {
 
 // 確定重置按鈕點擊事件
 ResetSure.addEventListener("click", () => {
-  ls_initialization();
+  ls_init();
   ResetConfirmWrapper.style.bottom = "-100%";
 });
 
@@ -250,14 +252,18 @@ addLocationSelectEvent(localItems, TownItems, TownSel);
 const SaveSelectedLocationToStorage = (city, town, station) => {
   if (city !== "重慶市" && city !== "南陽州市") {
     const coordinate = constant.REGION[city][town];
+
     const locationData = {
       city,
       town,
       lat: coordinate.lat,
       lon: coordinate.lon,
     };
-    set_ls("current-location", JSON.stringify(locationData));
-    set_ls("current-station", station);
+
+    let config = ReadConfig() || { setting: {} };
+    config.setting['location'] = locationData;
+    config.setting['station'] = JSON.parse(station);
+    WriteConfig(config);
   }
 };
 
@@ -415,7 +421,10 @@ function StationSelEvent(itemsContainer) {
             closestDiv.getAttribute(`data-${attr}`),
           ])
         );
-        set_ls("current-station", JSON.stringify(stationData));
+
+        let config = ReadConfig() || { setting: {} };
+        config.setting['station'] = stationData;
+        WriteConfig(config);
       }
     }
   });
@@ -467,7 +476,8 @@ FormLogin.addEventListener("click", async () => {
 
 // 登入-表單登出按鈕
 LogoutBtn.addEventListener("click", async () => {
-  const token = localStorage.getItem("user-key");
+  let config = ReadConfig() || { setting: {} };
+  const token = config.setting['user-key'];
   await logout(token);
 });
 
@@ -477,7 +487,6 @@ function LoginSuccess(msg) {
   display([LogoutBtn], "flex");
   act.textContent = "Welcome";
   vip.textContent = `VIP-${msg.vip}`;
-  set_ls("user-key", msg.device[0].key);
   LoginBack.dispatchEvent(clickEvent);
 }
 
@@ -502,15 +511,12 @@ async function handleUserAction(endpoint, options) {
     LoginMsg.classList.add(isSuccess ? "success" : "error");
 
     if (isSuccess) {
-      LoginMsg.textContent = `${
-        options.method == "POST" ? "登入" : "登出"
-      }成功！`;
+      LoginMsg.textContent = `${options.method == "POST" ? "登入" : "登出"
+        }成功！`;
 
       let config = ReadConfig() || { setting: {} };
       let data = { login: responseData };
-
       config.setting.login = data.login === "OK" ? "" : data.login || "";
-
       WriteConfig(config);
 
       if (endpoint == "login") LoginSuccess(await getUserInfo(responseData));
@@ -621,12 +627,16 @@ function initializeSel(type, location, showInt, selectWrapper, items) {
 }
 
 function updateLocalStorage(typeClassName, selectedValue) {
-  const data = JSON.parse(localStorage.getItem("current-warning")) || {};
+  let config = ReadConfig() || { setting: {} };
+  const data = config.setting['warning'] || {};
   const key = typeClassName.includes("warning-realtime-station")
     ? "realtime-station"
     : "estimate-int";
   data[key] = selectedValue;
-  set_ls("current-warning", JSON.stringify(data));
+
+  if (typeof config.setting.warning !== 'object' || config.setting.warning === null) config.setting.warning = {};
+  config.setting.warning[key] = selectedValue;
+  WriteConfig(config);
 }
 
 // 預警條件-即時測站
@@ -680,34 +690,35 @@ addEventListener("mousemove", (event) => {
     sliderThumb.style.left = `${percentage}%`;
     sliderTrack.style.width = `${percentage}%`;
     SettingWrapper.style.backdropFilter = `blur(${blurValue}px)`;
-    set_ls("bg-percentage", percentage);
-    set_ls("bg-filter", blurValue);
+
+    let config = ReadConfig() || { setting: {} };
+    config.setting['bg-percentage'] = percentage;
+    config.setting['bg-filter'] = blurValue;
+    WriteConfig(config);
   }
 });
 
 // 從storage取得user之前保存的選項
 const GetSelectedFromStorage = () => {
-  const locationData =
-    JSON.parse(localStorage.getItem("current-location")) || {};
-  const warningData = JSON.parse(localStorage.getItem("current-warning")) || {};
-  sliderThumb.style.left = `${
-    localStorage.getItem("bg-percentage")
-      ? localStorage.getItem("bg-percentage")
-      : 100
-  }%`;
-  sliderTrack.style.width = `${
-    localStorage.getItem("bg-percentage")
-      ? localStorage.getItem("bg-percentage")
-      : 100
-  }%`;
-  SettingWrapper.style.backdropFilter = `blur(${
-    localStorage.getItem("bg-filter") ? localStorage.getItem("bg-filter") : 20
-  }px)`;
+  let config = ReadConfig() || { setting: {} };
+
+  const locationData = config.setting['location'] || {};
+  const warningData = config.setting['warning'] || {};
+  sliderThumb.style.left = `${config.setting['bg-percentage']
+    ? config.setting['bg-percentage']
+    : 100
+    }%`;
+  sliderTrack.style.width = `${config.setting['bg-percentage']
+    ? config.setting['bg-percentage']
+    : 100
+    }%`;
+  SettingWrapper.style.backdropFilter = `blur(${config.setting['bg-filter'] ? config.setting['bg-filter'] : 20
+    }px)`;
   return {
     city: locationData.city ? locationData.city : "臺南市",
     town: locationData.town ? locationData.town : "歸仁區",
-    station: localStorage.getItem("current-station")
-      ? localStorage.getItem("current-station")
+    station: config.setting['station']
+      ? config.setting['station']
       : "未知區域",
     wrts: warningData["realtime-station"]
       ? warningData["realtime-station"]
@@ -715,10 +726,10 @@ const GetSelectedFromStorage = () => {
     wei: warningData["estimate-int"]
       ? warningData["estimate-int"]
       : constant.SETTING.INTENSITY[0],
-    effect: localStorage.getItem("current-map-display-effect")
-      ? localStorage.getItem("current-map-display-effect")
+    effect: config.setting['map-display-effect']
+      ? config.setting['map-display-effect']
       : "1",
-    selectedcheckbox: localStorage.getItem("user-checkbox"),
+    selectedcheckbox: config.setting['user-checkbox'],
   };
 };
 
@@ -727,6 +738,7 @@ const RenderSelectedFromStorage = () => {
   const { city, town, station, wrts, wei, effect, selectedcheckbox } =
     GetSelectedFromStorage();
   const current_station = $(".current-station");
+  let config = ReadConfig() || { setting: {} };
 
   querySelector(".current-city").textContent = city;
   querySelector(".current-town").textContent = town;
@@ -734,8 +746,8 @@ const RenderSelectedFromStorage = () => {
   querySelector(".estimate-int").textContent = wei;
 
   if (station && station !== "null") {
-    const stationData = JSON.parse(localStorage.getItem("current-station"));
-    if(stationData) current_station.textContent = `${stationData.net} ${stationData.code}-${stationData.name} ${stationData.loc}`;
+    const stationData = config.setting['station'];
+    if (stationData) current_station.textContent = `${stationData.net} ${stationData.code}-${stationData.name} ${stationData.loc}`;
   } else current_station.textContent = "未知區域";
 
   const keys = Object.keys(constant.SETTING.MAP_DISPLAY);
@@ -744,7 +756,7 @@ const RenderSelectedFromStorage = () => {
 
   /** 選中check box**/
   const checkboxes = querySelectorAll(".switch input[type='checkbox']");
-  const SelectedCheckBoxes = JSON.parse(selectedcheckbox) || {};
+  const SelectedCheckBoxes = selectedcheckbox || {};
   checkboxes.forEach((checkbox) => {
     const id = checkbox.id;
     if (SelectedCheckBoxes[id]) checkbox.checked = 1;
@@ -801,7 +813,10 @@ MapDisplayEffItems.addEventListener("click", (event) => {
       div.classList.remove("select-option-selected")
     );
     closestDiv.classList.toggle("select-option-selected");
-    set_ls("current-map-display-effect", closestDiv.dataset.value);
+
+    let config = ReadConfig() || { setting: {} };
+    config.setting['map-display-effect'] = closestDiv.dataset.value;
+    WriteConfig(config);
   }
 });
 
@@ -810,7 +825,7 @@ addMapDisplayEffSelEvent(MapDisplayEffItems, MapDisplayEffSel);
 const Tos = $(".tos");
 const Tos_Sure = $(".tos_sure");
 
-if (!localStorage.getItem("tos")) {
+if (!ReadConfig().setting['tos']) {
   display([Tos], "flex");
   setTimeout(() => {
     const tosWrapper = $(".tos_wrapper");
@@ -823,7 +838,10 @@ Tos_Sure.addEventListener("click", () => {
   opacity([Tos], 0);
   setTimeout(() => {
     display([Tos]);
-    set_ls("tos", 1);
+
+    let config = ReadConfig() || { setting: {} };
+    config.setting['tos'] = 1;
+    WriteConfig(config);
   }, 2000);
 });
 
@@ -831,10 +849,13 @@ Tos_Sure.addEventListener("click", () => {
 const checkboxes = querySelectorAll(".switch input[type='checkbox']");
 const updateCheckboxesLocalStorage = () => {
   const selectedCheckbox = Array.from(checkboxes).reduce((acc, cb) => {
-    if (cb.checked) acc[cb.id] = 1;
+    acc[cb.id] = cb.checked ? 1 : 0;
     return acc;
   }, {});
-  set_ls("user-checkbox", JSON.stringify(selectedCheckbox));
+
+  let config = ReadConfig() || { setting: {} };
+  config.setting['user-checkbox'] = selectedCheckbox;
+  WriteConfig(config);
 };
 
 checkboxes.forEach((checkbox) =>
@@ -875,7 +896,7 @@ function compareVersions(last, current) {
   NewVersion.textContent = lst;
   CurrentVersion.textContent = current;
 
-  if(last.includes('-'))  lst = lst.split('-')[0];
+  if (last.includes('-')) lst = lst.split('-')[0];
   const curr = current.split("-")[0];
   const parts1 = lst.split(".").map(Number);
   const parts2 = curr.split(".").map(Number);

@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const doc_time = getElementById("time");
+const doc_time = $("#time");
 
 const speech = new Speech.default();
 (async () => {

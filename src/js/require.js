@@ -43,3 +43,18 @@ function WriteConfig(data) {
   let yamlStr = yaml.dump(data);
   fs.writeFileSync("config.yaml", yamlStr, "utf8");
 }
+
+function config_init() {
+  let config = ReadConfig();
+
+  if (!config) {
+    config = {
+      setting: {}
+    };
+    WriteConfig(config);
+  } else if (!config.setting) {
+    config.setting = {};
+    WriteConfig(config);
+  }
+}
+config_init();

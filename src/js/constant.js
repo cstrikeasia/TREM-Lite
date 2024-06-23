@@ -128,11 +128,11 @@ const constant = {
       "sound-effects-dong"       : 1,
     },
     LOCALSTORAGE_DEF: {
-      "current-location"           : { city: "臺南市", town: "歸仁區", lat: 22.967286, lon: 120.2940045 },
-      "current-warning"            : { "realtime-station": "0級", "estimate-int": "0級" },
+      "location"           : { city: "臺南市", town: "歸仁區", lat: 22.967286, lon: 120.2940045 },
+      "warning"            : { "realtime-station": "0級", "estimate-int": "0級" },
       "bg-filter"                  : 20,
       "bg-percentage"              : 100,
-      "current-map-display-effect" : 1,
+      "map-display-effect" : 1,
     },
     LOCALFALLBACK: {
       "13379360" : "重慶市北碚區",

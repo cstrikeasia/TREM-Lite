@@ -2,8 +2,8 @@
 get_station_info();
 setInterval(get_station_info, constant.STATION_INFO_FETCH_TIME);
 
-const max_pga_text = getElementById("max-pga");
-const realtime_list = getElementById("realtime-list");
+const max_pga_text = $("#max-pga");
+const realtime_list = $("#realtime-list");
 
 function get_station_info() {
   logger.info("[Fetch] Fetching station data...");
@@ -228,6 +228,6 @@ function show_rts_dot(data, alert) {
 
   max_pga_text.textContent = `${(max_pga > 999) ? "999+" : max_pga.toFixed(2)} gal`;
   max_pga_text.className = `intensity-${max_shindo}`;
-  getElementById("trigger").textContent = trigger;
-  getElementById("level").textContent = Math.round(level);
+  $("#trigger").textContent = trigger;
+  $("#level").textContent = Math.round(level);
 }
