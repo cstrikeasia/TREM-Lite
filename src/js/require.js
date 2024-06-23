@@ -29,32 +29,3 @@ if (!fs.existsSync(replayPath)) fs.mkdirSync(replayPath);
 variable.replay_list = fs.readdirSync(replayPath);
 
 const $ = (selector) => querySelector(selector);
-
-function ReadConfig() {
-  try {
-    config = yaml.load(fs.readFileSync("config.yaml", "utf8"));
-    return config;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-function WriteConfig(data) {
-  let yamlStr = yaml.dump(data);
-  fs.writeFileSync("config.yaml", yamlStr, "utf8");
-}
-
-function config_init() {
-  let config = ReadConfig();
-
-  if (!config) {
-    config = {
-      setting: {}
-    };
-    WriteConfig(config);
-  } else if (!config.setting) {
-    config.setting = {};
-    WriteConfig(config);
-  }
-}
-config_init();

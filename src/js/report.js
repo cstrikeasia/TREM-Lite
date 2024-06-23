@@ -241,7 +241,7 @@ function show_rts_list() {
   RTS_List.classList.toggle("hidden", !len);
   if (len > 0) {
     ReportListWrapper.classList.toggle("hidden", len);
-    const current_eew = variable.eew_list[_eew_list[last_map_count]] ? variable.eew_list[_eew_list[last_map_count]].data : '';
+    const current_eew = variable.eew_list[_eew_list[last_map_count]] ? variable.eew_list[_eew_list[last_map_count]].data : "";
     display([InfoBodyEQBox], current_eew.detail == 0 ? "" : "flex");
     display([SettingWrapper], "none");
     opacity([SettingWrapper], 0);
@@ -276,9 +276,8 @@ function ReportTimeFormat(timestamp) {
 
 
 /** Report Click事件**/
-// eslint-disable-next-line space-before-function-paren
 // 地震報告收展
-ReportListBtn.addEventListener("click", function () {
+ReportListBtn.addEventListener("click", () => {
   const ArrowSpan = this.querySelector(".nav-item-icon");
   ArrowSpan.textContent = ArrowSpan.textContent.trim() == "chevron_right" ? "chevron_left" : "chevron_right";
   ReportListWrapper.classList.toggle("hidden");
