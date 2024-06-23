@@ -1,41 +1,41 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-shadow */
 /* eslint-disable no-undef */
-const EEWInfoTitle = querySelector("#info-title-box-type");
+const EEWInfoTitle = $("#info-title-box-type");
 
-const ReportListWrapper = querySelector(".report-list-wrapper");
-const ReportListBtn = querySelector(".report-list-btn");
-const ReportItem = querySelector(".report-list-items");
-const ReportBoxWrapper = querySelector(".report-box-wrapper");
-const ReportTitle = querySelector("#report-title");
-const ReportSubTitle = querySelector("#report-subtitle");
-const ReportMaxIntensity = querySelector("#report-max-intensity");
-const ReportActionOpen = querySelector("#report-action-open");
-const ReportLocation = querySelector("#report-location");
-const ReportLongitude = querySelector("#report-longitude");
-const ReportLatitude = querySelector("#report-latitude");
-const ReportMagitude = querySelector("#report-magnitude");
-const ReportDepth = querySelector("#report-depth");
-const ReportTime = querySelector("#report-time");
-const ReportBackBtn = querySelector("#report-back-btn");
-const ReportIntensityGrouped = querySelector("#report-intensity-grouped");
+const ReportListWrapper = $(".report-list-wrapper");
+const ReportListBtn = $(".report-list-btn");
+const ReportItem = $(".report-list-items");
+const ReportBoxWrapper = $(".report-box-wrapper");
+const ReportTitle = $("#report-title");
+const ReportSubTitle = $("#report-subtitle");
+const ReportMaxIntensity = $("#report-max-intensity");
+const ReportActionOpen = $("#report-action-open");
+const ReportLocation = $("#report-location");
+const ReportLongitude = $("#report-longitude");
+const ReportLatitude = $("#report-latitude");
+const ReportMagitude = $("#report-magnitude");
+const ReportDepth = $("#report-depth");
+const ReportTime = $("#report-time");
+const ReportBackBtn = $("#report-back-btn");
+const ReportIntensityGrouped = $("#report-intensity-grouped");
 
-const InfoBox = querySelector(".info-box");
-const InfoBodyTitleBox = querySelector(".info-body-title-box");
-const InfoBodyFooter = querySelector(".info-body-footer");
-const InfoBodyEQBox = querySelector(".info-body-eq-box");
-const InfoNSSPE = querySelector(".info-nsspe");
-const InfoNo = querySelector("#info-no");
+const InfoBox = $(".info-box");
+const InfoBodyTitleBox = $(".info-body-title-box");
+const InfoBodyFooter = $(".info-body-footer");
+const InfoBodyEQBox = $(".info-body-eq-box");
+const InfoNSSPE = $(".info-nsspe");
+const InfoNo = $("#info-no");
 
-const RTS_List = querySelector(".intensity-container");
+const RTS_List = $(".intensity-container");
 
-async function report(t,retryCount = 0) {
+async function report(t, retryCount = 0) {
   let s = variable.report.survey;
   for (const int in variable.intensity_list)
     s = variable.intensity_list[int].data;
   try {
     logger.info("[Fetch] Fetching report data...");
-    const ReportList = document.querySelector(".report-list-items");
+    const ReportList = $(".report-list-items");
     const res = await fetchData(`${API_url()}v2/eq/report?limit=20`);
     if (!res.ok) return;
     logger.info("[Fetch] Got report data");
@@ -52,10 +52,7 @@ async function report(t,retryCount = 0) {
 
     if ((!variable.report.last || JSON.stringify(variable.report.last) !== JSON.stringify({ id: FirstItem.id })) && checkbox("sound-effects-Report") == 1) {
       variable.report.last = { id: FirstItem.id };
-      if(t == 1) {
-        constant.AUDIO.REPORT.play();
-        t = 1;
-        }
+      if (t !== 0) constant.AUDIO.REPORT.play();
     }
 
     const No = s ? "" : FirstItem.id.split("-");
@@ -124,7 +121,7 @@ async function report(t,retryCount = 0) {
     if (retryCount < variable.report.list_retry) {
       logger.error(`[Fetch] ${error} (Try #${retryCount})`);
       await new Promise(resolve => setTimeout(resolve, 1000));
-      await report(t ,retryCount + 1);
+      await report(t, retryCount + 1);
     }
   }
 }
@@ -155,7 +152,7 @@ function report_more(data, int) {
   setTimeout(() => opacity([ReportBoxWrapper], 1), 100);
 
   const { loc, lon, lat, mag, depth, time } = data;
-  const text = (el, val) => {el.textContent = val;};
+  const text = (el, val) => { el.textContent = val; };
   text(ReportLocation, loc.match(/^[^\(]+/)?.[0]?.trim() || "");
   text(ReportLatitude, lat);
   text(ReportLongitude, lon);
@@ -179,7 +176,7 @@ function report_more(data, int) {
 
 function report_grouped(data) {
   opacity([ReportListWrapper, InfoBox], 0);
-  const RepoListWrapper = document.querySelector("#report-intensity-grouped");
+  const RepoListWrapper = $("#report-intensity-grouped");
   RepoListWrapper.innerHTML = "";
 
   const cities = Object.keys(data.list);
@@ -222,7 +219,7 @@ function report_grouped(data) {
 }
 
 function report_all(data) {
-  const reportContainer = getElementById("report-intensity-all");
+  const reportContainer = $("#report-intensity-all");
   reportContainer.innerHTML = "";
 
   Object.entries(data.list).forEach(([city, { int: cityIntensity }]) => {
@@ -244,7 +241,7 @@ function show_rts_list() {
   RTS_List.classList.toggle("hidden", !len);
   if (len > 0) {
     ReportListWrapper.classList.toggle("hidden", len);
-    const current_eew = variable.eew_list[_eew_list[last_map_count]].data;
+    const current_eew = variable.eew_list[_eew_list[last_map_count]] ? variable.eew_list[_eew_list[last_map_count]].data : '';
     display([InfoBodyEQBox], current_eew.detail == 0 ? "" : "flex");
     display([InfoNSSPE], current_eew.detail == 0 ? "block" : "");
   } else {
@@ -279,7 +276,7 @@ function ReportTimeFormat(timestamp) {
 /** Report Click事件**/
 // eslint-disable-next-line space-before-function-paren
 // 地震報告收展
-ReportListBtn.addEventListener("click", function() {
+ReportListBtn.addEventListener("click", function () {
   const ArrowSpan = this.querySelector(".nav-item-icon");
   ArrowSpan.textContent = ArrowSpan.textContent.trim() == "chevron_right" ? "chevron_left" : "chevron_right";
   ReportListWrapper.classList.toggle("hidden");

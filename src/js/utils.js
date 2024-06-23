@@ -128,10 +128,8 @@ function int_to_color(int) {
 }
 
 const domMethods = {
-  querySelector    : document.querySelector.bind(document),
   querySelectorAll : document.querySelectorAll.bind(document),
   createElement    : document.createElement.bind(document),
-  getElementById   : document.getElementById.bind(document),
 };
 
 const { querySelector, querySelectorAll, createElement, getElementById } = domMethods;

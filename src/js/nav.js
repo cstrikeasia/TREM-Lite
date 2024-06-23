@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 const Nav_btns = querySelectorAll(".nav-btn");
-const Home_btn = querySelector("#nav-home");
-const Report_btn = querySelector("#nav-report-panel");
-const Tsunami_btn = querySelector("#nav-tsunami-panel");
-const Warning_msg = querySelector(".warning-message");
-const TsunamiInfoBox = querySelector(".tsunami-info-box");
-const TsunamiReport = querySelector(".tsunami-report-container");
+const Home_btn = $("#nav-home");
+const Report_btn = $("#nav-report-panel");
+const Tsunami_btn = $("#nav-tsunami-panel");
+const Warning_msg = $(".warning-message");
+const TsunamiInfoBox = $(".tsunami-info-box");
+const TsunamiReport = $(".tsunami-report-container");
 
 let toHomeTimeout = null;
 

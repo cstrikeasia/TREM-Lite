@@ -16,7 +16,7 @@ setInterval(() => {
 }, 1000);
 
 setInterval(() => {
-  if (variable.replay_list.length || Object.keys(variable.eew_list).length !== 0) return;
+  if (Object.keys(variable.eew_list).length !== 0) return;
   report();
 }, 10000);
 
@@ -53,7 +53,6 @@ function read_replay_file() {
       show_intensity(intensity);
 
     variable.replay = data.rts.time;
-    console.log(data);
   }
 }
 
@@ -67,7 +66,7 @@ async function realtime_rts() {
   if (alert) show_rts_box(data.box);
 
   variable.last_get_data_time = now();
-  getElementById("connect").style.color = "goldenrod";
+  $("#connect").style.color = "goldenrod";
 }
 
 async function realtime_eew() {

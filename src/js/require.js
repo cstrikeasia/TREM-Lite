@@ -28,6 +28,8 @@ const replayPath = path.join(app.getPath("userData"), "replay");
 if (!fs.existsSync(replayPath)) fs.mkdirSync(replayPath);
 variable.replay_list = fs.readdirSync(replayPath);
 
+const $ = (selector) => querySelector(selector);
+
 function ReadConfig() {
   try {
     config = yaml.load(fs.readFileSync("config.yaml", "utf8"));

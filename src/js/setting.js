@@ -1,18 +1,17 @@
 /* eslint-disable no-undef */
+const version = $("#version");
+const system_os = $("#system_os");
+const system_cpu = $("#system_cpu");
+const SettingWrapper = $(".setting-wrapper");
+const SettingBtn = $("#nav-settings-panel");
+const Back = $(".back_to_home");
+const ResetBtn = $(".setting-reset-btn");
+const ResetConfirmWrapper = $(".reset-confirm-wrapper");
+const ResetCancel = $(".reset-cancel");
+const ResetSure = $(".reset-sure");
+const LoginBtn = $(".login-btn");
 
-const version = querySelector("#version");
-const system_os = querySelector("#system_os");
-const system_cpu = querySelector("#system_cpu");
-const SettingWrapper = querySelector(".setting-wrapper");
-const SettingBtn = querySelector("#nav-settings-panel");
-const Back = querySelector(".back_to_home");
-const ResetBtn = querySelector(".setting-reset-btn");
-const ResetConfirmWrapper = querySelector(".reset-confirm-wrapper");
-const ResetCancel = querySelector(".reset-cancel");
-const ResetSure = querySelector(".reset-sure");
-const LoginBtn = querySelector(".login-btn");
-
-const LocationWrapper = querySelector(".usr-location");
+const LocationWrapper = $(".usr-location");
 const Location = LocationWrapper.querySelector(".location");
 const LocationSelWrapper = LocationWrapper.querySelector(".select-wrapper");
 const localItems = LocationSelWrapper.querySelector(".local");
@@ -21,9 +20,9 @@ const CityItems = LocationSelWrapper.querySelector(".city");
 const TownSel = LocationSelWrapper.querySelector(".current-town");
 const TownItems = LocationSelWrapper.querySelector(".town");
 
-const AppVersion = querySelector(".app-version");
-const CurrentVersion = querySelector("#current-version");
-const NewVersion = querySelector("#new-version");
+const AppVersion = $(".app-version");
+const CurrentVersion = $("#current-version");
+const NewVersion = $("#new-version");
 
 // 版本號、UUID
 version.textContent = app.getVersion();
@@ -262,7 +261,7 @@ const SaveSelectedLocationToStorage = (city, town, station) => {
   }
 };
 
-const StationWrapper = querySelector(".realtime-station");
+const StationWrapper = $(".realtime-station");
 const StationLocation = StationWrapper.querySelector(".location");
 const StationSelWrapper = StationWrapper.querySelector(".select-wrapper");
 const StationLocalItems = StationSelWrapper.querySelector(".local");
@@ -422,17 +421,17 @@ function StationSelEvent(itemsContainer) {
   });
 }
 
-const LoginFormContent = querySelector(".login-forms-content");
-const AccountInfoContent = querySelector(".usr-account-info-content");
-const act = querySelector(".account");
-const vip = querySelector(".vip");
-const LogoutBtn = querySelector(".logout-btn");
-const LoginBack = querySelector(".login-back");
+const LoginFormContent = $(".login-forms-content");
+const AccountInfoContent = $(".usr-account-info-content");
+const act = $(".account");
+const vip = $(".vip");
+const LogoutBtn = $(".logout-btn");
+const LoginBack = $(".login-back");
 
-const FormLogin = querySelector("#form-login");
-const FormEmail = querySelector("#email");
-const FormPassword = querySelector("#password");
-const LoginMsg = querySelector(".login_msg");
+const FormLogin = $("#form-login");
+const FormEmail = $("#email");
+const FormPassword = $("#password");
+const LoginMsg = $(".login_msg");
 const url = "https://api.exptech.com.tw/api/v3/et/";
 
 // 登入-切換登入表單和帳號資訊
@@ -631,7 +630,7 @@ function updateLocalStorage(typeClassName, selectedValue) {
 }
 
 // 預警條件-即時測站
-const WRTS = querySelector(".warning-realtime-station");
+const WRTS = $(".warning-realtime-station");
 const WRTSLocation = WRTS.querySelector(".location");
 const WRTSShowInt = WRTS.querySelector(".realtime-int");
 const WRTSSelWrapper = WRTS.querySelector(".select-wrapper");
@@ -640,7 +639,7 @@ const WRTSItems = WRTSSelWrapper.querySelector(".int");
 initializeSel(WRTS, WRTSLocation, WRTSShowInt, WRTSSelWrapper, WRTSItems);
 
 // 預警條件-預估震度
-const WEI = querySelector(".warning-estimate-int");
+const WEI = $(".warning-estimate-int");
 const WEILocation = WEI.querySelector(".location");
 const WEIShowInt = WEI.querySelector(".estimate-int");
 const WEISelWrapper = WEI.querySelector(".select-wrapper");
@@ -658,9 +657,9 @@ Ints.forEach((Int) => {
 });
 
 // 其他功能-設定頁面背景透明度滑塊
-const sliderContainer = querySelector(".slider-container");
-const sliderTrack = querySelector(".slider-track");
-const sliderThumb = querySelector(".slider-thumb");
+const sliderContainer = $(".slider-container");
+const sliderTrack = $(".slider-track");
+const sliderThumb = $(".slider-thumb");
 let isDragging = 0;
 
 sliderThumb.addEventListener("mousedown", () => {
@@ -727,7 +726,7 @@ const GetSelectedFromStorage = () => {
 const RenderSelectedFromStorage = () => {
   const { city, town, station, wrts, wei, effect, selectedcheckbox } =
     GetSelectedFromStorage();
-  const current_station = querySelector(".current-station");
+  const current_station = $(".current-station");
 
   querySelector(".current-city").textContent = city;
   querySelector(".current-town").textContent = town;
@@ -756,7 +755,7 @@ const RenderSelectedFromStorage = () => {
 // 渲染user之前保存的選項
 addEventListener("DOMContentLoaded", RenderSelectedFromStorage);
 
-const MapDisplayEff = querySelector(".map-display-effect");
+const MapDisplayEff = $(".map-display-effect");
 const MapDisplayEffSel = MapDisplayEff.querySelector(".current-effect");
 const MapDisplayEffLocation = MapDisplayEff.querySelector(".location");
 const MapDisplayEffSelWrapper = MapDisplayEff.querySelector(".select-wrapper");
@@ -808,13 +807,13 @@ MapDisplayEffItems.addEventListener("click", (event) => {
 
 addMapDisplayEffSelEvent(MapDisplayEffItems, MapDisplayEffSel);
 
-const Tos = querySelector(".tos");
-const Tos_Sure = querySelector(".tos_sure");
+const Tos = $(".tos");
+const Tos_Sure = $(".tos_sure");
 
 if (!localStorage.getItem("tos")) {
   display([Tos], "flex");
   setTimeout(() => {
-    const tosWrapper = querySelector(".tos_wrapper");
+    const tosWrapper = $(".tos_wrapper");
     tosWrapper.style.height = "19em";
     opacity([tosWrapper], 1);
   }, 2500);
