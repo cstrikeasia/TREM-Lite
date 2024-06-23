@@ -243,6 +243,8 @@ function show_rts_list() {
     ReportListWrapper.classList.toggle("hidden", len);
     const current_eew = variable.eew_list[_eew_list[last_map_count]] ? variable.eew_list[_eew_list[last_map_count]].data : '';
     display([InfoBodyEQBox], current_eew.detail == 0 ? "" : "flex");
+    display([SettingWrapper], "none");
+    opacity([SettingWrapper], 0);
     display([InfoNSSPE], current_eew.detail == 0 ? "block" : "");
   } else {
     opacity([InfoBox], window.getComputedStyle(ReportBoxWrapper).display !== "flex" ? 1 : 0);

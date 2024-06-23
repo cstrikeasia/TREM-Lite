@@ -456,7 +456,7 @@ body {
 }
 
 .intensity-container.hidden {
-  display: none;
+  display: none!important;
 }
 
 .intensity-container {
